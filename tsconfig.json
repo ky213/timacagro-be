@@ -15,7 +15,7 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*", "model", "index.ts"],
+  "include": ["src/**/*", "model", "index.ts", "codegen.ts"],
   "exclude": ["node_modules/*"],
   "ts-node": {
     "require": ["tsconfig-paths/register"]
