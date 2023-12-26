@@ -1,19 +1,21 @@
 import "reflect-metadata";
 import dotenv from "dotenv";
+import express from "express";
 import { createYoga } from "graphql-yoga";
-import { appSchema } from "app";
-import { createServer } from "http";
+import { useGraphQLModules } from "@envelop/graphql-modules";
+
+import { application } from "app";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
 const yoga = createYoga({
-  schema: appSchema,
+  plugins: [useGraphQLModules(application)],
 });
 
-const server = createServer(yoga);
+const app = express();
 
-const port = process.env.SERVER_PORT || 4000;
+app.use(yoga);
 
-server.listen(port, () => {
-  console.info(`Server is running on http://localhost:${port}/graphql`);
-});
+const port = process.env.SERVER_PORT;
+
+app.listen(port, () => console.log(`Server running on port ${port}`));
