@@ -16,3 +16,7 @@ enum ROLE {
 type Query {
   hello: String
 }
+
+type Query {
+  hello(id: String): String
+}

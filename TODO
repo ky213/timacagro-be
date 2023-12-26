@@ -2,8 +2,10 @@
 Todo:
 
     ☐ init app - done @project(Todo) @started(23-12-25 07:55)
-        ☐ code-gen
+        ✔ code-gen @done(23-12-26 09:35)
+        ☐ api mappers
         ☐ database
+        ☐ error handling
     ☐ docs
         ☐ tech stack
         ☐ architecture
