@@ -1,16 +1,18 @@
+import { InjectionToken, Provider } from "graphql-modules";
 import { ROLE } from "modules/user/model";
+import { database } from "config/database";
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
   BaseEntity,
+  Repository,
 } from "typeorm";
 
 @Entity()
-export class User extends BaseEntity {
+export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,9 +21,6 @@ export class User extends BaseEntity {
 
   @Column({ type: "varchar", length: 25, nullable: false })
   lastName: string;
-
-  @Column({ type: "varchar", nullable: false })
-  fullName: string;
 
   @Column({ type: "varchar", unique: true, nullable: false })
   email: string;
@@ -41,3 +40,12 @@ export class User extends BaseEntity {
   @UpdateDateColumn({ type: "date" })
   updatedAt: Date;
 }
+
+export type IUserService = Repository<UserEntity>;
+
+export const UserService = new InjectionToken<IUserService>("UserService");
+
+export const UserServiceProvider: Provider<IUserService> = {
+  provide: UserService,
+  useFactory: () => database.getRepository(UserEntity),
+};

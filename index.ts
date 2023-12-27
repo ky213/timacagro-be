@@ -3,27 +3,29 @@ import dotenv from "dotenv";
 import express from "express";
 import { createYoga } from "graphql-yoga";
 import { useGraphQLModules } from "@envelop/graphql-modules";
-
-import { application } from "app";
-import { db } from "config/database";
+import { DataSource } from "typeorm";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
-const yoga = createYoga({
-  plugins: [useGraphQLModules(application)],
-});
+import { database } from "config/database";
+import { application } from "app";
 
-const app = express();
+async function startServer() {
+  try {
+    const dbConnection: DataSource = await database.initialize();
+    const yoga = createYoga({
+      plugins: [useGraphQLModules(application)],
+      context: { db: dbConnection },
+    });
 
-app.use(yoga);
+    const app = express();
+    const port = process.env.SERVER_PORT;
 
-const port = process.env.SERVER_PORT;
-
-db.initialize()
-  .then(() => {
-    console.log("Database initialized");
+    app.use(yoga);
     app.listen(port, () => console.log(`Server running on port ${port}`));
-  })
-  .catch((error) => {
-    console.error("Error during Data Source initialization:", error);
-  });
+  } catch (error) {
+    console.error("Error starting the server:", error);
+  }
+}
+
+startServer();

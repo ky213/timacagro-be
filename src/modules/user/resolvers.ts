@@ -1,18 +1,12 @@
-import { Resolvers, User } from "generated-types/graphql";
-
-export const resolvers: Resolvers<User> = {
+import { UserRepository } from "data-sources/database/repositrories/user.repository";
 import { Resolvers } from "generated-types/graphql";
-import { User } from "data-sources/database/user";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
-    hello: (root, args, context, info) => {
-      return "world";
-    },
-    hello: (_parent, { id }, context) => {
-      const user = context.injector.get(User);
+    hello: async (_parent, _args, context) => {
+      const user = context.injector.get(UserRepository);
 
-      return "world " + user.getName() + id;
+      return "world " + (await user.getName()) + " " + (await user.getCount());
     },
   },
 };
