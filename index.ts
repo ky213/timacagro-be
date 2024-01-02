@@ -1,9 +1,8 @@
 import "reflect-metadata";
 import dotenv from "dotenv";
 import express from "express";
-import { createYoga } from "graphql-yoga";
+import { createYoga, maskError } from "graphql-yoga";
 import { useGraphQLModules } from "@envelop/graphql-modules";
-import { DataSource } from "typeorm";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
@@ -12,10 +11,10 @@ import { application } from "app";
 
 async function startServer() {
   try {
-    const dbConnection: DataSource = await database.initialize();
+    await database.initialize();
+
     const yoga = createYoga({
-      plugins: [useGraphQLModules(application)],
-      context: { db: dbConnection },
+      plugins: [useGraphQLModules(application), maskError],
     });
 
     const app = express();
