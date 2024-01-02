@@ -1,16 +1,16 @@
-import { GraphQLError } from "graphql";
-
 import { UserRepository } from "services/database/repositrories/user.repository";
-import { Resolvers } from "generated-types/graphql";
-import { HttpError } from "shared/utils/error-handler";
+import { Resolvers } from "types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
-    //@ts-ignore
-    hello: async (_parent, _args, context) => {
-      const user = context.injector.get(UserRepository);
-      throw new HttpError(404, "New Errorr");
-      return await user.getCount();
+    listUsers: async (_parent, { page = 1, perPage = 10 }, context) => {
+      try {
+        const user = context.injector.get(UserRepository);
+
+        return await user.lisUser(page, perPage);
+      } catch (error) {
+        throw error;
+      }
     },
   },
 };

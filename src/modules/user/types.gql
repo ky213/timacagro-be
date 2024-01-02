@@ -1,22 +1,44 @@
 type User {
-  id: ID!
+  id: Int!
   firstName: String!
   lastName: String!
   email: String!
-  Role: ROLE!
+  role: ROLE!
+  active: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
-enum ROLE {
-  ADMIN
-  ATC
-  SALES
-  COMMERCE
+input CreateUserInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  role: ROLE!
+  active: Boolean!
+}
+
+input UpdateUserInput {
+  firstName: String
+  lastName: String
+  email: String
+  role: ROLE
+  active: Boolean
+}
+
+type UsersList {
+  users: [User]!
+  page: Int!
+  perPage: Int!
+  total: Int!
 }
 
 type Query {
-  hello: String
+  listUsers(page: Int!, perPage: Int!): UsersList!
+  getUser(id: ID!): User
 }
 
-type Query {
-  hello(id: String): String
+type Mutation {
+  createUser(userInfo: CreateUserInput!): User!
+  updateUser(id: ID!, userInfo: UpdateUserInput!): User!
+  deleteUser(id: ID!): User
 }

@@ -1,6 +1,4 @@
 import { InjectionToken, Provider } from "graphql-modules";
-import { ROLE } from "modules/user/model";
-import { database } from "config/database";
 import {
   Entity,
   Column,
@@ -10,6 +8,10 @@ import {
   BaseEntity,
   Repository,
 } from "typeorm";
+
+import { database } from "config/database";
+import { ROLE } from "types/global";
+import { Role } from "types/graphql";
 
 @Entity()
 export class UserEntity extends BaseEntity {
@@ -29,16 +31,16 @@ export class UserEntity extends BaseEntity {
   password: string;
 
   @Column({ type: "enum", enum: ROLE, nullable: false })
-  role: string;
+  role: Role;
 
   @Column({ default: true })
   active: boolean;
 
   @CreateDateColumn({ type: "date" })
-  createdAt: Date;
+  createdAt: string;
 
   @UpdateDateColumn({ type: "date" })
-  updatedAt: Date;
+  updatedAt: string;
 }
 
 export type IUserService = Repository<UserEntity>;

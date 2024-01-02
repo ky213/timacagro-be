@@ -1,0 +1,20 @@
+scalar DateTime
+
+type Entity {
+  id: ID!
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Pagination {
+  page: Int!
+  perPage: Int!
+  total: Int!
+}
+
+enum ROLE {
+  ADMIN
+  ATC
+  SALES
+  COMMERCE
+}

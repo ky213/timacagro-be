@@ -4,10 +4,15 @@ const config: CodegenConfig = {
   schema: "./src/modules/**/*.gql",
   generates: {
     "./src/types/": {
+      config: {
+        scalars: {
+          DateTime: "string",
+        },
+      },
       preset: "graphql-modules",
       presetConfig: {
-        baseTypesPath: "../generated-types/graphql.ts",
-        filename: "generated-types/module-types.ts",
+        baseTypesPath: "../types/graphql.ts",
+        filename: "types/module-types.ts",
       },
       plugins: [
         {
