@@ -36,10 +36,10 @@ export class UserEntity extends BaseEntity {
   @Column({ default: true })
   active: boolean;
 
-  @CreateDateColumn({ type: "date" })
+  @CreateDateColumn({ type: "timestamp" })
   createdAt: string;
 
-  @UpdateDateColumn({ type: "date" })
+  @UpdateDateColumn({ type: "timestamp" })
   updatedAt: string;
 }
 
