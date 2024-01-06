@@ -1,4 +1,4 @@
-import { UserRepository } from "services/database/repositrories/user.repository";
+import { UserServiceProvider } from "services";
 import { HttpError } from "shared/utils/error-handler";
 import { Resolvers } from "types/graphql";
 
@@ -6,7 +6,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
     getUser: async (_parent, { id }, context) => {
       try {
-        const userRepo = context.injector.get(UserRepository);
+        const userRepo = context.injector.get(UserServiceProvider);
 
         return await userRepo.getUser(Number(id));
       } catch (error) {
@@ -15,7 +15,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     },
     listUsers: async (_parent, { page = 1, perPage = 10 }, context) => {
       try {
-        const userRepo = context.injector.get(UserRepository);
+        const userRepo = context.injector.get(UserServiceProvider);
 
         return await userRepo.lisUsers(page, perPage);
       } catch (error) {
@@ -26,16 +26,16 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Mutation: {
     createUser: async (_parent, { userInfo }, context) => {
       try {
-        const userRepo = context.injector.get(UserRepository);
+        const userSerivce = context.injector.get(UserServiceProvider);
 
-        return await userRepo.createUser(userInfo);
+        return await userSerivce.createUser(userInfo);
       } catch (error) {
         throw new HttpError(null, error.message);
       }
     },
     updateUser: async (_parent, { id, userInfo }, context) => {
       try {
-        const userRepo = context.injector.get(UserRepository);
+        const userRepo = context.injector.get(UserServiceProvider);
 
         await userRepo.updateUser(Number(id), userInfo);
 
@@ -46,7 +46,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     },
     deleteUser: async (_parent, { id }, context) => {
       try {
-        const userRepo = context.injector.get(UserRepository);
+        const userRepo = context.injector.get(UserServiceProvider);
 
         await userRepo.deleteUser(Number(id));
 

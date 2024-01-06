@@ -43,11 +43,11 @@ export class UserEntity extends BaseEntity {
   updatedAt: string;
 }
 
-export type IUserService = Repository<UserEntity>;
+export type IUserRepository = Repository<UserEntity>;
 
-export const UserService = new InjectionToken<IUserService>("UserService");
+export const UserRepositoryToken = new InjectionToken<IUserRepository>("UserRepository");
 
-export const UserServiceProvider: Provider<IUserService> = {
-  provide: UserService,
+export const UserRepositoryProvider: Provider<IUserRepository> = {
+  provide: UserRepositoryToken,
   useFactory: () => database.getRepository(UserEntity),
 };

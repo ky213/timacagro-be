@@ -1,16 +1,20 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
 import bcrypt from "bcrypt";
 
-import { UserService, IUserService } from "../entities/user.entity";
+import { UserRepositoryToken, IUserRepository } from "../repos";
 import { UsersList, User, CreateUserInput, UpdateUserInput } from "types/graphql";
 import { validateData } from "shared/utils/validator";
 import { HttpError } from "shared/utils/error-handler";
 import { ERRORS } from "config/contants";
 import UserSchema from "types/schemas/user.schema";
+import { EmailServiceToken, IEmailService } from "services";
 
 @Injectable()
-export class UserRepository {
-  constructor(@Inject(forwardRef(() => UserService)) private userService: IUserService) {}
+export class UserServiceProvider {
+  constructor(
+    @Inject(forwardRef(() => UserRepositoryToken)) private userService: IUserRepository,
+    @Inject(forwardRef(() => EmailServiceToken)) private emailService: IEmailService
+  ) {}
 
   async getUser(id: number): Promise<User> {
     return await this.userService.findOneBy({ id });
@@ -49,7 +53,13 @@ export class UserRepository {
     await user.save();
 
     //send confirmation email
-    //TODO
+    this.emailService.send(
+      "support@timacagro.com",
+      newUser.email,
+      "Welcome email",
+      `<h1>Welcome ${newUser.firstName}</h1>`
+    );
+
     return user;
   }
 
