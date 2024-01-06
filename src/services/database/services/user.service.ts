@@ -7,13 +7,14 @@ import { validateData } from "shared/utils/validator";
 import { HttpError } from "shared/utils/error-handler";
 import { ERRORS } from "config/contants";
 import UserSchema from "types/schemas/user.schema";
-import { EmailServiceToken, IEmailService } from "services";
+import { EmailServiceToken, RedisServiceToken, IEmailService, IRedisService } from "services";
 
 @Injectable()
 export class UserServiceProvider {
   constructor(
     @Inject(forwardRef(() => UserRepositoryToken)) private userService: IUserRepository,
-    @Inject(forwardRef(() => EmailServiceToken)) private emailService: IEmailService
+    @Inject(forwardRef(() => EmailServiceToken)) private emailService: IEmailService,
+    @Inject(forwardRef(() => RedisServiceToken)) private redisService: IRedisService
   ) {}
 
   async getUser(id: number): Promise<User> {
@@ -59,6 +60,10 @@ export class UserServiceProvider {
       "Welcome email",
       `<h1>Welcome ${newUser.firstName}</h1>`
     );
+
+    // const red = await this.redisService.set("testKey", "any value");
+    // console.log("RED----set", red);
+    const key = this.redisService.get("testkey");
 
     return user;
   }

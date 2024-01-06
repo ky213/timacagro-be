@@ -13,6 +13,8 @@ async function startServer() {
   try {
     await database.initialize();
 
+    console.log(`Database connected.`);
+
     const yoga = createYoga({
       plugins: [useGraphQLModules(application), maskError],
     });

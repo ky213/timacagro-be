@@ -1,5 +1,5 @@
 import { Injectable, InjectionToken, Provider } from "graphql-modules";
-import { Transporter, createTransport, createTestAccount, getTestMessageUrl } from "nodemailer";
+import { Transporter, createTransport, getTestMessageUrl } from "nodemailer";
 
 import { emailServerOptions } from "config/email-server";
 
