@@ -2,7 +2,7 @@ import { createModule } from "graphql-modules";
 import { loadFilesSync } from "@graphql-tools/load-files";
 import { join } from "path";
 
-import { RedisServiceProvider, UserServiceProvider } from "services";
+import { UserServiceProvider } from "services";
 import { UserRepositoryProvider } from "services/database/repos";
 
 export const userModule = createModule({
