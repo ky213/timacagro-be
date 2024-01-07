@@ -71,7 +71,7 @@ export class UserServiceProvider {
   async sendConfirmationEmail(user: User) {
     const token = generateToken();
 
-    await this.cacheService.set(user.email, token, DELAYS.EMAIL_CONFIRMATION_EXPIRATION_TIME);
+    await this.cacheService.set(token, user.email, DELAYS.EMAIL_CONFIRMATION_EXPIRATION_TIME);
 
     this.emailService.send(
       `support@timacagro.com`,
