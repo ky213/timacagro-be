@@ -23,7 +23,7 @@ export class CacheServiceProvider {
     return this.redisService.get(key);
   }
 
-  async set(key: string, value: string, expiration?: number) {
+  async set(key: string, value: string, expiration: number) {
     return this.redisService.set(key, value, { EX: expiration });
   }
 }

@@ -1,20 +1,20 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
-import bcrypt from "bcrypt";
 
 import { UserRepositoryToken, IUserRepository } from "../repos";
 import { UsersList, User, CreateUserInput, UpdateUserInput } from "types/graphql";
 import { validateData } from "shared/utils/validator";
 import { HttpError } from "shared/utils/error-handler";
-import { ERRORS } from "config/contants";
+import { DELAYS, ERRORS } from "config/contants";
 import UserSchema from "types/schemas/user.schema";
 import { EmailServiceToken, CacheServiceProvider, IEmailService } from "services";
+import { generateHash, generateToken } from "shared/utils/cyphers";
 
 @Injectable()
 export class UserServiceProvider {
   constructor(
     @Inject(forwardRef(() => UserRepositoryToken)) private userService: IUserRepository,
     @Inject(forwardRef(() => EmailServiceToken)) private emailService: IEmailService,
-    @Inject(forwardRef(() => CacheServiceProvider)) private chacheService: CacheServiceProvider
+    @Inject(forwardRef(() => CacheServiceProvider)) private cacheService: CacheServiceProvider
   ) {}
 
   async getUser(id: number): Promise<User> {
@@ -44,22 +44,14 @@ export class UserServiceProvider {
     if (userExists) throw new HttpError(400, "User with this email exists.", ERRORS.USER_EXISTS_ERROR);
 
     //hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(newUser.password, salt);
-
-    newUser.password = hashedPassword;
+    newUser.password = await generateHash(newUser.password);
 
     //save user
     const user = this.userService.create({ ...newUser });
     await user.save();
 
     //send confirmation email
-    this.emailService.send(
-      "support@timacagro.com",
-      newUser.email,
-      "Welcome email",
-      `<h1>Welcome ${newUser.firstName}</h1>`
-    );
+    this.sendConfirmationEmail(user);
 
     return user;
   }
@@ -74,5 +66,20 @@ export class UserServiceProvider {
     await this.userService.update({ id }, { active: false });
 
     return true;
+  }
+
+  async sendConfirmationEmail(user: User) {
+    const token = generateToken();
+
+    await this.cacheService.set(user.email, token, DELAYS.EMAIL_CONFIRMATION_EXPIRATION_TIME);
+
+    this.emailService.send(
+      `support@timacagro.com`,
+      user.email,
+      `Welcome email`,
+      `<h1>Welcome ${user.firstName}</h1>
+       <p>follow this <a href="/graphql/?token=${token}">link</a> to confirm you email address.
+    `
+    );
   }
 }
