@@ -18,6 +18,16 @@ export type Scalars = {
   DateTime: { input: string; output: string; }
 };
 
+export type AuthInput = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type Authresponse = {
+  __typename?: 'Authresponse';
+  token: Scalars['String']['output'];
+};
+
 export type CreateUserInput = {
   active: Scalars['Boolean']['input'];
   email: Scalars['String']['input'];
@@ -36,9 +46,18 @@ export type Entity = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  confirmEmail?: Maybe<Scalars['Boolean']['output']>;
   createUser: User;
   deleteUser: Scalars['Boolean']['output'];
+  login?: Maybe<Authresponse>;
+  logout?: Maybe<Scalars['Boolean']['output']>;
+  resetPassword?: Maybe<Scalars['Boolean']['output']>;
   updateUser: Scalars['Boolean']['output'];
+};
+
+
+export type MutationConfirmEmailArgs = {
+  token: Scalars['String']['input'];
 };
 
 
@@ -49,6 +68,16 @@ export type MutationCreateUserArgs = {
 
 export type MutationDeleteUserArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationLoginArgs = {
+  credentials?: InputMaybe<AuthInput>;
+};
+
+
+export type MutationResetPasswordArgs = {
+  newPassword: Scalars['String']['input'];
 };
 
 
@@ -186,6 +215,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AuthInput: AuthInput;
+  Authresponse: ResolverTypeWrapper<Authresponse>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CreateUserInput: CreateUserInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
@@ -204,6 +235,8 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AuthInput: AuthInput;
+  Authresponse: Authresponse;
   Boolean: Scalars['Boolean']['output'];
   CreateUserInput: CreateUserInput;
   DateTime: Scalars['DateTime']['output'];
@@ -219,6 +252,11 @@ export type ResolversParentTypes = {
   UsersList: UsersList;
 };
 
+export type AuthresponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['Authresponse'] = ResolversParentTypes['Authresponse']> = {
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
@@ -231,8 +269,12 @@ export type EntityResolvers<ContextType = any, ParentType extends ResolversParen
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  confirmEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationConfirmEmailArgs, 'token'>>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'userInfo'>>;
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
+  login?: Resolver<Maybe<ResolversTypes['Authresponse']>, ParentType, ContextType, Partial<MutationLoginArgs>>;
+  logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  resetPassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'newPassword'>>;
   updateUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id' | 'userInfo'>>;
 };
 
@@ -269,6 +311,7 @@ export type UsersListResolvers<ContextType = any, ParentType extends ResolversPa
 };
 
 export type Resolvers<ContextType = any> = {
+  Authresponse?: AuthresponseResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Entity?: EntityResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

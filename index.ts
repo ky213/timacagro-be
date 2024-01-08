@@ -17,6 +17,8 @@ async function startServer() {
 
     const yoga = createYoga({
       plugins: [useGraphQLModules(application), maskError],
+      logging: process.env.NODE_ENV === "dev",
+      maskedErrors: process.env.NODE_ENV === "prod",
     });
 
     const app = express();

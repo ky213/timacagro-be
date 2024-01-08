@@ -12,10 +12,10 @@ export class CacheServiceProvider {
     try {
       this.redisService = await this.redisService.connect();
 
-      console.log("Redis connected ", this.redisService.isOpen);
+      console.log("Redis connected ", this.redisService.isReady);
     } catch (error) {
       console.error("Redis failed to connect", error.message);
-      process.exit(1);
+      // process.exit(1);
     }
   }
 
