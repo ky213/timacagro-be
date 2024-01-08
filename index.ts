@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import dotenv from "dotenv";
 import express from "express";
-import { createYoga, maskError } from "graphql-yoga";
+import { createYoga } from "graphql-yoga";
 import { useGraphQLModules } from "@envelop/graphql-modules";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
@@ -16,7 +16,7 @@ async function startServer() {
     console.log(`Database connected.`);
 
     const yoga = createYoga({
-      plugins: [useGraphQLModules(application), maskError],
+      plugins: [useGraphQLModules(application)],
       logging: process.env.NODE_ENV === "dev",
       maskedErrors: process.env.NODE_ENV === "prod",
     });

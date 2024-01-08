@@ -3,13 +3,13 @@ input AuthInput {
   password: String!
 }
 
-type Authresponse {
+type AuthResponse {
   token: String!
 }
 
 type Mutation {
-  login(credentials: AuthInput): Authresponse
-  logout: Boolean
-  resetPassword(newPassword: String!): Boolean
+  # login(credentials: AuthInput): AuthResponse
+  # logout: Boolean
+  # resetPassword(newPassword: String!): Boolean
   confirmEmail(token: String!): Boolean
 }

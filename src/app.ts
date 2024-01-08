@@ -1,11 +1,10 @@
 import { createApplication } from "graphql-modules";
-import { globalModule } from "modules/global";
 
-import { userModule } from "modules/user";
+import { GlobalModule, AuthModule, UserModule } from "modules";
 import { EmailServiceProvider, CacheServiceProvider } from "services";
 import { RedisServiceProvider } from "config/redis";
 
 export const application = createApplication({
-  modules: [globalModule, userModule],
+  modules: [GlobalModule, UserModule, AuthModule],
   providers: [EmailServiceProvider, RedisServiceProvider, CacheServiceProvider],
 });

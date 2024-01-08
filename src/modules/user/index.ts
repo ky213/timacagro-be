@@ -5,7 +5,7 @@ import { join } from "path";
 import { UserServiceProvider } from "services";
 import { UserRepositoryProvider } from "services/database/repos";
 
-export const userModule = createModule({
+export const UserModule = createModule({
   id: "user-module",
   dirname: __dirname,
   providers: [UserRepositoryProvider, UserServiceProvider],

@@ -36,6 +36,9 @@ export class UserEntity extends BaseEntity {
   @Column({ default: true })
   active: boolean;
 
+  @Column({ default: false })
+  emailConfirmed: boolean;
+
   @CreateDateColumn({ type: "timestamp" })
   createdAt: string;
 

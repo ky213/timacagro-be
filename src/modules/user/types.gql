@@ -5,6 +5,7 @@ type User {
   email: String!
   role: ROLE!
   active: Boolean!
+  emailConfirmed: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -24,6 +25,7 @@ input UpdateUserInput {
   email: String
   role: ROLE
   active: Boolean
+  emailConfirmed: Boolean
 }
 
 type UsersList {
