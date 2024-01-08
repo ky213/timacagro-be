@@ -27,7 +27,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     async login(_root, { email, password }, { injector }) {
       const cacheStore = injector.get(CacheServiceProvider);
       const userSerivce = injector.get(UserServiceProvider);
-      const user = await userSerivce.getUserBy({ email });
+      const user = await userSerivce.getUserWithPassword(email);
 
       if (!user) throw new HttpError(400, "invalid user credentials", ERRORS.INVALID_INPUT_ERROR);
 

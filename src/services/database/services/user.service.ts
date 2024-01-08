@@ -21,8 +21,12 @@ export class UserServiceProvider {
     return await this.userRepo.findOneBy({ id });
   }
 
-  async getUserBy(attribute: UpdateUserInput): Promise<User> {
-    return await this.userRepo.findOneBy({ ...attribute });
+  async getUserWithPassword(email: string) {
+    return this.userRepo
+      .createQueryBuilder("user")
+      .where(`user.email=:email`, { email })
+      .addSelect("user.password")
+      .getOne();
   }
 
   async lisUsers(page: number, perPage: number): Promise<UsersList> {
