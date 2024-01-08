@@ -2,6 +2,7 @@ import { Resolvers } from "types/graphql";
 
 import { UserServiceProvider, CacheServiceProvider } from "services";
 import { HttpError } from "shared/utils/error-handler";
+import { isSameHash } from "shared/utils/cyphers";
 import { ERRORS } from "config/contants";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
@@ -22,6 +23,22 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       }
 
       return false;
+    },
+    async login(_root, { email, password }, { injector }) {
+      const cacheStore = injector.get(CacheServiceProvider);
+      const userSerivce = injector.get(UserServiceProvider);
+      const user = await userSerivce.getUserBy({ email });
+
+      if (!user) throw new HttpError(400, "invalid user credentials", ERRORS.INVALID_INPUT_ERROR);
+
+      if (!isSameHash(password, user.password))
+        throw new HttpError(400, "invalid user credentials", ERRORS.INVALID_INPUT_ERROR);
+
+      if (!user.emailConfirmed) throw new HttpError(401, "user email not confirmed", ERRORS.USER_EMAIL_NOT_CONFIRMED);
+
+      if (!user.active) throw new HttpError(401, "user not active", ERRORS.USER_NOT_ACTIVE);
+
+      return { token: "token" };
     },
   },
 };

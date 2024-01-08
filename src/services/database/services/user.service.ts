@@ -12,18 +12,22 @@ import { generateHash, generateToken } from "shared/utils/cyphers";
 @Injectable()
 export class UserServiceProvider {
   constructor(
-    @Inject(forwardRef(() => UserRepositoryToken)) private userService: IUserRepository,
+    @Inject(forwardRef(() => UserRepositoryToken)) private userRepo: IUserRepository,
     @Inject(forwardRef(() => EmailServiceToken)) private emailService: IEmailService,
     @Inject(forwardRef(() => CacheServiceProvider)) private cacheService: CacheServiceProvider
   ) {}
 
   async getUser(id: number): Promise<User> {
-    return await this.userService.findOneBy({ id });
+    return await this.userRepo.findOneBy({ id });
+  }
+
+  async getUserBy(attribute: UpdateUserInput): Promise<User> {
+    return await this.userRepo.findOneBy({ ...attribute });
   }
 
   async lisUsers(page: number, perPage: number): Promise<UsersList> {
-    const users: User[] = await this.userService.find({ skip: page, take: perPage });
-    const total = await this.userService.count();
+    const users: User[] = await this.userRepo.find({ skip: page, take: perPage });
+    const total = await this.userRepo.count();
 
     return {
       users,
@@ -39,7 +43,7 @@ export class UserServiceProvider {
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
 
     //check user exists
-    const userExists = await this.userService.findOneBy({ email: newUser.email });
+    const userExists = await this.userRepo.findOneBy({ email: newUser.email });
 
     if (userExists) throw new HttpError(400, "User with this email exists.", ERRORS.USER_EXISTS_ERROR);
 
@@ -47,7 +51,7 @@ export class UserServiceProvider {
     newUser.password = await generateHash(newUser.password);
 
     //save user
-    const user = this.userService.create({ ...newUser });
+    const user = this.userRepo.create({ ...newUser });
     await user.save();
 
     //send confirmation email
@@ -57,13 +61,13 @@ export class UserServiceProvider {
   }
 
   async updateUser(id: number, userData: UpdateUserInput): Promise<Boolean> {
-    await this.userService.update({ id }, { ...userData });
+    await this.userRepo.update({ id }, { ...userData });
 
     return true;
   }
 
   async deleteUser(id: number): Promise<Boolean> {
-    await this.userService.update({ id }, { active: false });
+    await this.userRepo.update({ id }, { active: false });
 
     return true;
   }

@@ -1,14 +1,9 @@
-input AuthInput {
-  email: String!
-  password: String!
-}
-
 type AuthResponse {
   token: String!
 }
 
 type Mutation {
-  # login(credentials: AuthInput): AuthResponse
+  login(email: String!, password: String!): AuthResponse
   # logout: Boolean
   # resetPassword(newPassword: String!): Boolean
   confirmEmail(token: String!): Boolean
