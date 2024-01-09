@@ -9,6 +9,11 @@ const config: CodegenConfig = {
         baseTypesPath: "../types/graphql.ts",
         filename: "types/module-types.ts",
       },
+      config: {
+        enumValues: {
+          ROLE_ENUM: "./global#ROLE_ENUM",
+        },
+      },
       plugins: [
         {
           add: {

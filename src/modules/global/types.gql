@@ -16,7 +16,7 @@ type Pagination {
   total: Int!
 }
 
-enum ROLE {
+enum ROLE_ENUM {
   ADMIN
   ATC
   SALES

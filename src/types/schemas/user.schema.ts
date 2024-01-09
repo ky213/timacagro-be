@@ -1,6 +1,6 @@
 import { Length, IsEmail, IsBoolean, IsStrongPassword, MaxLength, IsEnum, IsAlpha } from "class-validator";
 
-import { ROLE } from "types/global";
+import { ROLE_ENUM } from "types/global";
 
 export default class UserSchema {
   @IsAlpha()
@@ -18,7 +18,7 @@ export default class UserSchema {
   @IsStrongPassword({ minNumbers: 1, minLength: 6, minSymbols: 0, minUppercase: 0, minLowercase: 0 })
   password: string;
 
-  @IsEnum(ROLE)
+  @IsEnum(ROLE_ENUM)
   role: string;
 
   @IsBoolean()

@@ -10,8 +10,7 @@ import {
 } from "typeorm";
 
 import { database } from "config/database";
-import { ROLE } from "types/global";
-import { Role } from "types/graphql";
+import { ROLE_ENUM } from "types/global";
 
 @Entity()
 export class UserEntity extends BaseEntity {
@@ -30,8 +29,8 @@ export class UserEntity extends BaseEntity {
   @Column({ type: "varchar", nullable: false, select: false })
   password: string;
 
-  @Column({ type: "enum", enum: ROLE, nullable: false })
-  role: Role;
+  @Column({ type: "enum", enum: ROLE_ENUM, nullable: false })
+  role: ROLE_ENUM;
 
   @Column({ default: true })
   active: boolean;

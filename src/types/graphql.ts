@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { ROLE_ENUM } from './global';
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -8,6 +9,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Mayb
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
+export type EnumResolverSignature<T, AllowedValues = any> = { [key in keyof T]?: AllowedValues };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -29,7 +31,7 @@ export type CreateUserInput = {
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
   password: Scalars['String']['input'];
-  role: Role;
+  role: ROLE_ENUM;
 };
 
 export type Entity = {
@@ -100,11 +102,7 @@ export type QueryListUsersArgs = {
   perPage: Scalars['Int']['input'];
 };
 
-export type Role =
-  | 'ADMIN'
-  | 'ATC'
-  | 'COMMERCE'
-  | 'SALES';
+export { ROLE_ENUM };
 
 export type UpdateUserInput = {
   active?: InputMaybe<Scalars['Boolean']['input']>;
@@ -112,7 +110,7 @@ export type UpdateUserInput = {
   emailConfirmed?: InputMaybe<Scalars['Boolean']['input']>;
   firstName?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
-  role?: InputMaybe<Role>;
+  role?: InputMaybe<ROLE_ENUM>;
 };
 
 export type User = {
@@ -125,7 +123,7 @@ export type User = {
   id: Scalars['Int']['output'];
   lastName: Scalars['String']['output'];
   password?: Maybe<Scalars['String']['output']>;
-  role: Role;
+  role: ROLE_ENUM;
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -218,7 +216,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Pagination: ResolverTypeWrapper<Pagination>;
   Query: ResolverTypeWrapper<{}>;
-  ROLE: Role;
+  ROLE_ENUM: ROLE_ENUM;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
@@ -280,6 +278,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   listUsers?: Resolver<ResolversTypes['UsersList'], ParentType, ContextType, RequireFields<QueryListUsersArgs, 'page' | 'perPage'>>;
 };
 
+export type Role_EnumResolvers = EnumResolverSignature<{ ADMIN?: any, ATC?: any, COMMERCE?: any, SALES?: any }, ResolversTypes['ROLE_ENUM']>;
+
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -289,7 +289,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  role?: Resolver<ResolversTypes['ROLE'], ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['ROLE_ENUM'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -309,6 +309,7 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   Pagination?: PaginationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  ROLE_ENUM?: Role_EnumResolvers;
   User?: UserResolvers<ContextType>;
   UsersList?: UsersListResolvers<ContextType>;
 };

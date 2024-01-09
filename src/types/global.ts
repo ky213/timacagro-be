@@ -1,4 +1,4 @@
-export enum ROLE {
+export enum ROLE_ENUM {
   ADMIN = "ADMIN",
   ATC = "ATC",
   SALES = "SALES",
