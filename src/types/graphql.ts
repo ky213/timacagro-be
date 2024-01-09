@@ -84,6 +84,7 @@ export type Pagination = {
 
 export type Query = {
   __typename?: 'Query';
+  getDateTime: Scalars['DateTime']['output'];
   getUser?: Maybe<User>;
   listUsers: UsersList;
 };
@@ -274,6 +275,7 @@ export type PaginationResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  getDateTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
   listUsers?: Resolver<ResolversTypes['UsersList'], ParentType, ContextType, RequireFields<QueryListUsersArgs, 'page' | 'perPage'>>;
 };
