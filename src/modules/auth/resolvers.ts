@@ -41,7 +41,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       if (!user.active) throw new HttpError(401, "user not active", ERRORS.USER_NOT_ACTIVE);
 
-      const token = jwt.sign({ email: user.email }, JWT_SIGNING_KEY, { subject: `${user.id}` });
+      const token = jwt.sign({ username: user.email }, JWT_SIGNING_KEY, { subject: `${user.id}` });
 
       await request.cookieStore?.set({ ...COOKIE_CONFIG, value: token });
 

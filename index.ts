@@ -23,7 +23,7 @@ async function startServer() {
     const yoga = createYoga({
       logging: process.env.NODE_ENV === "dev",
       maskedErrors: process.env.NODE_ENV === "prod",
-      plugins: [useGenericAuth(authConfig), useCookies(), useJWT(JWT_CONFIG), useGraphQLModules(application)],
+      plugins: [useCookies(), useJWT(JWT_CONFIG), useGenericAuth(authConfig), useGraphQLModules(application)],
       context: ({ request }) => request,
     });
 
