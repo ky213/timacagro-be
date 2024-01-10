@@ -1,9 +1,11 @@
 import { Resolvers } from "types/graphql";
+import jwt from "jsonwebtoken";
 
 import { UserServiceProvider, CacheServiceProvider } from "services";
 import { HttpError } from "shared/utils/error-handler";
 import { isSameHash } from "shared/utils/cyphers";
 import { ERRORS } from "config/contants";
+import { COOKIE_CONFIG, JWT_SIGNING_KEY } from "config/auth";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Mutation: {
@@ -24,7 +26,8 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       return false;
     },
-    async login(_root, { email, password }, { injector }) {
+    //@ts-ignore //TODO:set correct context type
+    async login(_root, { email, password }, { injector, request }) {
       const cacheStore = injector.get(CacheServiceProvider);
       const userSerivce = injector.get(UserServiceProvider);
       const user = await userSerivce.getUserWithPassword(email);
@@ -38,7 +41,11 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       if (!user.active) throw new HttpError(401, "user not active", ERRORS.USER_NOT_ACTIVE);
 
-      return { token: "token" };
+      const token = jwt.sign({ email: user.email }, JWT_SIGNING_KEY, { subject: `${user.id}` });
+
+      await request.cookieStore?.set({ ...COOKIE_CONFIG, value: token });
+
+      return { token };
     },
   },
 };

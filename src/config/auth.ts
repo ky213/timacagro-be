@@ -3,13 +3,13 @@ import { JwtPluginOptions } from "@graphql-yoga/plugin-jwt";
 export const JWT_SIGNING_KEY = process.env.JWT_SIGNING_KEY;
 
 export const JWT_CONFIG: JwtPluginOptions = {
-  issuer: "http://graphql-yoga.com",
+  issuer: process.env.SERVER_HOST + `:${process.env.SERVER_PORT}`,
   signingKey: JWT_SIGNING_KEY,
-  getToken: async ({ request }) => (await request.cookieStore?.get("authorization"))?.value,
+  getToken: async ({ request }) => (await request.cookieStore?.get("cookie"))?.value,
 };
 
 export const COOKIE_CONFIG = {
-  name: "authorization",
+  name: "cookie",
   sameSite: "strict",
   secure: process.env.NODE_ENV === "prod",
   domain: process.env.SERVER_HOST,

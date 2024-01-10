@@ -21,9 +21,10 @@ async function startServer() {
     console.log(`Database connected.`);
 
     const yoga = createYoga({
-      plugins: [useGenericAuth(authConfig), useCookies(), useJWT(JWT_CONFIG), useGraphQLModules(application)],
       logging: process.env.NODE_ENV === "dev",
       maskedErrors: process.env.NODE_ENV === "prod",
+      plugins: [useGenericAuth(authConfig), useCookies(), useJWT(JWT_CONFIG), useGraphQLModules(application)],
+      context: ({ request }) => request,
     });
 
     const app = express();
