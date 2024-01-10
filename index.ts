@@ -3,11 +3,16 @@ import dotenv from "dotenv";
 import express from "express";
 import { createYoga } from "graphql-yoga";
 import { useGraphQLModules } from "@envelop/graphql-modules";
+import { useGenericAuth } from "@envelop/generic-auth";
+import { useJWT } from "@graphql-yoga/plugin-jwt";
+import { useCookies } from "@whatwg-node/server-plugin-cookies";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
-import { database } from "config/database";
 import { application } from "app";
+import { database } from "config/database";
+import { authConfig } from "modules/auth/auth-controllers";
+import { JWT_CONFIG } from "config/auth";
 
 async function startServer() {
   try {
@@ -16,7 +21,7 @@ async function startServer() {
     console.log(`Database connected.`);
 
     const yoga = createYoga({
-      plugins: [useGraphQLModules(application)],
+      plugins: [useGenericAuth(authConfig), useCookies(), useJWT(JWT_CONFIG), useGraphQLModules(application)],
       logging: process.env.NODE_ENV === "dev",
       maskedErrors: process.env.NODE_ENV === "prod",
     });
