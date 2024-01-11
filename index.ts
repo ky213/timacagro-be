@@ -24,7 +24,6 @@ async function startServer() {
       logging: process.env.NODE_ENV === "dev",
       maskedErrors: process.env.NODE_ENV === "prod",
       plugins: [useCookies(), useJWT(JWT_CONFIG), useGenericAuth(authConfig), useGraphQLModules(application)],
-      context: ({ request }) => request,
     });
 
     const app = express();

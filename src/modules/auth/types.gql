@@ -4,7 +4,7 @@ type AuthResponse {
 
 type Mutation {
   login(email: String!, password: String!): AuthResponse
-  # logout: Boolean
+  logout: Boolean
   # resetPassword(newPassword: String!): Boolean
   confirmEmail(token: String!): Boolean
 }

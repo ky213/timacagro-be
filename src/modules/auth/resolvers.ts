@@ -47,5 +47,11 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       return { token };
     },
+    //@ts-ignore //TODO:set correct context type
+    async logout(_root, _args, { request }) {
+      await request.cookieStore?.delete("authorization");
+
+      return true;
+    },
   },
 };
