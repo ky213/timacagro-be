@@ -10,7 +10,7 @@ import {
 } from "typeorm";
 
 import { database } from "config/database";
-import { ROLE_ENUM } from "types/global";
+import { ROLE_ENUM } from "types/graphql";
 
 @Entity()
 export class UserEntity extends BaseEntity {

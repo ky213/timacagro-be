@@ -26,7 +26,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       return false;
     },
-    //@ts-ignore //TODO:set correct context type
+
     async login(_root, { email, password }, { injector, request }) {
       const cacheStore = injector.get(CacheServiceProvider);
       const userSerivce = injector.get(UserServiceProvider);
@@ -43,11 +43,11 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       const token = jwt.sign({ username: user.email }, JWT_SIGNING_KEY, { subject: `${user.id}` });
 
+      //@ts-ignore //TODO:set correct context type
       await request.cookieStore?.set({ ...COOKIE_CONFIG, value: token });
 
       return { token };
     },
-    //@ts-ignore //TODO:set correct context type
     async logout(_root, _args, { request }) {
       await request.cookieStore?.delete("authorization");
 
