@@ -1,4 +1,5 @@
 import { JwtPluginOptions } from "@graphql-yoga/plugin-jwt";
+import { CookieListItem } from "@whatwg-node/cookie-store";
 
 export const JWT_SIGNING_KEY = process.env.JWT_SIGNING_KEY;
 
@@ -9,7 +10,7 @@ export const JWT_CONFIG: JwtPluginOptions = {
   // getToken: async ({ request }) => (await request.cookieStore?.get("authorization"))?.value,
 };
 
-export const COOKIE_CONFIG = {
+export const COOKIE_CONFIG: CookieListItem = {
   name: "authorization",
   sameSite: "strict",
   secure: process.env.NODE_ENV === "prod",

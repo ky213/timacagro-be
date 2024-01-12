@@ -43,10 +43,9 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       const token = jwt.sign({ username: user.email }, JWT_SIGNING_KEY, { subject: `${user.id}` });
 
-      //@ts-ignore //TODO:set correct context type
       await request.cookieStore?.set({ ...COOKIE_CONFIG, value: token });
 
-      return { token };
+      return true;
     },
     async logout(_root, _args, { request }) {
       await request.cookieStore?.delete("authorization");
