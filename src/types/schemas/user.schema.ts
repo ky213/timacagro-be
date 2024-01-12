@@ -2,7 +2,18 @@ import { Length, IsEmail, IsBoolean, IsStrongPassword, MaxLength, IsEnum, IsAlph
 
 import { ROLE_ENUM } from "types/global";
 
-export default class UserSchema {
+export class PasswordSchema {
+  @MaxLength(50)
+  @IsStrongPassword({ minNumbers: 1, minLength: 6, minSymbols: 0, minUppercase: 0, minLowercase: 0 })
+  password: string;
+}
+
+export class LoginSchema extends PasswordSchema {
+  @IsEmail()
+  email: string;
+}
+
+export class UserSchema extends LoginSchema {
   @IsAlpha()
   @Length(2, 25)
   firstName: string;
@@ -11,15 +22,8 @@ export default class UserSchema {
   @Length(2, 25)
   lastName: string;
 
-  @IsEmail()
-  email: string;
-
-  @MaxLength(50)
-  @IsStrongPassword({ minNumbers: 1, minLength: 6, minSymbols: 0, minUppercase: 0, minLowercase: 0 })
-  password: string;
-
   @IsEnum(ROLE_ENUM)
-  role: string;
+  role: ROLE_ENUM;
 
   @IsBoolean()
   active: boolean;

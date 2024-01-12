@@ -7,7 +7,6 @@ import { ERRORS } from "config/contants";
 
 export const resolveUserFn: ResolveUserFn<User, GraphQLModules.Context> = async (context) => {
   try {
-    //@ts-ignore //TODO:set correct types
     const token = (await context.request.cookieStore?.get("authorization"))?.value;
     const user = jwt.decode(token) as User;
 
@@ -20,7 +19,7 @@ export const resolveUserFn: ResolveUserFn<User, GraphQLModules.Context> = async 
 };
 
 export const validateUser: ValidateUserFn<User> = (params) => {
-  if (["Login", "ForgotPassword"].includes(params.executionArgs.operationName)) {
+  if (["Login", "ForgotPassword", "ResetPassword", "ConfirmEmail"].includes(params.executionArgs.operationName)) {
     return;
   }
 

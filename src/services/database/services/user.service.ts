@@ -5,7 +5,7 @@ import { UsersList, User, CreateUserInput, UpdateUserInput } from "types/graphql
 import { validateData } from "shared/utils/validator";
 import { HttpError } from "shared/utils/error-handler";
 import { DELAYS, ERRORS, WEB_CLIENT_HOST, WEB_CLIENT_PORT } from "config/contants";
-import UserSchema from "types/schemas/user.schema";
+import { PasswordSchema, UserSchema } from "types/schemas/";
 import { EmailServiceToken, CacheServiceProvider, IEmailService } from "services";
 import { generateHash, generateToken } from "shared/utils/cyphers";
 
@@ -69,6 +69,18 @@ export class UserServiceProvider {
 
   async updateUser(id: number, userData: UpdateUserInput): Promise<Boolean> {
     await this.userRepo.update({ id }, { ...userData });
+
+    return true;
+  }
+
+  async updateUserPassword(id: number, newPassword: string): Promise<Boolean> {
+    const errors = validateData<{ password: string }>(PasswordSchema, { password: newPassword });
+
+    if (errors.length) throw new HttpError(400, "Password format not valid", ERRORS.INVALID_INPUT_ERROR);
+
+    const newHashedPassword = await generateHash(newPassword);
+
+    await this.userRepo.update({ id }, { password: newHashedPassword });
 
     return true;
   }

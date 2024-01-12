@@ -33,8 +33,9 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       if (!user) throw new HttpError(400, "invalid user credentials", ERRORS.INVALID_INPUT_ERROR);
 
-      if (!isSameHash(password, user.password))
-        throw new HttpError(400, "invalid user credentials", ERRORS.INVALID_INPUT_ERROR);
+      const passwordsMatch = await isSameHash(password, user.password);
+
+      if (!passwordsMatch) throw new HttpError(400, "invalid user credentials", ERRORS.INVALID_INPUT_ERROR);
 
       if (!user.emailConfirmed) throw new HttpError(401, "user email not confirmed", ERRORS.USER_EMAIL_NOT_CONFIRMED);
 
@@ -64,6 +65,23 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       await userService.sendResetPasswordEmail(user);
 
       return "An email has been sent to you for password reset";
+    },
+    async resetPassword(_root, { newPassword, token }, { injector }) {
+      const userService = injector.get(UserServiceProvider);
+      const cacheService = injector.get(CacheServiceProvider);
+      const email = await cacheService.get(token);
+
+      if (!email) throw new HttpError(400, "Invalid token", ERRORS.INVALID_TOKEN);
+
+      const user = await userService.getUserByEmail(email);
+
+      if (!user) return null;
+
+      await userService.updateUserPassword(user.id, newPassword);
+
+      await cacheService.delete(token);
+
+      return true;
     },
   },
 };
