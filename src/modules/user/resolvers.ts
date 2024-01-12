@@ -7,7 +7,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     getUser: async (_parent, { id }, context) => {
       const userRepo = context.injector.get(UserServiceProvider);
 
-      return await userRepo.getUser(Number(id));
+      return await userRepo.getUserById(Number(id));
     },
     listUsers: async (_parent, { page = 0, perPage = 10 }, context) => {
       const userRepo = context.injector.get(UserServiceProvider);

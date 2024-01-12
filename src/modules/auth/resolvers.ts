@@ -15,7 +15,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       const userId = await cacheStore.get(token);
 
       if (userId) {
-        const user = await userSerivce.getUser(Number(userId));
+        const user = await userSerivce.getUserById(Number(userId));
 
         if (user.emailConfirmed) throw new HttpError(400, "email already confirmed", ERRORS.INVALID_INPUT_ERROR);
 
@@ -28,7 +28,6 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     },
 
     async login(_root, { email, password }, { injector, request }) {
-      const cacheStore = injector.get(CacheServiceProvider);
       const userSerivce = injector.get(UserServiceProvider);
       const user = await userSerivce.getUserWithPassword(email);
 
@@ -51,6 +50,20 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       await request.cookieStore?.delete("authorization");
 
       return true;
+    },
+    async forgotPassword(_root, { email }, { injector }) {
+      const userService = injector.get(UserServiceProvider);
+      const user = await userService.getUserByEmail(email);
+
+      if (!user) return null;
+
+      if (!user.emailConfirmed) throw new HttpError(400, "user email not confirmed", ERRORS.USER_EMAIL_NOT_CONFIRMED);
+
+      if (!user.active) throw new HttpError(400, "user not active", ERRORS.USER_NOT_ACTIVE);
+
+      await userService.sendResetPasswordEmail(user);
+
+      return "An email has been sent to you for password reset";
     },
   },
 };

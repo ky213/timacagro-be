@@ -1,6 +1,7 @@
 type Mutation {
   login(email: String!, password: String!): Boolean
   logout: Boolean
-  # resetPassword(newPassword: String!): Boolean
+  forgotPassword(email: String!): String
+  resetPassword(newPassword: String!, token: String!): Boolean
   confirmEmail(token: String!): Boolean
 }

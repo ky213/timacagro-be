@@ -20,7 +20,7 @@ export const resolveUserFn: ResolveUserFn<User, GraphQLModules.Context> = async 
 };
 
 export const validateUser: ValidateUserFn<User> = (params) => {
-  if (params.executionArgs.operationName === "Login") {
+  if (["Login", "ForgotPassword"].includes(params.executionArgs.operationName)) {
     return;
   }
 
