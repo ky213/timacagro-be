@@ -1,10 +1,21 @@
 import { DateTimeResolver } from "graphql-scalars";
+import { createPubSub } from "graphql-yoga";
+
 import { Resolvers } from "types/graphql";
+
+const pubSub = createPubSub();
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
     getDateTime() {
       return new Date().toISOString();
+    },
+  },
+  Mutation: {
+    randomize: () => {
+      const random = Math.random();
+      pubSub.publish("random_number", random);
+      return random;
     },
   },
   Subscription: {
@@ -15,6 +26,10 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
           yield i;
         }
       },
+      resolve: (payload: number) => payload,
+    },
+    randomNumber: {
+      subscribe: () => pubSub.subscribe("random_number"),
       resolve: (payload: number) => payload,
     },
   },

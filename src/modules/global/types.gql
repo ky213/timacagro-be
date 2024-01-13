@@ -23,6 +23,11 @@ type Query {
   getDateTime: DateTime!
 }
 
+type Mutation {
+  randomize: Float!
+}
+
 type Subscription {
   testConnection: Int!
+  randomNumber: Float!
 }

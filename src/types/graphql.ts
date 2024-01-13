@@ -44,6 +44,7 @@ export type Mutation = {
   forgotPassword?: Maybe<Scalars['String']['output']>;
   login?: Maybe<Scalars['Boolean']['output']>;
   logout?: Maybe<Scalars['Boolean']['output']>;
+  randomize: Scalars['Float']['output'];
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
   updateUser: Scalars['Boolean']['output'];
 };
@@ -115,6 +116,7 @@ export { ROLE_ENUM };
 
 export type Subscription = {
   __typename?: 'Subscription';
+  randomNumber: Scalars['Float']['output'];
   testConnection: Scalars['Int']['output'];
 };
 
@@ -224,6 +226,7 @@ export type ResolversTypes = {
   CreateUserInput: CreateUserInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Entity: ResolverTypeWrapper<Entity>;
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -243,6 +246,7 @@ export type ResolversParentTypes = {
   CreateUserInput: CreateUserInput;
   DateTime: Scalars['DateTime']['output'];
   Entity: Entity;
+  Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   Mutation: {};
@@ -273,6 +277,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   forgotPassword?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationForgotPasswordArgs, 'email'>>;
   login?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  randomize?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   resetPassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'newPassword' | 'token'>>;
   updateUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id' | 'userInfo'>>;
 };
@@ -293,6 +298,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type Role_EnumResolvers = EnumResolverSignature<{ ADMIN?: any, ATC?: any, COMMERCE?: any, SALES?: any }, ResolversTypes['ROLE_ENUM']>;
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  randomNumber?: SubscriptionResolver<ResolversTypes['Float'], "randomNumber", ParentType, ContextType>;
   testConnection?: SubscriptionResolver<ResolversTypes['Int'], "testConnection", ParentType, ContextType>;
 };
 
