@@ -1,9 +1,6 @@
 import { DateTimeResolver } from "graphql-scalars";
-import { createPubSub } from "graphql-yoga";
 
 import { Resolvers } from "types/graphql";
-
-const pubSub = createPubSub();
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
@@ -12,15 +9,15 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     },
   },
   Mutation: {
-    randomize: () => {
+    randomize: (_root, _args, { pubSub }) => {
       const random = Math.random();
-      pubSub.publish("random_number", random);
+      pubSub.publish("global:random_number", random);
       return random;
     },
   },
   Subscription: {
     testConnection: {
-      subscribe: async function* () {
+      subscribe: async function* (_root, _args, { pubSub }) {
         for (let i = 30; i >= 0; i--) {
           await new Promise((resolve) => setTimeout(resolve, 1000));
           yield i;
@@ -29,7 +26,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       resolve: (payload: number) => payload,
     },
     randomNumber: {
-      subscribe: () => pubSub.subscribe("random_number"),
+      subscribe: (_root, _args, { pubSub }) => pubSub.subscribe("global:random_number"),
       resolve: (payload: number) => payload,
     },
   },

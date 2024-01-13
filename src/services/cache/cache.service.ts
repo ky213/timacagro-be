@@ -1,6 +1,6 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
 
-import { IRedisService, RedisServiceToken } from "config/redis";
+import { IRedisService, RedisServiceToken } from "config";
 
 @Injectable({ global: true })
 export class CacheServiceProvider {

@@ -3,7 +3,7 @@ import { User } from "types/graphql";
 import jwt from "jsonwebtoken";
 
 import { HttpError } from "shared/utils/error-handler";
-import { ERRORS } from "config/contants";
+import { ERRORS } from "config";
 
 export const resolveUserFn: ResolveUserFn<User, GraphQLModules.Context> = async (context) => {
   try {

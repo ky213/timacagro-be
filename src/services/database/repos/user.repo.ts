@@ -9,7 +9,7 @@ import {
   Repository,
 } from "typeorm";
 
-import { database } from "config/database";
+import { database } from "config";
 import { ROLE_ENUM } from "types/graphql";
 
 @Entity()

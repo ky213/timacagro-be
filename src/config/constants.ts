@@ -18,8 +18,3 @@ export const DELAYS = {
 // Hosts
 export const WEB_CLIENT_HOST = process.env.WEB_CLIENT_HOST;
 export const WEB_CLIENT_PORT = process.env.WEB_CLIENT_PORT;
-
-//Pub Topics
-export const PUBSUB_TOPICS = {
-  TEST_CONNECTION: "TEST_CONNECTION",
-};
