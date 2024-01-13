@@ -113,6 +113,11 @@ export type QueryListUsersArgs = {
 
 export { ROLE_ENUM };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  testConnection: Scalars['Int']['output'];
+};
+
 export type UpdateUserInput = {
   active?: InputMaybe<Scalars['Boolean']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
@@ -226,6 +231,7 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   ROLE_ENUM: ROLE_ENUM;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Subscription: ResolverTypeWrapper<{}>;
   UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
   UsersList: ResolverTypeWrapper<UsersList>;
@@ -243,6 +249,7 @@ export type ResolversParentTypes = {
   Pagination: Pagination;
   Query: {};
   String: Scalars['String']['output'];
+  Subscription: {};
   UpdateUserInput: UpdateUserInput;
   User: User;
   UsersList: UsersList;
@@ -285,6 +292,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type Role_EnumResolvers = EnumResolverSignature<{ ADMIN?: any, ATC?: any, COMMERCE?: any, SALES?: any }, ResolversTypes['ROLE_ENUM']>;
 
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  testConnection?: SubscriptionResolver<ResolversTypes['Int'], "testConnection", ParentType, ContextType>;
+};
+
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -314,6 +325,7 @@ export type Resolvers<ContextType = any> = {
   Pagination?: PaginationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ROLE_ENUM?: Role_EnumResolvers;
+  Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UsersList?: UsersListResolvers<ContextType>;
 };

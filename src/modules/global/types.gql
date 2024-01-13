@@ -1,9 +1,5 @@
 scalar DateTime
 
-type Query {
-  getDateTime: DateTime!
-}
-
 type Entity {
   id: ID!
   createdAt: DateTime
@@ -21,4 +17,12 @@ enum ROLE_ENUM {
   ATC
   SALES
   COMMERCE
+}
+
+type Query {
+  getDateTime: DateTime!
+}
+
+type Subscription {
+  testConnection: Int!
 }

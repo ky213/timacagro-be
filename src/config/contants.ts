@@ -21,5 +21,5 @@ export const WEB_CLIENT_PORT = process.env.WEB_CLIENT_PORT;
 
 //Pub Topics
 export const PUBSUB_TOPICS = {
-  USER_LOGGIN_IN: "USER_LOGGIN_IN",
+  TEST_CONNECTION: "TEST_CONNECTION",
 };
