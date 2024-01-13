@@ -9,10 +9,17 @@ export const ERRORS = {
   INVALID_TOKEN: "INVALID_TOKEN",
 };
 
+//Sessoin and times
 export const DELAYS = {
   SESSION_EXPIRATION_TIME: Number(process.env.SESSION_EXPIRATION_TIM),
   EMAIL_CONFIRMATION_EXPIRATION_TIME: Number(process.env.EMAIL_CONFIRMATION_EXPIRATION_TIME),
 };
 
+// Hosts
 export const WEB_CLIENT_HOST = process.env.WEB_CLIENT_HOST;
 export const WEB_CLIENT_PORT = process.env.WEB_CLIENT_PORT;
+
+//Pub Topics
+export const PUBSUB_TOPICS = {
+  USER_LOGGIN_IN: "USER_LOGGIN_IN",
+};
