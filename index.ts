@@ -19,6 +19,10 @@ async function startServer() {
 
     console.log(`Database connected.`);
 
+    await cache.connect();
+
+    console.log(`Redis server connected.`);
+
     const yoga = createYoga({
       logging: process.env.NODE_ENV === "dev",
       maskedErrors: process.env.NODE_ENV === "prod",
