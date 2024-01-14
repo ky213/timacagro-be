@@ -12,31 +12,32 @@ dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 import { database, pubSub, JWT_CONFIG, redisClient as cache } from "config";
 import { authConfig } from "modules/auth/auth-controllers";
 import { application } from "app";
+import { logger } from "shared/utils/logger";
 
 async function startServer() {
   try {
     await database.initialize();
 
-    console.log(`Database connected.`);
+    logger.info("Database connected");
 
     await cache.connect();
 
-    console.log(`Redis server connected.`);
+    logger.info(`Redis server connected.`);
 
     const yoga = createYoga({
       logging: process.env.NODE_ENV === "dev",
       maskedErrors: process.env.NODE_ENV === "prod",
+      context: { pubSub, cache },
       plugins: [useCookies(), useJWT(JWT_CONFIG), useGenericAuth(authConfig), useGraphQLModules(application)],
-      context: () => ({ pubSub, cache }),
     });
 
     const app = express();
     const port = process.env.SERVER_PORT;
 
     app.use(yoga);
-    app.listen(port, () => console.log(`Server running on port ${port}`));
+    app.listen(port, () => logger.info(`Server running on port ${port}`));
   } catch (error) {
-    console.error("Error starting the server:", error);
+    logger.error("Error starting the server:", error);
   }
 }
 
