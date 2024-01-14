@@ -13,7 +13,9 @@ export type IRedisService = RedisClientType<RedisModules, RedisFunctions, RedisS
 
 export const RedisServiceToken = new InjectionToken<RedisClientType>("RedisService");
 
+export const redisClient = createClient(redisConfig);
+
 export const RedisServiceProvider: Provider<IRedisService> = {
   provide: RedisServiceToken,
-  useValue: createClient(redisConfig),
+  useValue: redisClient,
 };

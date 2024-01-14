@@ -1,5 +1,6 @@
 import { CookieStore } from "@whatwg-node/cookie-store";
 import { PubSub } from "graphql-yoga";
+import { RedisClientType } from "redis";
 
 import { ITopics } from "config";
 
@@ -8,6 +9,7 @@ declare global {
     interface GlobalContext {
       request: HttpREquest;
       pubSub: PubSub<ITopics>;
+      cache: RedisClientType;
     }
   }
 }

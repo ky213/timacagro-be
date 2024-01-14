@@ -9,7 +9,7 @@ import { useCookies } from "@whatwg-node/server-plugin-cookies";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
-import { database, pubSub, JWT_CONFIG } from "config";
+import { database, pubSub, JWT_CONFIG, redisClient as cache } from "config";
 import { authConfig } from "modules/auth/auth-controllers";
 import { application } from "app";
 
@@ -23,7 +23,7 @@ async function startServer() {
       logging: process.env.NODE_ENV === "dev",
       maskedErrors: process.env.NODE_ENV === "prod",
       plugins: [useCookies(), useJWT(JWT_CONFIG), useGenericAuth(authConfig), useGraphQLModules(application)],
-      context: () => ({ pubSub }),
+      context: () => ({ pubSub, cache }),
     });
 
     const app = express();
