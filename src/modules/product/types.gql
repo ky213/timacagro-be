@@ -1,14 +1,15 @@
 type Product {
-  id: ID!
+  id: Int!
   type: String!
   quantity: Float!
   points: Int!
+  active: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
 type ProductsList implements Pagination {
-  users: [Product]!
+  products: [Product]!
   page: Int!
   perPage: Int!
   total: Int!
@@ -18,12 +19,14 @@ input CreateProductInput {
   type: String!
   quantity: Float!
   points: Int!
+  active: Boolean
 }
 
 input UpdateProductInput {
   type: String
   quantity: Float
   points: Int
+  active: Boolean
 }
 
 type Query {

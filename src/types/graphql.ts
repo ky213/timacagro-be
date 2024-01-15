@@ -21,6 +21,7 @@ export type Scalars = {
 };
 
 export type CreateProductInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
   points: Scalars['Int']['input'];
   quantity: Scalars['Float']['input'];
   type: Scalars['String']['input'];
@@ -120,8 +121,9 @@ export type Pagination = {
 
 export type Product = {
   __typename?: 'Product';
+  active: Scalars['Boolean']['output'];
   createdAt: Scalars['DateTime']['output'];
-  id: Scalars['ID']['output'];
+  id: Scalars['Int']['output'];
   points: Scalars['Int']['output'];
   quantity: Scalars['Float']['output'];
   type: Scalars['String']['output'];
@@ -132,8 +134,8 @@ export type ProductsList = Pagination & {
   __typename?: 'ProductsList';
   page: Scalars['Int']['output'];
   perPage: Scalars['Int']['output'];
+  products: Array<Maybe<Product>>;
   total: Scalars['Int']['output'];
-  users: Array<Maybe<Product>>;
 };
 
 export type Query = {
@@ -176,6 +178,7 @@ export type Subscription = {
 };
 
 export type UpdateProductInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
   points?: InputMaybe<Scalars['Int']['input']>;
   quantity?: InputMaybe<Scalars['Float']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
@@ -366,8 +369,9 @@ export type PaginationResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -378,8 +382,8 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
 export type ProductsListResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductsList'] = ResolversParentTypes['ProductsList']> = {
   page?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   perPage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  products?: Resolver<Array<Maybe<ResolversTypes['Product']>>, ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  users?: Resolver<Array<Maybe<ResolversTypes['Product']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
