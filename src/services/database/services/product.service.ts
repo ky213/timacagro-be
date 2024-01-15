@@ -1,19 +1,15 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
 
-import { UserRepositoryToken, IUserRepository, IProductRepository, ProductRepositoryToken } from "../repos";
+import { IProductRepository, ProductRepositoryToken } from "../repos";
 import { CreateProductInput, Product, ProductsList, UpdateProductInput } from "types/graphql";
 import { validateData } from "shared/utils/validator";
 import { HttpError } from "shared/utils/error-handler";
 import { ERRORS } from "config";
-import { ProductSchema, UserSchema } from "types/schemas/";
-import { generateHash } from "shared/utils/cyphers";
+import { ProductSchema } from "types/schemas/";
 
 @Injectable()
 export class ProductServiceProvider {
-  constructor(
-    @Inject(forwardRef(() => ProductRepositoryToken)) private productRepo: IProductRepository,
-    @Inject(forwardRef(() => UserRepositoryToken)) private userRepo: IUserRepository
-  ) {}
+  constructor(@Inject(forwardRef(() => ProductRepositoryToken)) private productRepo: IProductRepository) {}
 
   async getProductById(id: number): Promise<Product> {
     return await this.productRepo.findOneBy({ id });
@@ -49,7 +45,7 @@ export class ProductServiceProvider {
   }
 
   async updateProduct(id: number, productData: UpdateProductInput): Promise<Boolean> {
-    await this.userRepo.update({ id }, { ...productData });
+    await this.productRepo.update({ id }, { ...productData });
 
     return true;
   }
