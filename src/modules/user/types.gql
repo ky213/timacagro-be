@@ -29,7 +29,7 @@ input UpdateUserInput {
   emailConfirmed: Boolean
 }
 
-type UsersList {
+type UsersList implements Pagination {
   users: [User]!
   page: Int!
   perPage: Int!

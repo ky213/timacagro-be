@@ -20,6 +20,12 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type CreateProductInput = {
+  points: Scalars['Int']['input'];
+  quantity: Scalars['Float']['input'];
+  type: Scalars['String']['input'];
+};
+
 export type CreateUserInput = {
   active: Scalars['Boolean']['input'];
   email: Scalars['String']['input'];
@@ -39,13 +45,16 @@ export type Entity = {
 export type Mutation = {
   __typename?: 'Mutation';
   confirmEmail?: Maybe<Scalars['Boolean']['output']>;
+  createProduct: Product;
   createUser: User;
+  deleteProduct: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
   forgotPassword?: Maybe<Scalars['String']['output']>;
   login?: Maybe<Scalars['Boolean']['output']>;
   logout?: Maybe<Scalars['Boolean']['output']>;
   randomize: Scalars['Float']['output'];
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
+  updateProduct: Scalars['Boolean']['output'];
   updateUser: Scalars['Boolean']['output'];
 };
 
@@ -55,8 +64,18 @@ export type MutationConfirmEmailArgs = {
 };
 
 
+export type MutationCreateProductArgs = {
+  productInfo: CreateProductInput;
+};
+
+
 export type MutationCreateUserArgs = {
   userInfo: CreateUserInput;
+};
+
+
+export type MutationDeleteProductArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -82,28 +101,64 @@ export type MutationResetPasswordArgs = {
 };
 
 
+export type MutationUpdateProductArgs = {
+  id: Scalars['ID']['input'];
+  productInfo: UpdateProductInput;
+};
+
+
 export type MutationUpdateUserArgs = {
   id: Scalars['ID']['input'];
   userInfo: UpdateUserInput;
 };
 
 export type Pagination = {
-  __typename?: 'Pagination';
   page: Scalars['Int']['output'];
   perPage: Scalars['Int']['output'];
   total: Scalars['Int']['output'];
 };
 
+export type Product = {
+  __typename?: 'Product';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  points: Scalars['Int']['output'];
+  quantity: Scalars['Float']['output'];
+  type: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type ProductsList = Pagination & {
+  __typename?: 'ProductsList';
+  page: Scalars['Int']['output'];
+  perPage: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+  users: Array<Maybe<Product>>;
+};
+
 export type Query = {
   __typename?: 'Query';
   getDateTime: Scalars['DateTime']['output'];
+  getProduct?: Maybe<Product>;
   getUser?: Maybe<User>;
+  listProducts: ProductsList;
   listUsers: UsersList;
+};
+
+
+export type QueryGetProductArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryGetUserArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryListProductsArgs = {
+  page: Scalars['Int']['input'];
+  perPage: Scalars['Int']['input'];
 };
 
 
@@ -118,6 +173,12 @@ export type Subscription = {
   __typename?: 'Subscription';
   randomNumber: Scalars['Float']['output'];
   testConnection: Scalars['Int']['output'];
+};
+
+export type UpdateProductInput = {
+  points?: InputMaybe<Scalars['Int']['input']>;
+  quantity?: InputMaybe<Scalars['Float']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
@@ -143,7 +204,7 @@ export type User = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
-export type UsersList = {
+export type UsersList = Pagination & {
   __typename?: 'UsersList';
   page: Scalars['Int']['output'];
   perPage: Scalars['Int']['output'];
@@ -219,10 +280,15 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 ) => TResult | Promise<TResult>;
 
 
+/** Mapping of interface types */
+export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
+  Pagination: ( ProductsList ) | ( UsersList );
+};
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CreateProductInput: CreateProductInput;
   CreateUserInput: CreateUserInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Entity: ResolverTypeWrapper<Entity>;
@@ -230,11 +296,14 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
-  Pagination: ResolverTypeWrapper<Pagination>;
+  Pagination: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Pagination']>;
+  Product: ResolverTypeWrapper<Product>;
+  ProductsList: ResolverTypeWrapper<ProductsList>;
   Query: ResolverTypeWrapper<{}>;
   ROLE_ENUM: ROLE_ENUM;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
+  UpdateProductInput: UpdateProductInput;
   UpdateUserInput: UpdateUserInput;
   User: ResolverTypeWrapper<User>;
   UsersList: ResolverTypeWrapper<UsersList>;
@@ -243,6 +312,7 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
+  CreateProductInput: CreateProductInput;
   CreateUserInput: CreateUserInput;
   DateTime: Scalars['DateTime']['output'];
   Entity: Entity;
@@ -250,10 +320,13 @@ export type ResolversParentTypes = {
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   Mutation: {};
-  Pagination: Pagination;
+  Pagination: ResolversInterfaceTypes<ResolversParentTypes>['Pagination'];
+  Product: Product;
+  ProductsList: ProductsList;
   Query: {};
   String: Scalars['String']['output'];
   Subscription: {};
+  UpdateProductInput: UpdateProductInput;
   UpdateUserInput: UpdateUserInput;
   User: User;
   UsersList: UsersList;
@@ -272,26 +345,49 @@ export type EntityResolvers<ContextType = any, ParentType extends ResolversParen
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   confirmEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationConfirmEmailArgs, 'token'>>;
+  createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'productInfo'>>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'userInfo'>>;
+  deleteProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteProductArgs, 'id'>>;
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
   forgotPassword?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationForgotPasswordArgs, 'email'>>;
   login?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   randomize?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   resetPassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'newPassword' | 'token'>>;
+  updateProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateProductArgs, 'id' | 'productInfo'>>;
   updateUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id' | 'userInfo'>>;
 };
 
 export type PaginationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Pagination'] = ResolversParentTypes['Pagination']> = {
+  __resolveType: TypeResolveFn<'ProductsList' | 'UsersList', ParentType, ContextType>;
   page?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   perPage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+};
+
+export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  quantity?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProductsListResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductsList'] = ResolversParentTypes['ProductsList']> = {
+  page?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  perPage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  users?: Resolver<Array<Maybe<ResolversTypes['Product']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getDateTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  getProduct?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType, RequireFields<QueryGetProductArgs, 'id'>>;
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
+  listProducts?: Resolver<ResolversTypes['ProductsList'], ParentType, ContextType, RequireFields<QueryListProductsArgs, 'page' | 'perPage'>>;
   listUsers?: Resolver<ResolversTypes['UsersList'], ParentType, ContextType, RequireFields<QueryListUsersArgs, 'page' | 'perPage'>>;
 };
 
@@ -329,6 +425,8 @@ export type Resolvers<ContextType = any> = {
   Entity?: EntityResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Pagination?: PaginationResolvers<ContextType>;
+  Product?: ProductResolvers<ContextType>;
+  ProductsList?: ProductsListResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   ROLE_ENUM?: Role_EnumResolvers;
   Subscription?: SubscriptionResolvers<ContextType>;

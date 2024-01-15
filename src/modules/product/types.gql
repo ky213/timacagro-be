@@ -1,0 +1,38 @@
+type Product {
+  id: ID!
+  type: String!
+  quantity: Float!
+  points: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ProductsList implements Pagination {
+  users: [Product]!
+  page: Int!
+  perPage: Int!
+  total: Int!
+}
+
+input CreateProductInput {
+  type: String!
+  quantity: Float!
+  points: Int!
+}
+
+input UpdateProductInput {
+  type: String
+  quantity: Float
+  points: Int
+}
+
+type Query {
+  listProducts(page: Int!, perPage: Int!): ProductsList!
+  getProduct(id: ID!): Product
+}
+
+type Mutation {
+  createProduct(productInfo: CreateProductInput!): Product!
+  updateProduct(id: ID!, productInfo: UpdateProductInput!): Boolean!
+  deleteProduct(id: ID!): Boolean!
+}
