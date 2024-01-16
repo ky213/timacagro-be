@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/4b1c5823-88a7-483e-bec2-78a757628d90/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/Timacagro",
+  "appService.deploySubpath": "."
+}
