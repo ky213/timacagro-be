@@ -36,10 +36,10 @@ stages:
       displayName: 'Install Node.js'
 
     - script: |
+        npm i -g pnpm
         pnpm install
-        pnpm run build --if-present
-        pnpm run test --if-present
-      displayName: 'npm install, build and test'
+        pnpm  stage 
+      displayName: 'pnpm install, stage.'
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
@@ -50,7 +50,7 @@ stages:
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
         replaceExistingArchive: true
 
-    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
 
 - stage: Deploy

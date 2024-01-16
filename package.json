@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "dev": "NODE_ENV=dev nodemon -e js,ts,gql",
+    "stage": "NODE_ENV=staging nodemon -e js,ts,gql",
     "prod": "NODE_ENV=prod node dist/index.js",
     "lint": "eslint",
     "build": "NODE_ENV=prod tsc",
