@@ -32,7 +32,7 @@ stages:
     steps:
     - task: NodeTool@0
       inputs:
-        versionSpec: '18-lts'
+        versionSpec: '18.18.2'
       displayName: 'Install Node.js'
 
     - script: |
@@ -72,6 +72,6 @@ stages:
               azureSubscription: $(azureSubscription)
               appType: webAppLinux
               appName: $(webAppName)
-              runtimeStack: 'NODE|18-lts'
+              runtimeStack: 'NODE|18.18.2'
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
               startUpCommand: 'pnpm stage'
