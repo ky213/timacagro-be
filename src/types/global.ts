@@ -18,9 +18,20 @@ interface HttpREquest extends Request {
   cookieStore?: CookieStore;
 }
 
-export enum ROLE_ENUM {
+export enum Role {
   ADMIN = "ADMIN",
   ATC = "ATC",
   SALES = "SALES",
   COMMERCE = "COMMERCE",
+}
+
+export enum Region {
+  CENTER = "CENTER",
+  CENTER_EAST = "CENTER_EAST",
+  NORTH_WEST = "NORTH_WEST",
+  FAR_WEST = "FAR_WEST",
+  NORTH_EAST = "NORTH_EAST",
+  SOUTH_EAST = "SOUTH_EAST",
+  FAR_EAST = "FAR_EAST",
+  DEV_ZONE_SOUTH = "DEV_ZONE_SOUTH",
 }

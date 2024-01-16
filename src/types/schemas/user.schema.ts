@@ -1,6 +1,6 @@
 import { Length, IsEmail, IsBoolean, IsStrongPassword, MaxLength, IsEnum, IsAlpha } from "class-validator";
 
-import { ROLE_ENUM } from "types/global";
+import { Role } from "types/global";
 
 export class PasswordSchema {
   @MaxLength(50)
@@ -22,8 +22,8 @@ export class UserSchema extends LoginSchema {
   @Length(2, 25)
   lastName: string;
 
-  @IsEnum(ROLE_ENUM)
-  role: ROLE_ENUM;
+  @IsEnum(Role)
+  role: Role;
 
   @IsBoolean()
   active: boolean;

@@ -1,5 +1,6 @@
 /* eslint-disable */
-import { ROLE_ENUM } from './global';
+import { Role } from './global';
+import { Region } from './global';
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -29,11 +30,14 @@ export type CreateProductInput = {
 
 export type CreateUserInput = {
   active: Scalars['Boolean']['input'];
+  currentPoints?: InputMaybe<Scalars['Int']['input']>;
   email: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
   password: Scalars['String']['input'];
-  role: ROLE_ENUM;
+  region?: InputMaybe<Region>;
+  role: Role;
+  targetPoints?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type Entity = {
@@ -169,7 +173,9 @@ export type QueryListUsersArgs = {
   perPage: Scalars['Int']['input'];
 };
 
-export { ROLE_ENUM };
+export { Region };
+
+export { Role };
 
 export type Subscription = {
   __typename?: 'Subscription';
@@ -186,24 +192,30 @@ export type UpdateProductInput = {
 
 export type UpdateUserInput = {
   active?: InputMaybe<Scalars['Boolean']['input']>;
+  currentPoints?: InputMaybe<Scalars['Int']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   emailConfirmed?: InputMaybe<Scalars['Boolean']['input']>;
   firstName?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
-  role?: InputMaybe<ROLE_ENUM>;
+  region?: InputMaybe<Region>;
+  role?: InputMaybe<Role>;
+  targetPoints?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type User = {
   __typename?: 'User';
   active: Scalars['Boolean']['output'];
   createdAt: Scalars['DateTime']['output'];
+  currentPoints?: Maybe<Scalars['Int']['output']>;
   email: Scalars['String']['output'];
   emailConfirmed: Scalars['Boolean']['output'];
   firstName: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   lastName: Scalars['String']['output'];
   password?: Maybe<Scalars['String']['output']>;
-  role: ROLE_ENUM;
+  region?: Maybe<Region>;
+  role: Role;
+  targetPoints?: Maybe<Scalars['Int']['output']>;
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -303,7 +315,8 @@ export type ResolversTypes = {
   Product: ResolverTypeWrapper<Product>;
   ProductsList: ResolverTypeWrapper<ProductsList>;
   Query: ResolverTypeWrapper<{}>;
-  ROLE_ENUM: ROLE_ENUM;
+  Region: Region;
+  Role: Role;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
   UpdateProductInput: UpdateProductInput;
@@ -395,7 +408,9 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   listUsers?: Resolver<ResolversTypes['UsersList'], ParentType, ContextType, RequireFields<QueryListUsersArgs, 'page' | 'perPage'>>;
 };
 
-export type Role_EnumResolvers = EnumResolverSignature<{ ADMIN?: any, ATC?: any, COMMERCE?: any, SALES?: any }, ResolversTypes['ROLE_ENUM']>;
+export type RegionResolvers = EnumResolverSignature<{ CENTER?: any, CENTER_EAST?: any, DEV_ZONE_SOUTH?: any, FAR_EAST?: any, FAR_WEST?: any, NORTH_EAST?: any, NORTH_WEST?: any, SOUTH_EAST?: any }, ResolversTypes['Region']>;
+
+export type RoleResolvers = EnumResolverSignature<{ ADMIN?: any, ATC?: any, COMMERCE?: any, SALES?: any }, ResolversTypes['Role']>;
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   randomNumber?: SubscriptionResolver<ResolversTypes['Float'], "randomNumber", ParentType, ContextType>;
@@ -405,13 +420,16 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  currentPoints?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   emailConfirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  role?: Resolver<ResolversTypes['ROLE_ENUM'], ParentType, ContextType>;
+  region?: Resolver<Maybe<ResolversTypes['Region']>, ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['Role'], ParentType, ContextType>;
+  targetPoints?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -432,7 +450,8 @@ export type Resolvers<ContextType = any> = {
   Product?: ProductResolvers<ContextType>;
   ProductsList?: ProductsListResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  ROLE_ENUM?: Role_EnumResolvers;
+  Region?: RegionResolvers;
+  Role?: RoleResolvers;
   Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UsersList?: UsersListResolvers<ContextType>;

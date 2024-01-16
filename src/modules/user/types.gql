@@ -4,7 +4,10 @@ type User {
   lastName: String!
   email: String!
   password: String
-  role: ROLE_ENUM!
+  role: Role!
+  currentPoints: Int
+  targetPoints: Int
+  region: Region
   active: Boolean!
   emailConfirmed: Boolean!
   createdAt: DateTime!
@@ -16,7 +19,10 @@ input CreateUserInput {
   lastName: String!
   email: String!
   password: String!
-  role: ROLE_ENUM!
+  role: Role!
+  currentPoints: Int
+  targetPoints: Int
+  region: Region
   active: Boolean!
 }
 
@@ -24,7 +30,10 @@ input UpdateUserInput {
   firstName: String
   lastName: String
   email: String
-  role: ROLE_ENUM
+  role: Role
+  currentPoints: Int
+  targetPoints: Int
+  region: Region
   active: Boolean
   emailConfirmed: Boolean
 }

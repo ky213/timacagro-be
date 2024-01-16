@@ -11,7 +11,8 @@ const config: CodegenConfig = {
       },
       config: {
         enumValues: {
-          ROLE_ENUM: "./global#ROLE_ENUM",
+          Role: "./global#Role",
+          Region: "./global#Region",
         },
       },
       plugins: [

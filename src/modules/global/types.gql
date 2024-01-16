@@ -12,11 +12,22 @@ interface Pagination {
   total: Int!
 }
 
-enum ROLE_ENUM {
+enum Role {
   ADMIN
   ATC
   SALES
   COMMERCE
+}
+
+enum Region {
+  CENTER
+  CENTER_EAST
+  NORTH_WEST
+  FAR_WEST
+  NORTH_EAST
+  SOUTH_EAST
+  FAR_EAST
+  DEV_ZONE_SOUTH
 }
 
 type Query {
