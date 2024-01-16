@@ -13,7 +13,9 @@
     "prod": "NODE_ENV=prod node dist/index.js",
     "lint": "eslint",
     "build": "NODE_ENV=prod tsc",
-    "generate": "graphql-codegen"
+    "generate": "graphql-codegen",
+    "preinstall": "npm i -g pnpm",
+    "install": "pnpm i"
   },
   "keywords": [],
   "author": "",
