@@ -12,7 +12,7 @@ variables:
   azureSubscription: '2c5bb81a-2c7f-4624-ab0e-0f80da9e37f1'
 
   # Web app name
-  webAppName: 'Timacagro'
+  webAppName: 'Timacagro-be'
 
   # Environment name
   environmentName: 'staging'
