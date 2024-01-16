@@ -38,8 +38,7 @@ stages:
     - script: |
         npm i -g pnpm
         pnpm install
-        pnpm  stage 
-      displayName: 'pnpm install, stage.'
+      displayName: 'pnpm install'
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
@@ -75,4 +74,4 @@ stages:
               appName: $(webAppName)
               runtimeStack: 'NODE|18.18.2'
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-              startUpCommand: 'npm run prod'
+              startUpCommand: 'pnpm stage'
