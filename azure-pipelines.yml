@@ -81,14 +81,11 @@ stages:
       runOnce:
         deploy:
           steps:
-          - task: AzureFileCopy@5
+          - task: CopyFilesOverSSH@0
             inputs:
-              SourcePath: '.'
-              azureSubscription: 'Microsoft Partner Network(2)(4b1c5823-88a7-483e-bec2-78a757628d90)'
-              Destination: 'AzureVMs'
-              storage: 'timacagro'
-              resourceGroup: 'TIMACAGRO'
-              MachineNames: 'timacagro'
-              vmsAdminUserName: 'timacagro'
-              vmsAdminPassword: 'timacagro'
-              TargetPath: 'app/backend'
+              sshEndpoint: 'timacagro-vm'
+              sourceFolder: '.'
+              contents: '**'
+              targetFolder: '/app/backend'
+              readyTimeout: '20000'
+              failOnEmptySource: true
