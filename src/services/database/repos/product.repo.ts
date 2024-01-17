@@ -25,7 +25,7 @@ export class ProductEntity extends BaseEntity {
   @Column({ type: "numeric", nullable: false })
   points: number;
 
-  @Column({ default: true })
+  @Column({ type: "boolean", default: true })
   active: boolean;
 
   @CreateDateColumn({ type: "timestamp" })

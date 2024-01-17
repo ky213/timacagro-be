@@ -41,10 +41,10 @@ export class UserEntity extends BaseEntity {
   @Column({ type: "numeric", nullable: true })
   targetPoints: number;
 
-  @Column({ default: true })
+  @Column({ type: "boolean", default: true })
   active: boolean;
 
-  @Column({ default: false })
+  @Column({ type: "boolean", default: false })
   emailConfirmed: boolean;
 
   @CreateDateColumn({ type: "timestamp" })
