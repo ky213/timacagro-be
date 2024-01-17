@@ -91,4 +91,4 @@ stages:
               MachineNames: 'timacagro'
               vmsAdminUserName: 'timacagro'
               vmsAdminPassword: 'timacagro'
-              TargetPath: '/app/backend'
+              TargetPath: 'app/backend'
