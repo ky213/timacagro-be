@@ -52,6 +52,7 @@ stages:
 
     - script: |
         pwd
+        ls -lah
         pnpm install
         pnpm run build
       displayName: "pnpm install and build"
@@ -67,6 +68,7 @@ stages:
 
     - script: |
         pwd
+        ls -lah
       displayName: "PWD"
 
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
@@ -89,6 +91,7 @@ stages:
           steps:
           - script: |
               pwd
+              ls -lah
             displayName: "PWD"
           - task: CopyFilesOverSSH@0
             inputs:
