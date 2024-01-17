@@ -4,73 +4,88 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-  - staging
+- staging
 
 variables:
+
   # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: "2c5bb81a-2c7f-4624-ab0e-0f80da9e37f1"
+  azureSubscription: '2c5bb81a-2c7f-4624-ab0e-0f80da9e37f1'
 
   # Web app name
-  webAppName: "Timacagro-be"
+  webAppName: 'Timacagro-be'
 
   # Environment name
-  environmentName: "staging"
+  environmentName: 'staging'
 
   # Agent VM image name
-  vmImageName: "ubuntu-latest"
+  vmImageName: 'ubuntu-latest'
 
 stages:
-  - stage: Build
-    displayName: Build stage
-    jobs:
-      - job: Build
-        displayName: Build
-        pool:
-          vmImage: $(vmImageName)
-        steps:
-          - task: NodeTool@0
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '18.x'
+      displayName: 'Install Node.js'
+
+    - task: Cache@2
+      inputs:
+        key: 'pnpm | "$(Agent.OS)" | pnpm-lock.yaml'
+        path: $(pnpm_config_cache)
+      displayName: Cache pnpm
+
+    - script: |
+        corepack enable
+        corepack prepare pnpm@latest-8 --activate
+        pnpm config set store-dir $(pnpm_config_cache)
+      displayName: "Setup pnpm"
+
+    - script: |
+        pnpm install
+        pnpm run build
+      displayName: "pnpm install and build"
+
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
+
+    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      artifact: drop
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    environment: $(environmentName)
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: AzureFileCopy@5
             inputs:
-              versionSpec: "18.18.2"
-            displayName: "Install Node.js"
-
-          - script: |
-              npm i -g pnpm
-              pnpm install
-            displayName: "pnpm install"
-
-          - task: ArchiveFiles@2
-            displayName: "Archive files"
-            inputs:
-              rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
-              includeRootFolder: false
-              archiveType: zip
-              archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-              replaceExistingArchive: true
-
-          - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-            artifact: drop
-
-  - stage: Deploy
-    displayName: Deploy stage
-    dependsOn: Build
-    condition: succeeded()
-    jobs:
-      - deployment: Deploy
-        displayName: Deploy
-        environment: $(environmentName)
-        pool:
-          vmImage: $(vmImageName)
-
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - task: AzureWebApp@1
-                  displayName: "Azure Web App Deploy: "
-                  inputs:
-                    azureSubscription: $(azureSubscription)
-                    appType: webAppLinux
-                    appName: $(webAppName)
-                    runtimeStack: "NODE|18.18.2"
-                    package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-                    startUpCommand: "pnpm stage"
+              SourcePath: './dist'
+              azureSubscription: 'Microsoft Partner Network(2)(4b1c5823-88a7-483e-bec2-78a757628d90)'
+              Destination: 'AzureVMs'
+              storage: 'timacagro'
+              resourceGroup: 'TIMACAGRO'
+              MachineNames: 'timacagro'
+              vmsAdminUserName: 'timacagro'
+              vmsAdminPassword: 'timacagro'
+              TargetPath: '/app/backend'
