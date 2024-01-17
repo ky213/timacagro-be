@@ -62,7 +62,7 @@ stages:
         sshEndpoint: 'timacagro-vm'
         sourceFolder: $(System.DefaultWorkingDirectory)/dist
         contents: '**'
-        targetFolder: '/app/backend'
+        targetFolder: '/home/azureuser/app/backend'
         readyTimeout: '20000'
         failOnEmptySource: true
 
