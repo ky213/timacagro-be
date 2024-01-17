@@ -51,6 +51,7 @@ stages:
       displayName: "Setup pnpm"
 
     - script: |
+        pwd
         pnpm install
         pnpm run build
       displayName: "pnpm install and build"
@@ -64,9 +65,14 @@ stages:
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
         replaceExistingArchive: true
 
+    - script: |
+        pwd
+      displayName: "PWD"
+
     - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
 
+      
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
@@ -81,6 +87,9 @@ stages:
       runOnce:
         deploy:
           steps:
+          - script: |
+              pwd
+            displayName: "PWD"
           - task: CopyFilesOverSSH@0
             inputs:
               sshEndpoint: 'timacagro-vm'
