@@ -20,6 +20,10 @@ variables:
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
+  #pnpm cache
+  variables:
+  pnpm_config_cache: $(Pipeline.Workspace)/.pnpm-store
+
 stages:
 - stage: Build
   displayName: Build stage
