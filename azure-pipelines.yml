@@ -84,7 +84,6 @@ stages:
           - task: CopyFilesOverSSH@0
             inputs:
               sshEndpoint: 'timacagro-vm'
-              sourceFolder: '*'
               contents: '**'
               targetFolder: '/app/backend'
               readyTimeout: '20000'
