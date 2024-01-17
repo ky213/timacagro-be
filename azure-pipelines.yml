@@ -54,26 +54,8 @@ stages:
         pwd
         ls -lah
         pnpm install
-        pnpm run build
+        pnpm build
       displayName: "pnpm install and build"
-
-    - task: ArchiveFiles@2
-      displayName: 'Archive files'
-      inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-        includeRootFolder: false
-        archiveType: zip
-        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-        replaceExistingArchive: true
-
-    - script: |
-        pwd
-        ls -lah
-      displayName: "PWD"
-
-    - publish: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      artifact: drop
-
       
 - stage: Deploy
   displayName: Deploy stage
@@ -96,6 +78,7 @@ stages:
           - task: CopyFilesOverSSH@0
             inputs:
               sshEndpoint: 'timacagro-vm'
+              sourceFolder: $(System.DefaultWorkingDirectory)/dist
               contents: '**'
               targetFolder: '/app/backend'
               readyTimeout: '20000'
