@@ -9,20 +9,16 @@ import { useCookies } from "@whatwg-node/server-plugin-cookies";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
-import { database, pubSub, JWT_CONFIG, redisClient as cache } from "config";
+import { database, pubSub, JWT_CONFIG, redisClient as cache, initCache, initDatabse } from "config";
 import { authConfig } from "modules/auth/auth-controllers";
 import { application } from "app";
 import { logger } from "shared/utils/logger";
 
 async function startServer() {
   try {
-    await database.initialize();
+    await initDatabse();
 
-    logger.info("Database Server connected");
-
-    await cache.connect();
-
-    logger.info(`Cache server connected.`);
+    await initCache();
 
     const yoga = createYoga({
       logging: process.env.NODE_ENV === "dev",
@@ -37,7 +33,7 @@ async function startServer() {
     app.use(yoga);
     app.listen(port, () => logger.info(`Server running on port ${port}`));
   } catch (error) {
-    logger.error("Error starting the server:", error);
+    logger.error("Server failed to start: ", error);
   }
 }
 

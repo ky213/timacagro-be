@@ -1,3 +1,4 @@
+import { logger } from "shared/utils/logger";
 import { DataSource } from "typeorm";
 
 export const database = new DataSource({
@@ -11,3 +12,13 @@ export const database = new DataSource({
   logging: process.env.NODE_ENV == "prod",
   synchronize: process.env.NODE_ENV == "dev",
 });
+
+export const initDatabse = async () => {
+  try {
+    await database.initialize();
+
+    logger.info("Database Server connected");
+  } catch (error) {
+    logger.error(error);
+  }
+};
