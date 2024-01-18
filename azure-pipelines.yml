@@ -4,68 +4,66 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-- staging
+  - staging
 
 variables:
-
   # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: '2c5bb81a-2c7f-4624-ab0e-0f80da9e37f1'
+  azureSubscription: "2c5bb81a-2c7f-4624-ab0e-0f80da9e37f1"
 
   # Web app name
-  webAppName: 'Timacagro-be'
+  webAppName: "Timacagro-be"
 
   # Environment name
-  environmentName: 'staging'
+  environmentName: "staging"
 
   # Agent VM image name
-  vmImageName: 'ubuntu-latest'
+  vmImageName: "ubuntu-latest"
 
   #pnpm cache
   pnpm_config_cache: $(Pipeline.Workspace)/.pnpm-store
 
 stages:
-- stage: Build
-  displayName: Build stage
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
+  - stage: Build
+    displayName: Build stage
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: $(vmImageName)
 
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '18.x'
-      displayName: 'Install Node.js'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "18.x"
+            displayName: "Install Node.js"
 
-    - task: Cache@2
-      inputs:
-        key: 'pnpm | "$(Agent.OS)" | pnpm-lock.yaml'
-        path: $(pnpm_config_cache)
-      displayName: Cache pnpm
+          - task: Cache@2
+            inputs:
+              key: 'pnpm | "$(Agent.OS)" | pnpm-lock.yaml'
+              path: $(pnpm_config_cache)
+            displayName: Cache pnpm
 
-    - script: |
-        corepack enable
-        corepack prepare pnpm@latest-8 --activate
-        pnpm config set store-dir $(pnpm_config_cache)
-      displayName: "Setup pnpm"
+          - script: |
+              corepack enable
+              corepack prepare pnpm@latest-8 --activate
+              pnpm config set store-dir $(pnpm_config_cache)
+            displayName: "Setup pnpm"
 
-    - script: |
-        pwd
-        ls -lah
-        pnpm install
-        pnpm build
-      displayName: "pnpm install and build"
-            
-    - task: CopyFilesOverSSH@0
-      inputs:
-        sshEndpoint: 'timacagro-vm'
-        sourceFolder: $(System.DefaultWorkingDirectory)/dist
-        contents: '**'
-        targetFolder: '/home/azureuser/app/backend'
-        readyTimeout: '20000'
-        failOnEmptySource: true
+          - script: |
+              pwd
+              ls -lah
+              pnpm install
+              pnpm build:staging
+            displayName: "pnpm install and build"
 
+          - task: CopyFilesOverSSH@0
+            inputs:
+              sshEndpoint: "timacagro-vm"
+              sourceFolder: $(System.DefaultWorkingDirectory)/dist
+              contents: "**"
+              targetFolder: "/home/azureuser/app/backend"
+              readyTimeout: "20000"
+              failOnEmptySource: true
 # - stage: Deploy
 #   displayName: Deploy stage
 #   dependsOn: Build
