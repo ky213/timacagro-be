@@ -2,7 +2,7 @@ import { CookieStore } from "@whatwg-node/cookie-store";
 import { PubSub } from "graphql-yoga";
 import { RedisClientType } from "redis";
 
-import { ITopics } from "config";
+import { ITopics } from "~/config";
 
 declare global {
   namespace GraphQLModules {

@@ -1,6 +1,6 @@
 import { Length, IsEmail, IsBoolean, IsStrongPassword, MaxLength, IsEnum, IsAlpha } from "class-validator";
 
-import { Role } from "types/global";
+import { Role } from "~/types/global";
 
 export class PasswordSchema {
   @MaxLength(50)

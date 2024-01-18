@@ -1,4 +1,4 @@
-import { ERRORS } from "config";
+import { ERRORS } from "~/config";
 import { GraphQLError } from "graphql";
 
 export type HttpStatus = 200 | 201 | 400 | 401 | 403 | 404 | 500;

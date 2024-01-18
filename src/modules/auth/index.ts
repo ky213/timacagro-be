@@ -2,8 +2,8 @@ import { createModule } from "graphql-modules";
 import { loadFilesSync } from "@graphql-tools/load-files";
 import { join } from "path";
 
-import { UserServiceProvider } from "services";
-import { UserRepositoryProvider } from "services/database/repos";
+import { UserServiceProvider } from "~/services";
+import { UserRepositoryProvider } from "~/services/database/repos";
 
 export const AuthModule = createModule({
   id: "auth-module",

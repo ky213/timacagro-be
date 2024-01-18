@@ -1,11 +1,11 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
 
 import { IProductRepository, ProductEntity, ProductRepositoryToken } from "../repos";
-import { CreateProductInput, Product, ProductsList, UpdateProductInput } from "types/graphql";
-import { validateData } from "shared/utils/validator";
-import { HttpError } from "shared/utils/error-handler";
-import { ERRORS } from "config";
-import { ProductSchema } from "types/schemas/";
+import { CreateProductInput, Product, ProductsList, UpdateProductInput } from "~/types/graphql";
+import { validateData } from "~/shared/utils/validator";
+import { HttpError } from "~/shared/utils/error-handler";
+import { ERRORS } from "~/config";
+import { ProductSchema } from "~/types/schemas/";
 
 @Injectable()
 export class ProductServiceProvider {

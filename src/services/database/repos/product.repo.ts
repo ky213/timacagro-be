@@ -9,7 +9,7 @@ import {
   Repository,
 } from "typeorm";
 
-import { database } from "config";
+import { database } from "~/config";
 
 @Entity()
 export class ProductEntity extends BaseEntity {

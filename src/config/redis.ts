@@ -1,6 +1,6 @@
 import { InjectionToken, Provider } from "graphql-modules";
 import { createClient, RedisClientType, RedisModules, RedisFunctions, RedisScripts } from "redis";
-import { logger } from "shared/utils/logger";
+import { logger } from "~/shared/utils/logger";
 
 export const redisConfig = {
   password: process.env.REDIS_PASSWORD,

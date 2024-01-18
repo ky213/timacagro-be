@@ -1,5 +1,5 @@
-import { ProductServiceProvider } from "services";
-import { Resolvers } from "types/graphql";
+import { ProductServiceProvider } from "~/services";
+import { Resolvers } from "~/types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {

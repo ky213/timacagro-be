@@ -1,6 +1,6 @@
-import { UserServiceProvider } from "services";
-import { HttpError } from "shared/utils/error-handler";
-import { Resolvers } from "types/graphql";
+import { UserServiceProvider } from "~/services";
+import { HttpError } from "~/shared/utils/error-handler";
+import { Resolvers } from "~/types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {

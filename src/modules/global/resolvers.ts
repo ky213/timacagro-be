@@ -1,6 +1,6 @@
 import { DateTimeResolver } from "graphql-scalars";
 
-import { Resolvers } from "types/graphql";
+import { Resolvers } from "~/types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {

@@ -1,9 +1,9 @@
 import { ResolveUserFn, ValidateUserFn, GenericAuthPluginOptions } from "@envelop/generic-auth";
-import { User } from "types/graphql";
+import { User } from "~/types/graphql";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
-import { HttpError } from "shared/utils/error-handler";
-import { ERRORS } from "config";
+import { HttpError } from "~/shared/utils/error-handler";
+import { ERRORS } from "~/config";
 
 export const resolveUserFn: ResolveUserFn<User, GraphQLModules.Context> = async (context) => {
   try {

@@ -1,4 +1,4 @@
-import { logger } from "shared/utils/logger";
+import { logger } from "~/shared/utils/logger";
 import { DataSource } from "typeorm";
 
 export const database = new DataSource({

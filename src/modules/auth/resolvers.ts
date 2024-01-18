@@ -1,10 +1,10 @@
-import { Resolvers } from "types/graphql";
+import { Resolvers } from "~/types/graphql";
 import jwt from "jsonwebtoken";
 
-import { UserServiceProvider, CacheServiceProvider } from "services";
-import { HttpError } from "shared/utils/error-handler";
-import { isSameHash } from "shared/utils/cyphers";
-import { ERRORS, COOKIE_CONFIG, JWT_SIGNING_KEY } from "config";
+import { UserServiceProvider, CacheServiceProvider } from "~/services";
+import { HttpError } from "~/shared/utils/error-handler";
+import { isSameHash } from "~/shared/utils/cyphers";
+import { ERRORS, COOKIE_CONFIG, JWT_SIGNING_KEY } from "~/config";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Mutation: {

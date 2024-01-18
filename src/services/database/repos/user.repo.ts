@@ -9,8 +9,8 @@ import {
   Repository,
 } from "typeorm";
 
-import { database } from "config";
-import { Region, Role } from "types/graphql";
+import { database } from "~/config";
+import { Region, Role } from "~/types/graphql";
 
 @Entity()
 export class UserEntity extends BaseEntity {

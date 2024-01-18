@@ -1,13 +1,13 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
 
 import { UserRepositoryToken, IUserRepository, UserEntity } from "../repos";
-import { UsersList, User, CreateUserInput, UpdateUserInput } from "types/graphql";
-import { validateData } from "shared/utils/validator";
-import { HttpError } from "shared/utils/error-handler";
-import { DELAYS, ERRORS, WEB_CLIENT_HOST, WEB_CLIENT_PORT } from "config";
-import { PasswordSchema, UserSchema } from "types/schemas/";
-import { EmailServiceToken, CacheServiceProvider, IEmailService } from "services";
-import { generateHash, generateToken } from "shared/utils/cyphers";
+import { UsersList, User, CreateUserInput, UpdateUserInput } from "~/types/graphql";
+import { validateData } from "~/shared/utils/validator";
+import { HttpError } from "~/shared/utils/error-handler";
+import { DELAYS, ERRORS, WEB_CLIENT_HOST, WEB_CLIENT_PORT } from "~/config";
+import { PasswordSchema, UserSchema } from "~/types/schemas/";
+import { EmailServiceToken, CacheServiceProvider, IEmailService } from "~/services";
+import { generateHash, generateToken } from "~/shared/utils/cyphers";
 
 @Injectable()
 export class UserServiceProvider {

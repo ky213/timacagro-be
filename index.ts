@@ -9,16 +9,16 @@ import { useCookies } from "@whatwg-node/server-plugin-cookies";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
-import { database, pubSub, JWT_CONFIG, redisClient as cache, initCache, initDatabse } from "config";
-import { authConfig } from "modules/auth/auth-controllers";
-import { application } from "app";
-import { logger } from "shared/utils/logger";
+import { pubSub, JWT_CONFIG, initCache, initDatabse } from "./src/config";
+import { authConfig } from "./src/modules/auth/auth-controllers";
+import { application } from "./src/app";
+import { logger } from "./src/shared/utils/logger";
 
 async function startServer() {
   try {
     await initDatabse();
 
-    await initCache();
+    const cache = await initCache();
 
     const yoga = createYoga({
       logging: process.env.NODE_ENV === "dev",
