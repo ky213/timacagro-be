@@ -24,7 +24,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     updateUser: async (_parent, { id, userInfo }, context) => {
       const userRepo = context.injector.get(UserServiceProvider);
 
-      await userRepo.updateUser(Number(id), userInfo);
+      await userRepo.updateUser(Number(id), { ...userInfo });
 
       return true;
     },

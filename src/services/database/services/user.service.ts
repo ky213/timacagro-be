@@ -1,6 +1,6 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
 
-import { UserRepositoryToken, IUserRepository } from "../repos";
+import { UserRepositoryToken, IUserRepository, UserEntity } from "../repos";
 import { UsersList, User, CreateUserInput, UpdateUserInput } from "types/graphql";
 import { validateData } from "shared/utils/validator";
 import { HttpError } from "shared/utils/error-handler";
@@ -17,10 +17,10 @@ export class UserServiceProvider {
     @Inject(forwardRef(() => CacheServiceProvider)) private cacheService: CacheServiceProvider
   ) {}
 
-  async getUserById(id: number): Promise<User> {
+  async getUserById(id: number): Promise<User | null> {
     return await this.userRepo.findOneBy({ id });
   }
-  async getUserByEmail(email: string): Promise<User> {
+  async getUserByEmail(email: string): Promise<User | null> {
     return await this.userRepo.findOneBy({ email });
   }
 
@@ -66,7 +66,7 @@ export class UserServiceProvider {
     return user;
   }
 
-  async updateUser(id: number, userData: UpdateUserInput): Promise<Boolean> {
+  async updateUser(id: number, userData: Partial<UserEntity> | {}): Promise<Boolean> {
     await this.userRepo.update({ id }, { ...userData });
 
     return true;

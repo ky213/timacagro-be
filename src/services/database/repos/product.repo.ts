@@ -14,25 +14,25 @@ import { database } from "config";
 @Entity()
 export class ProductEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: "varchar", unique: true, length: 25, nullable: false })
-  type: string;
+  type!: string;
 
   @Column({ type: "numeric", nullable: false })
-  quantity: number;
+  quantity!: number;
 
   @Column({ type: "numeric", nullable: false })
-  points: number;
+  points!: number;
 
   @Column({ type: "boolean", default: true })
-  active: boolean;
+  active!: boolean;
 
   @CreateDateColumn({ type: "timestamp" })
-  createdAt: string;
+  createdAt!: string;
 
   @UpdateDateColumn({ type: "timestamp" })
-  updatedAt: string;
+  updatedAt!: string;
 }
 
 export type IProductRepository = Repository<ProductEntity>;

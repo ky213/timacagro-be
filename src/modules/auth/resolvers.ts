@@ -16,7 +16,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       if (userId) {
         const user = await userSerivce.getUserById(Number(userId));
 
-        if (user.emailConfirmed) throw new HttpError(400, "email already confirmed", ERRORS.INVALID_INPUT_ERROR);
+        if (user?.emailConfirmed) throw new HttpError(400, "email already confirmed", ERRORS.INVALID_INPUT_ERROR);
 
         await userSerivce.updateUser(Number(userId), { emailConfirmed: true });
 

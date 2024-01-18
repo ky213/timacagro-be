@@ -16,12 +16,12 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Mutation: {
     createProduct: async (_parent, { productInfo }, { injector }) => {
       const productService = injector.get(ProductServiceProvider);
-
+      //@ts-ignore TODO:fix types
       return await productService.createProduct(productInfo);
     },
     updateProduct: async (_parent, { id, productInfo }, { injector }) => {
       const productService = injector.get(ProductServiceProvider);
-
+      //@ts-ignore TODO:fix types
       await productService.updateProduct(Number(id), productInfo);
 
       return true;

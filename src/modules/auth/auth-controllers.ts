@@ -1,6 +1,6 @@
 import { ResolveUserFn, ValidateUserFn, GenericAuthPluginOptions } from "@envelop/generic-auth";
 import { User } from "types/graphql";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 import { HttpError } from "shared/utils/error-handler";
 import { ERRORS } from "config";
@@ -8,10 +8,10 @@ import { ERRORS } from "config";
 export const resolveUserFn: ResolveUserFn<User, GraphQLModules.Context> = async (context) => {
   try {
     const token = (await context.request.cookieStore?.get("authorization"))?.value;
-    const user = jwt.decode(token) as User;
+    const user = jwt.decode(`${token}`) as JwtPayload & User;
 
     return user;
-  } catch (error) {
+  } catch (error: any | Error) {
     console.error("Auth controller failed to validate token.\n", error.message);
   }
 
@@ -19,7 +19,7 @@ export const resolveUserFn: ResolveUserFn<User, GraphQLModules.Context> = async 
 };
 
 export const validateUser: ValidateUserFn<User> = (params) => {
-  if (["Login", "ForgotPassword", "ResetPassword", "ConfirmEmail"].includes(params.executionArgs.operationName)) {
+  if (["Login", "ForgotPassword", "ResetPassword", "ConfirmEmail"].includes(`${params.executionArgs.operationName}`)) {
     return;
   }
 

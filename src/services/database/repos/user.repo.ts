@@ -15,43 +15,43 @@ import { Region, Role } from "types/graphql";
 @Entity()
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ type: "varchar", length: 25, nullable: false })
-  firstName: string;
+  firstName!: string;
 
   @Column({ type: "varchar", length: 25, nullable: false })
-  lastName: string;
+  lastName!: string;
 
   @Column({ type: "varchar", unique: true, nullable: false })
-  email: string;
+  email!: string;
 
   @Column({ type: "varchar", nullable: false, select: false })
-  password: string;
+  password!: string;
 
   @Column({ type: "enum", enum: Role, nullable: false })
-  role: Role;
+  role!: Role;
 
   @Column({ type: "enum", enum: Region, nullable: true })
-  region: Region;
+  region: Nil<Region>;
 
   @Column({ type: "numeric", nullable: true })
-  currentPoints: number;
+  currentPoints: Nil<number>;
 
   @Column({ type: "numeric", nullable: true })
-  targetPoints: number;
+  targetPoints: Nil<number>;
 
   @Column({ type: "boolean", default: true })
-  active: boolean;
+  active!: boolean;
 
   @Column({ type: "boolean", default: false })
-  emailConfirmed: boolean;
+  emailConfirmed!: boolean;
 
   @CreateDateColumn({ type: "timestamp" })
-  createdAt: string;
+  createdAt!: string;
 
   @UpdateDateColumn({ type: "timestamp" })
-  updatedAt: string;
+  updatedAt!: string;
 }
 
 export type IUserRepository = Repository<UserEntity>;

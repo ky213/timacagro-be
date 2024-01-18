@@ -1,6 +1,6 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
 
-import { IProductRepository, ProductRepositoryToken } from "../repos";
+import { IProductRepository, ProductEntity, ProductRepositoryToken } from "../repos";
 import { CreateProductInput, Product, ProductsList, UpdateProductInput } from "types/graphql";
 import { validateData } from "shared/utils/validator";
 import { HttpError } from "shared/utils/error-handler";
@@ -11,7 +11,7 @@ import { ProductSchema } from "types/schemas/";
 export class ProductServiceProvider {
   constructor(@Inject(forwardRef(() => ProductRepositoryToken)) private productRepo: IProductRepository) {}
 
-  async getProductById(id: number): Promise<Product> {
+  async getProductById(id: number): Promise<Product | null> {
     return await this.productRepo.findOneBy({ id });
   }
 
@@ -26,8 +26,8 @@ export class ProductServiceProvider {
     };
   }
 
-  async createProduct(newProduct: CreateProductInput): Promise<Product> {
-    const errors = validateData<CreateProductInput>(ProductSchema, newProduct);
+  async createProduct(newProduct: ProductEntity): Promise<Product> {
+    const errors = validateData<ProductEntity>(ProductSchema, newProduct);
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
 
@@ -44,7 +44,7 @@ export class ProductServiceProvider {
     return product;
   }
 
-  async updateProduct(id: number, productData: UpdateProductInput): Promise<Boolean> {
+  async updateProduct(id: number, productData: ProductEntity): Promise<Boolean> {
     await this.productRepo.update({ id }, { ...productData });
 
     return true;

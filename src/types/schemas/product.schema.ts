@@ -13,14 +13,14 @@ import {
 export class ProductSchema {
   @IsAlpha()
   @Length(2, 25)
-  type: string;
+  type!: string;
 
   @IsNumber({ maxDecimalPlaces: 2 }, { message: "Quantity should be a number" })
-  quantity: number;
+  quantity!: number;
 
   @IsInt({ message: "Points should be integers" })
-  points: number;
+  points!: number;
 
   @IsBoolean({ message: "Active should be a boolean" })
-  active: boolean;
+  active!: boolean;
 }

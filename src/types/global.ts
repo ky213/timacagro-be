@@ -12,6 +12,8 @@ declare global {
       cache: RedisClientType;
     }
   }
+
+  type Nil<T> = T | null | undefined;
 }
 
 interface HttpREquest extends Request {

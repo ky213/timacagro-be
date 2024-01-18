@@ -5,26 +5,26 @@ import { Role } from "types/global";
 export class PasswordSchema {
   @MaxLength(50)
   @IsStrongPassword({ minNumbers: 1, minLength: 6, minSymbols: 0, minUppercase: 0, minLowercase: 0 })
-  password: string;
+  password!: string;
 }
 
 export class LoginSchema extends PasswordSchema {
   @IsEmail()
-  email: string;
+  email!: string;
 }
 
 export class UserSchema extends LoginSchema {
   @IsAlpha()
   @Length(2, 25)
-  firstName: string;
+  firstName!: string;
 
   @IsAlpha()
   @Length(2, 25)
-  lastName: string;
+  lastName!: string;
 
   @IsEnum(Role)
-  role: Role;
+  role!: Role;
 
   @IsBoolean()
-  active: boolean;
+  active!: boolean;
 }
