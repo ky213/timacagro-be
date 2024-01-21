@@ -2,13 +2,13 @@ import { createModule } from "graphql-modules";
 import { loadFilesSync } from "@graphql-tools/load-files";
 import { join } from "path";
 
-import { InvoiceServiceProvider } from "~/services";
-import { InvoiceRepositoryProvider } from "~/services/database/repos";
+import { ClientServiceProvider } from "~/services";
+import { ClientRepositoryProvider } from "~/services/database/repos";
 
-export const InvoicelModule = createModule({
-  id: "invoice-module",
+export const ClientlModule = createModule({
+  id: "client-module",
   dirname: __dirname,
-  providers: [InvoiceRepositoryProvider, InvoiceServiceProvider],
+  providers: [ClientRepositoryProvider, ClientServiceProvider],
   typeDefs: [...loadFilesSync(join(__dirname, "./*.gql"))],
   resolvers: loadFilesSync(join(__dirname, "./resolvers.ts")),
 });

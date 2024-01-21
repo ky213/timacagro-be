@@ -1,35 +1,35 @@
-import { InvoiceServiceProvider } from "~/services";
+import { ClientServiceProvider } from "~/services";
 import { Resolvers } from "~/types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
-    getInvoice: async (_parent, { id }, { injector }) => {
-      const productService = injector.get(InvoiceServiceProvider);
+    getClient: async (_parent, { id }, { injector }) => {
+      const productService = injector.get(ClientServiceProvider);
 
-      return await productService.getInvoiceById(Number(id));
+      return await productService.getClientById(Number(id));
     },
-    listInvoices: async (_parent, { page = 0, perPage = 10 }, { injector }) => {
-      const productService = injector.get(InvoiceServiceProvider);
-      return await productService.listInvoices(page, perPage);
+    listClients: async (_parent, { page = 0, perPage = 10 }, { injector }) => {
+      const productService = injector.get(ClientServiceProvider);
+      return await productService.listClients(page, perPage);
     },
   },
   Mutation: {
-    createInvoice: async (_parent, { productInfo }, { injector }) => {
-      const productService = injector.get(InvoiceServiceProvider);
+    createClient: async (_parent, { productInfo }, { injector }) => {
+      const productService = injector.get(ClientServiceProvider);
       //@ts-ignore TODO:fix types
-      return await productService.createInvoice(productInfo);
+      return await productService.createClient(productInfo);
     },
-    updateInvoice: async (_parent, { id, productInfo }, { injector }) => {
-      const productService = injector.get(InvoiceServiceProvider);
+    updateClient: async (_parent, { id, productInfo }, { injector }) => {
+      const productService = injector.get(ClientServiceProvider);
       //@ts-ignore TODO:fix types
-      await productService.updateInvoice(Number(id), productInfo);
+      await productService.updateClient(Number(id), productInfo);
 
       return true;
     },
-    deleteInvoice: async (_parent, { id }, { injector }) => {
-      const productService = injector.get(InvoiceServiceProvider);
+    deleteClient: async (_parent, { id }, { injector }) => {
+      const productService = injector.get(ClientServiceProvider);
 
-      await productService.deleteInvoice(Number(id));
+      await productService.deleteClient(Number(id));
 
       return true;
     },
