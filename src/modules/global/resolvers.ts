@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import { DateTimeResolver } from "graphql-scalars";
 
 import { Resolvers } from "~/types/graphql";
@@ -13,6 +15,22 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       const random = Math.random();
       pubSub.publish("global:random_number", random);
       return random;
+    },
+    readTextFile: async (_, { file }) => {
+      const fileContent = await file.text();
+      return fileContent;
+    },
+    saveFile: async (_, { file }) => {
+      try {
+        const fileArrayBuffer = await file.arrayBuffer();
+        await fs.promises.writeFile(
+          path.join(__dirname + "/../../../uploads/", file.name),
+          Buffer.from(fileArrayBuffer),
+        );
+      } catch (e) {
+        return false;
+      }
+      return true;
     },
   },
   Subscription: {

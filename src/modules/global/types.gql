@@ -1,4 +1,5 @@
 scalar DateTime
+scalar File
 
 type Entity {
   id: ID!
@@ -36,6 +37,8 @@ type Query {
 
 type Mutation {
   randomize: Float!
+  readTextFile(file: File!): String!
+  saveFile(file: File!): Boolean!
 }
 
 type Subscription {

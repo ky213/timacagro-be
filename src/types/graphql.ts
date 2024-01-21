@@ -19,6 +19,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   DateTime: { input: any; output: any; }
+  File: { input: any; output: any; }
 };
 
 export type Client = {
@@ -111,7 +112,9 @@ export type Mutation = {
   login?: Maybe<Scalars['Boolean']['output']>;
   logout?: Maybe<Scalars['Boolean']['output']>;
   randomize: Scalars['Float']['output'];
+  readTextFile: Scalars['String']['output'];
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
+  saveFile: Scalars['Boolean']['output'];
   updateClient: Scalars['Boolean']['output'];
   updateInvoice: Scalars['Boolean']['output'];
   updateProduct: Scalars['Boolean']['output'];
@@ -175,9 +178,19 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationReadTextFileArgs = {
+  file: Scalars['File']['input'];
+};
+
+
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String']['input'];
   token: Scalars['String']['input'];
+};
+
+
+export type MutationSaveFileArgs = {
+  file: Scalars['File']['input'];
 };
 
 
@@ -437,6 +450,7 @@ export type ResolversTypes = {
   CreateUserInput: CreateUserInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Entity: ResolverTypeWrapper<Entity>;
+  File: ResolverTypeWrapper<Scalars['File']['output']>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -470,6 +484,7 @@ export type ResolversParentTypes = {
   CreateUserInput: CreateUserInput;
   DateTime: Scalars['DateTime']['output'];
   Entity: Entity;
+  File: Scalars['File']['output'];
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
@@ -519,6 +534,10 @@ export type EntityResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export interface FileScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['File'], any> {
+  name: 'File';
+}
+
 export type InvoiceResolvers<ContextType = any, ParentType extends ResolversParentTypes['Invoice'] = ResolversParentTypes['Invoice']> = {
   client?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -552,7 +571,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   login?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   randomize?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  readTextFile?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationReadTextFileArgs, 'file'>>;
   resetPassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'newPassword' | 'token'>>;
+  saveFile?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSaveFileArgs, 'file'>>;
   updateClient?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateClientArgs, 'id' | 'productInfo'>>;
   updateInvoice?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateInvoiceArgs, 'id' | 'productInfo'>>;
   updateProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateProductArgs, 'id' | 'productInfo'>>;
@@ -636,6 +657,7 @@ export type Resolvers<ContextType = any> = {
   ClientsList?: ClientsListResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Entity?: EntityResolvers<ContextType>;
+  File?: GraphQLScalarType;
   Invoice?: InvoiceResolvers<ContextType>;
   InvoicesList?: InvoicesListResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
@@ -652,3 +674,4 @@ export type Resolvers<ContextType = any> = {
 
 
 export type DateTime = Scalars["DateTime"];
+export type File = Scalars["File"];
