@@ -1,0 +1,41 @@
+type Invoice {
+  id: Int!
+  number: String!
+  client: String!
+  total: Float!
+  payed: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type InvoicesList implements Pagination {
+  invoicess: [Invoice]!
+  page: Int!
+  perPage: Int!
+  total: Int!
+}
+
+input CreateInvoiceInput {
+  number: String!
+  client: String!
+  total: Float!
+  payed: Boolean!
+}
+
+input UpdateInvoiceInput {
+  number: String!
+  client: String!
+  total: Float!
+  payed: Boolean!
+}
+
+type Query {
+  listInvoices(page: Int!, perPage: Int!): InvoicesList!
+  getInvoice(id: ID!): Invoice
+}
+
+type Mutation {
+  createInvoice(productInfo: CreateInvoiceInput!): Invoice!
+  updateInvoice(id: ID!, productInfo: UpdateInvoiceInput!): Boolean!
+  deleteInvoice(id: ID!): Boolean!
+}
