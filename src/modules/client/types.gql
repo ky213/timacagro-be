@@ -1,0 +1,37 @@
+type Client {
+  id: Int!
+  name: String!
+  files: [String]!
+  active: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ClientsList implements Pagination {
+  clients: [Client]!
+  page: Int!
+  perPage: Int!
+  total: Int!
+}
+
+input CreateClientInput {
+  name: String!
+  files: [String]!
+}
+
+input UpdateClientInput {
+  name: String
+  files: [String]
+  active: Boolean
+}
+
+type Query {
+  listClients(page: Int!, perPage: Int!): ClientsList!
+  getClient(id: ID!): Client
+}
+
+type Mutation {
+  createClient(productInfo: CreateClientInput!): Client!
+  updateClient(id: ID!, productInfo: UpdateClientInput!): Boolean!
+  deleteClient(id: ID!): Boolean!
+}

@@ -21,6 +21,29 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type Client = {
+  __typename?: 'Client';
+  active: Scalars['Boolean']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  files: Array<Maybe<Scalars['String']['output']>>;
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type ClientsList = Pagination & {
+  __typename?: 'ClientsList';
+  clients: Array<Maybe<Client>>;
+  page: Scalars['Int']['output'];
+  perPage: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
+};
+
+export type CreateClientInput = {
+  files: Array<InputMaybe<Scalars['String']['input']>>;
+  name: Scalars['String']['input'];
+};
+
 export type CreateInvoiceInput = {
   client: Scalars['String']['input'];
   number: Scalars['String']['input'];
@@ -76,9 +99,11 @@ export type InvoicesList = Pagination & {
 export type Mutation = {
   __typename?: 'Mutation';
   confirmEmail?: Maybe<Scalars['Boolean']['output']>;
+  createClient: Client;
   createInvoice: Invoice;
   createProduct: Product;
   createUser: User;
+  deleteClient: Scalars['Boolean']['output'];
   deleteInvoice: Scalars['Boolean']['output'];
   deleteProduct: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
@@ -87,6 +112,7 @@ export type Mutation = {
   logout?: Maybe<Scalars['Boolean']['output']>;
   randomize: Scalars['Float']['output'];
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
+  updateClient: Scalars['Boolean']['output'];
   updateInvoice: Scalars['Boolean']['output'];
   updateProduct: Scalars['Boolean']['output'];
   updateUser: Scalars['Boolean']['output'];
@@ -95,6 +121,11 @@ export type Mutation = {
 
 export type MutationConfirmEmailArgs = {
   token: Scalars['String']['input'];
+};
+
+
+export type MutationCreateClientArgs = {
+  productInfo: CreateClientInput;
 };
 
 
@@ -110,6 +141,11 @@ export type MutationCreateProductArgs = {
 
 export type MutationCreateUserArgs = {
   userInfo: CreateUserInput;
+};
+
+
+export type MutationDeleteClientArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -142,6 +178,12 @@ export type MutationLoginArgs = {
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String']['input'];
   token: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateClientArgs = {
+  id: Scalars['ID']['input'];
+  productInfo: UpdateClientInput;
 };
 
 
@@ -189,13 +231,20 @@ export type ProductsList = Pagination & {
 
 export type Query = {
   __typename?: 'Query';
+  getClient?: Maybe<Client>;
   getDateTime: Scalars['DateTime']['output'];
   getInvoice?: Maybe<Invoice>;
   getProduct?: Maybe<Product>;
   getUser?: Maybe<User>;
+  listClients: ClientsList;
   listInvoices: InvoicesList;
   listProducts: ProductsList;
   listUsers: UsersList;
+};
+
+
+export type QueryGetClientArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -211,6 +260,12 @@ export type QueryGetProductArgs = {
 
 export type QueryGetUserArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryListClientsArgs = {
+  page: Scalars['Int']['input'];
+  perPage: Scalars['Int']['input'];
 };
 
 
@@ -239,6 +294,12 @@ export type Subscription = {
   __typename?: 'Subscription';
   randomNumber: Scalars['Float']['output'];
   testConnection: Scalars['Int']['output'];
+};
+
+export type UpdateClientInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
+  files?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateInvoiceInput = {
@@ -362,12 +423,15 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of interface types */
 export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
-  Pagination: ( InvoicesList ) | ( ProductsList ) | ( UsersList );
+  Pagination: ( ClientsList ) | ( InvoicesList ) | ( ProductsList ) | ( UsersList );
 };
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Client: ResolverTypeWrapper<Client>;
+  ClientsList: ResolverTypeWrapper<ClientsList>;
+  CreateClientInput: CreateClientInput;
   CreateInvoiceInput: CreateInvoiceInput;
   CreateProductInput: CreateProductInput;
   CreateUserInput: CreateUserInput;
@@ -387,6 +451,7 @@ export type ResolversTypes = {
   Role: Role;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Subscription: ResolverTypeWrapper<{}>;
+  UpdateClientInput: UpdateClientInput;
   UpdateInvoiceInput: UpdateInvoiceInput;
   UpdateProductInput: UpdateProductInput;
   UpdateUserInput: UpdateUserInput;
@@ -397,6 +462,9 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
+  Client: Client;
+  ClientsList: ClientsList;
+  CreateClientInput: CreateClientInput;
   CreateInvoiceInput: CreateInvoiceInput;
   CreateProductInput: CreateProductInput;
   CreateUserInput: CreateUserInput;
@@ -414,11 +482,30 @@ export type ResolversParentTypes = {
   Query: {};
   String: Scalars['String']['output'];
   Subscription: {};
+  UpdateClientInput: UpdateClientInput;
   UpdateInvoiceInput: UpdateInvoiceInput;
   UpdateProductInput: UpdateProductInput;
   UpdateUserInput: UpdateUserInput;
   User: User;
   UsersList: UsersList;
+};
+
+export type ClientResolvers<ContextType = any, ParentType extends ResolversParentTypes['Client'] = ResolversParentTypes['Client']> = {
+  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  files?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClientsListResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClientsList'] = ResolversParentTypes['ClientsList']> = {
+  clients?: Resolver<Array<Maybe<ResolversTypes['Client']>>, ParentType, ContextType>;
+  page?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  perPage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
@@ -453,9 +540,11 @@ export type InvoicesListResolvers<ContextType = any, ParentType extends Resolver
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   confirmEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationConfirmEmailArgs, 'token'>>;
+  createClient?: Resolver<ResolversTypes['Client'], ParentType, ContextType, RequireFields<MutationCreateClientArgs, 'productInfo'>>;
   createInvoice?: Resolver<ResolversTypes['Invoice'], ParentType, ContextType, RequireFields<MutationCreateInvoiceArgs, 'productInfo'>>;
   createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'productInfo'>>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'userInfo'>>;
+  deleteClient?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteClientArgs, 'id'>>;
   deleteInvoice?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteInvoiceArgs, 'id'>>;
   deleteProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteProductArgs, 'id'>>;
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
@@ -464,13 +553,14 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   randomize?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   resetPassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'newPassword' | 'token'>>;
+  updateClient?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateClientArgs, 'id' | 'productInfo'>>;
   updateInvoice?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateInvoiceArgs, 'id' | 'productInfo'>>;
   updateProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateProductArgs, 'id' | 'productInfo'>>;
   updateUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id' | 'userInfo'>>;
 };
 
 export type PaginationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Pagination'] = ResolversParentTypes['Pagination']> = {
-  __resolveType: TypeResolveFn<'InvoicesList' | 'ProductsList' | 'UsersList', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'ClientsList' | 'InvoicesList' | 'ProductsList' | 'UsersList', ParentType, ContextType>;
   page?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   perPage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -496,10 +586,12 @@ export type ProductsListResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  getClient?: Resolver<Maybe<ResolversTypes['Client']>, ParentType, ContextType, RequireFields<QueryGetClientArgs, 'id'>>;
   getDateTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   getInvoice?: Resolver<Maybe<ResolversTypes['Invoice']>, ParentType, ContextType, RequireFields<QueryGetInvoiceArgs, 'id'>>;
   getProduct?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType, RequireFields<QueryGetProductArgs, 'id'>>;
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
+  listClients?: Resolver<ResolversTypes['ClientsList'], ParentType, ContextType, RequireFields<QueryListClientsArgs, 'page' | 'perPage'>>;
   listInvoices?: Resolver<ResolversTypes['InvoicesList'], ParentType, ContextType, RequireFields<QueryListInvoicesArgs, 'page' | 'perPage'>>;
   listProducts?: Resolver<ResolversTypes['ProductsList'], ParentType, ContextType, RequireFields<QueryListProductsArgs, 'page' | 'perPage'>>;
   listUsers?: Resolver<ResolversTypes['UsersList'], ParentType, ContextType, RequireFields<QueryListUsersArgs, 'page' | 'perPage'>>;
@@ -540,6 +632,8 @@ export type UsersListResolvers<ContextType = any, ParentType extends ResolversPa
 };
 
 export type Resolvers<ContextType = any> = {
+  Client?: ClientResolvers<ContextType>;
+  ClientsList?: ClientsListResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Entity?: EntityResolvers<ContextType>;
   Invoice?: InvoiceResolvers<ContextType>;
