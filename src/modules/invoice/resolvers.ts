@@ -1,4 +1,4 @@
-import { ProductServiceProvider } from "~/services";
+import { InvoiceServiceProvider } from "~/services";
 import { Resolvers } from "~/types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {

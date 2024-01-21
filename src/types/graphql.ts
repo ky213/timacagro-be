@@ -56,7 +56,7 @@ export type Entity = {
 
 export type Invoice = {
   __typename?: 'Invoice';
-  client: Scalars['String']['output'];
+  client: Scalars['Int']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
   number: Scalars['String']['output'];
@@ -67,7 +67,7 @@ export type Invoice = {
 
 export type InvoicesList = Pagination & {
   __typename?: 'InvoicesList';
-  invoicess: Array<Maybe<Invoice>>;
+  invoices: Array<Maybe<Invoice>>;
   page: Scalars['Int']['output'];
   perPage: Scalars['Int']['output'];
   total: Scalars['Int']['output'];
@@ -433,7 +433,7 @@ export type EntityResolvers<ContextType = any, ParentType extends ResolversParen
 };
 
 export type InvoiceResolvers<ContextType = any, ParentType extends ResolversParentTypes['Invoice'] = ResolversParentTypes['Invoice']> = {
-  client?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  client?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   number?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -444,7 +444,7 @@ export type InvoiceResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type InvoicesListResolvers<ContextType = any, ParentType extends ResolversParentTypes['InvoicesList'] = ResolversParentTypes['InvoicesList']> = {
-  invoicess?: Resolver<Array<Maybe<ResolversTypes['Invoice']>>, ParentType, ContextType>;
+  invoices?: Resolver<Array<Maybe<ResolversTypes['Invoice']>>, ParentType, ContextType>;
   page?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   perPage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;

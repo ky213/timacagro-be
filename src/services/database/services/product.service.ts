@@ -34,7 +34,7 @@ export class ProductServiceProvider {
     //check product exists
     const productExists = await this.productRepo.findOneBy({ type: newProduct.type });
 
-    if (productExists) throw new HttpError(400, "User with this email exists.", ERRORS.PRODUCT_EXISTS_ERROR);
+    if (productExists) throw new HttpError(400, "User with this email exists.", ERRORS.ENTIY_EXISTS_ERROR);
 
     //save product
     const product = this.productRepo.create({ ...newProduct });

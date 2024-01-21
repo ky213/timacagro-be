@@ -28,6 +28,9 @@ export class InvoiceEntity extends BaseEntity {
   @Column({ type: "boolean", default: true })
   payed!: boolean;
 
+  @Column({ type: "boolean", default: true })
+  active!: boolean;
+
   @CreateDateColumn({ type: "timestamp" })
   createdAt!: string;
 

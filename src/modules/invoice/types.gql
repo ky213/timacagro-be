@@ -1,7 +1,7 @@
 type Invoice {
   id: Int!
   number: String!
-  client: String!
+  client: Int!
   total: Float!
   payed: Boolean!
   createdAt: DateTime!
@@ -9,7 +9,7 @@ type Invoice {
 }
 
 type InvoicesList implements Pagination {
-  invoicess: [Invoice]!
+  invoices: [Invoice]!
   page: Int!
   perPage: Int!
   total: Int!
