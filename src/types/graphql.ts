@@ -220,7 +220,7 @@ export type MutationUpdateUserArgs = {
 export type Pagination = {
   page: Scalars['Int']['output'];
   perPage: Scalars['Int']['output'];
-  total: Scalars['Int']['output'];
+  total?: Maybe<Scalars['Int']['output']>;
 };
 
 export type Product = {
@@ -584,7 +584,7 @@ export type PaginationResolvers<ContextType = any, ParentType extends ResolversP
   __resolveType: TypeResolveFn<'ClientsList' | 'InvoicesList' | 'ProductsList' | 'UsersList', ParentType, ContextType>;
   page?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   perPage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
 };
 
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {

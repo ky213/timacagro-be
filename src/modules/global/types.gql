@@ -10,7 +10,7 @@ type Entity {
 interface Pagination {
   page: Int!
   perPage: Int!
-  total: Int!
+  total: Int
 }
 
 enum Role {
