@@ -6,6 +6,7 @@ import { useGraphQLModules } from "@envelop/graphql-modules";
 import { useGenericAuth } from "@envelop/generic-auth";
 import { useJWT } from "@graphql-yoga/plugin-jwt";
 import { useCookies } from "@whatwg-node/server-plugin-cookies";
+import cors from "cors";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
@@ -29,7 +30,7 @@ async function startServer() {
 
     const app = express();
     const port = process.env.SERVER_PORT;
-
+    app.use(cors({ origin: ["http://localhost:3000", "*"], credentials: true, methods: ["GET", "POST"] }));
     app.use(yoga);
     app.listen(port, () => logger.info(`Server running on port ${port}`));
   } catch (error) {
