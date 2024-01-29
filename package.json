@@ -10,7 +10,7 @@
     "lint": "eslint",
     "build:prod": "NODE_ENV=prod tsc --build",
     "build:staging": "NODE_ENV=staging tsc --build",
-    "generate": "graphql-codegen",
+    "codegen": "graphql-codegen",
     "preinstall": "npm i -g pnpm",
     "install": "pnpm i"
   },

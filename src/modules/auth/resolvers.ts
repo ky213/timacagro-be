@@ -30,6 +30,10 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       const userSerivce = injector.get(UserServiceProvider);
       const user = await userSerivce.getUserWithPassword(email);
 
+      const existingToken = (await request.cookieStore?.get("authorization"))?.value;
+
+      if(existingToken) throw new HttpError(400, "User already authenticated", ERRORS.USER_ALREADY_AUTHENTICATED);
+
       if (!user) throw new HttpError(400, "invalid user credentials", ERRORS.INVALID_INPUT_ERROR);
 
       const passwordsMatch = await isSameHash(password, user.password);
@@ -44,7 +48,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       await request.cookieStore?.set({ ...COOKIE_CONFIG, value: token });
 
-      return true;
+      return user;
     },
     async logout(_root, _args, { request }) {
       await request.cookieStore?.delete("authorization");
