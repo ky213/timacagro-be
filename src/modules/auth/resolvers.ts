@@ -1,5 +1,5 @@
-import { Resolvers } from "~/types/graphql";
-import jwt from "jsonwebtoken";
+import { Resolvers, User } from "~/types/graphql";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 import { UserServiceProvider, CacheServiceProvider } from "~/services";
 import { HttpError } from "~/shared/utils/error-handler";
@@ -7,6 +7,17 @@ import { isSameHash } from "~/shared/utils/cyphers";
 import { ERRORS, COOKIE_CONFIG, JWT_SIGNING_KEY } from "~/config";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
+  Query:{
+    async getSession(_root, _args, {injector, currentUser}) {
+      if(currentUser){
+        const userService = injector.get(UserServiceProvider);
+        const user = await userService.getUserByEmail(currentUser.email);
+        
+        return user;
+      }
+      return null
+    },
+  },
   Mutation: {
     async confirmEmail(_root, { token }, { injector }) {
       const cacheStore = injector.get(CacheServiceProvider);

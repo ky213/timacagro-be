@@ -248,6 +248,7 @@ export type Query = {
   getDateTime: Scalars['DateTime']['output'];
   getInvoice?: Maybe<Invoice>;
   getProduct?: Maybe<Product>;
+  getSession?: Maybe<User>;
   getUser?: Maybe<User>;
   listClients: ClientsList;
   listInvoices: InvoicesList;
@@ -611,6 +612,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getDateTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   getInvoice?: Resolver<Maybe<ResolversTypes['Invoice']>, ParentType, ContextType, RequireFields<QueryGetInvoiceArgs, 'id'>>;
   getProduct?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType, RequireFields<QueryGetProductArgs, 'id'>>;
+  getSession?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
   listClients?: Resolver<ResolversTypes['ClientsList'], ParentType, ContextType, RequireFields<QueryListClientsArgs, 'page' | 'perPage'>>;
   listInvoices?: Resolver<ResolversTypes['InvoicesList'], ParentType, ContextType, RequireFields<QueryListInvoicesArgs, 'page' | 'perPage'>>;

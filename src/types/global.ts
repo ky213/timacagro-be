@@ -3,6 +3,7 @@ import { PubSub } from "graphql-yoga";
 import { RedisClientType } from "redis";
 
 import { ITopics } from "~/config";
+import { User } from "./graphql";
 
 declare global {
   namespace GraphQLModules {
@@ -10,6 +11,7 @@ declare global {
       request: HttpREquest;
       pubSub: PubSub<ITopics>;
       cache: RedisClientType;
+      currentUser?: User
     }
   }
 

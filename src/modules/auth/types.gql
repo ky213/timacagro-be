@@ -1,3 +1,7 @@
+type Query {
+  getSession: User
+}
+
 type Mutation {
   login(email: String!, password: String!): User
   logout: Boolean
