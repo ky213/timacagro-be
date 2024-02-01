@@ -33,7 +33,9 @@ export class UserServiceProvider {
   }
 
   async lisUsers(page: number, perPage: number): Promise<UsersList> {
-    const [users, total] = await this.userRepo.findAndCount({ skip: page, take: perPage });
+    const [users, total] = await this.userRepo.findAndCount({ skip: page, take: perPage, order:{
+      createdAt:"DESC"
+    } });
 
     return {
       users,
