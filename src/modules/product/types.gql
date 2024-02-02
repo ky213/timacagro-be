@@ -1,7 +1,9 @@
 type Product {
   id: Int!
-  type: String!
+  label: String!
+  type: ProductType!
   quantity: Float!
+  available: Float!
   points: Int!
   active: Boolean!
   createdAt: DateTime!
@@ -16,15 +18,19 @@ type ProductsList implements Pagination {
 }
 
 input CreateProductInput {
-  type: String!
+  label: String!
+  type: ProductType!
   quantity: Float!
+  available: Float!
   points: Int!
-  active: Boolean
+  active: Boolean!
 }
 
 input UpdateProductInput {
-  type: String
+  label: String
+  type: ProductType
   quantity: Float
+  available: Float
   points: Int
   active: Boolean
 }

@@ -11,7 +11,7 @@ declare global {
       request: HttpREquest;
       pubSub: PubSub<ITopics>;
       cache: RedisClientType;
-      currentUser?: User
+      currentUser?: User;
     }
   }
 
@@ -27,6 +27,12 @@ export enum Role {
   ATC = "ATC",
   SALES = "SALES",
   COMMERCE = "COMMERCE",
+}
+
+export enum ProductType {
+  LIQUID = "LIQUID",
+  SOLID = "SOLID",
+  GAS = "GAS",
 }
 
 export enum Region {

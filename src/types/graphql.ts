@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Role } from './global';
 import { Region } from './global';
+import { ProductType } from './global';
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -53,10 +54,12 @@ export type CreateInvoiceInput = {
 };
 
 export type CreateProductInput = {
-  active?: InputMaybe<Scalars['Boolean']['input']>;
+  active: Scalars['Boolean']['input'];
+  available: Scalars['Float']['input'];
+  label: Scalars['String']['input'];
   points: Scalars['Int']['input'];
   quantity: Scalars['Float']['input'];
-  type: Scalars['String']['input'];
+  type: ProductType;
 };
 
 export type CreateUserInput = {
@@ -226,13 +229,17 @@ export type Pagination = {
 export type Product = {
   __typename?: 'Product';
   active: Scalars['Boolean']['output'];
+  available: Scalars['Float']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
+  label: Scalars['String']['output'];
   points: Scalars['Int']['output'];
   quantity: Scalars['Float']['output'];
-  type: Scalars['String']['output'];
+  type: ProductType;
   updatedAt: Scalars['DateTime']['output'];
 };
+
+export { ProductType };
 
 export type ProductsList = Pagination & {
   __typename?: 'ProductsList';
@@ -325,9 +332,11 @@ export type UpdateInvoiceInput = {
 
 export type UpdateProductInput = {
   active?: InputMaybe<Scalars['Boolean']['input']>;
+  available?: InputMaybe<Scalars['Float']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
   points?: InputMaybe<Scalars['Int']['input']>;
   quantity?: InputMaybe<Scalars['Float']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<ProductType>;
 };
 
 export type UpdateUserInput = {
@@ -460,6 +469,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Pagination: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Pagination']>;
   Product: ResolverTypeWrapper<Product>;
+  ProductType: ProductType;
   ProductsList: ResolverTypeWrapper<ProductsList>;
   Query: ResolverTypeWrapper<{}>;
   Region: Region;
@@ -590,14 +600,18 @@ export type PaginationResolvers<ContextType = any, ParentType extends ResolversP
 
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
   active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  available?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   points?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['ProductType'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
+
+export type ProductTypeResolvers = EnumResolverSignature<{ GAS?: any, LIQUID?: any, SOLID?: any }, ResolversTypes['ProductType']>;
 
 export type ProductsListResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductsList'] = ResolversParentTypes['ProductsList']> = {
   page?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -665,6 +679,7 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   Pagination?: PaginationResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
+  ProductType?: ProductTypeResolvers;
   ProductsList?: ProductsListResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Region?: RegionResolvers;

@@ -13,6 +13,7 @@ const config: CodegenConfig = {
         enumValues: {
           Role: "./global#Role",
           Region: "./global#Region",
+          ProductType: "./global#ProductType",
         },
       },
       plugins: [

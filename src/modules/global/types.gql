@@ -31,6 +31,12 @@ enum Region {
   DEV_ZONE_SOUTH
 }
 
+enum ProductType {
+  LIQUID
+  SOLID
+  GAS
+}
+
 type Query {
   getDateTime: DateTime!
 }

@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 
 import { database } from "~/config";
+import { ProductType } from "~/types/global";
 
 @Entity()
 export class ProductEntity extends BaseEntity {
@@ -17,10 +18,16 @@ export class ProductEntity extends BaseEntity {
   id!: number;
 
   @Column({ type: "varchar", unique: true, length: 25, nullable: false })
-  type!: string;
+  label!: string;
+
+  @Column({ type: "enum", enum: ProductType, nullable: false })
+  type!: ProductType;
 
   @Column({ type: "numeric", nullable: false })
   quantity!: number;
+
+  @Column({ type: "numeric", nullable: false })
+  available!: number;
 
   @Column({ type: "numeric", nullable: false })
   points!: number;
