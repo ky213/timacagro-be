@@ -1,18 +1,7 @@
-import {
-  Length,
-  IsEmail,
-  IsBoolean,
-  IsStrongPassword,
-  MaxLength,
-  IsEnum,
-  IsAlpha,
-  IsNumber,
-  IsInt,
-} from "class-validator";
+import { Length, IsBoolean, IsEnum, IsNumber, IsInt } from "class-validator";
 import { ProductType } from "../global";
 
 export class ProductSchema {
-  @IsAlpha()
   @Length(2, 25)
   label!: string;
 
@@ -20,7 +9,7 @@ export class ProductSchema {
   quantity!: number;
 
   @IsNumber({ maxDecimalPlaces: 2 }, { message: "Available Quantity should be a number" })
-  available!: number;
+  available: number | undefined;
 
   @IsEnum(ProductType)
   type!: ProductType;

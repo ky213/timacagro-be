@@ -32,9 +32,9 @@ export class ProductServiceProvider {
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
 
     //check product exists
-    const productExists = await this.productRepo.findOneBy({ type: newProduct.type });
+    const productExists = await this.productRepo.findOneBy({ label: newProduct.label });
 
-    if (productExists) throw new HttpError(400, "User with this email exists.", ERRORS.ENTIY_EXISTS_ERROR);
+    if (productExists) throw new HttpError(400, "Product with this label exists already.", ERRORS.ENTIY_EXISTS_ERROR);
 
     //save product
     const product = this.productRepo.create({ ...newProduct });
