@@ -19,6 +19,11 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       //@ts-ignore TODO:fix types
       return await productService.createProduct(productInfo);
     },
+    importProducts: async (_parent, { productsList }, { injector }) => {
+      const productService = injector.get(ProductServiceProvider);
+
+      return await productService.importProducts({ products: productsList.products });
+    },
     updateProduct: async (_parent, { id, productInfo }, { injector }) => {
       const productService = injector.get(ProductServiceProvider);
       //@ts-ignore TODO:fix types

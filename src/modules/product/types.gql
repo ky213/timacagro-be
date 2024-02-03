@@ -26,6 +26,10 @@ input CreateProductInput {
   active: Boolean!
 }
 
+input ImportProductsInput {
+  products: [CreateProductInput!]!
+}
+
 input UpdateProductInput {
   label: String
   type: ProductType
@@ -42,6 +46,7 @@ type Query {
 
 type Mutation {
   createProduct(productInfo: CreateProductInput!): Product!
+  importProducts(productsList: ImportProductsInput!): Boolean!
   updateProduct(id: ID!, productInfo: UpdateProductInput!): Boolean!
   deleteProduct(id: ID!): Boolean!
 }

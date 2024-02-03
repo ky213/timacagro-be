@@ -1,11 +1,12 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
 
 import { IProductRepository, ProductEntity, ProductRepositoryToken } from "../repos";
-import { CreateProductInput, Product, ProductsList, UpdateProductInput } from "~/types/graphql";
+import { CreateProductInput, ImportProductsInput, Product, ProductsList, UpdateProductInput } from "~/types/graphql";
 import { validateData } from "~/shared/utils/validator";
 import { HttpError } from "~/shared/utils/error-handler";
 import { ERRORS } from "~/config";
 import { ProductSchema } from "~/types/schemas/";
+import { ObjectLiteral } from "typeorm";
 
 @Injectable()
 export class ProductServiceProvider {
@@ -16,7 +17,13 @@ export class ProductServiceProvider {
   }
 
   async listProducts(page: number, perPage: number): Promise<ProductsList> {
-    const [products, total] = await this.productRepo.findAndCount({ skip: page, take: perPage });
+    const [products, total] = await this.productRepo.findAndCount({
+      skip: page,
+      take: perPage,
+      order: {
+        createdAt: "DESC",
+      },
+    });
 
     return {
       products,
@@ -42,6 +49,19 @@ export class ProductServiceProvider {
     await product.save();
 
     return product;
+  }
+
+  async importProducts({ products }: ImportProductsInput): Promise<boolean> {
+    const errors = products.flatMap((product) => validateData<CreateProductInput>(ProductSchema, product));
+
+    if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
+
+    //save product
+    await this.productRepo.upsert(products, {
+      conflictPaths: ["label"],
+    });
+
+    return true;
   }
 
   async updateProduct(id: number, productData: ProductEntity): Promise<Boolean> {

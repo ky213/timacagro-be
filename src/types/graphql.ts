@@ -81,6 +81,10 @@ export type Entity = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
+export type ImportProductsInput = {
+  products: Array<CreateProductInput>;
+};
+
 export type Invoice = {
   __typename?: 'Invoice';
   client: Scalars['Int']['output'];
@@ -112,6 +116,7 @@ export type Mutation = {
   deleteProduct: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
   forgotPassword?: Maybe<Scalars['String']['output']>;
+  importProducts: Scalars['Boolean']['output'];
   login?: Maybe<User>;
   logout?: Maybe<Scalars['Boolean']['output']>;
   randomize: Scalars['Float']['output'];
@@ -172,6 +177,11 @@ export type MutationDeleteUserArgs = {
 
 export type MutationForgotPasswordArgs = {
   email: Scalars['String']['input'];
+};
+
+
+export type MutationImportProductsArgs = {
+  productsList: ImportProductsInput;
 };
 
 
@@ -463,6 +473,7 @@ export type ResolversTypes = {
   File: ResolverTypeWrapper<Scalars['File']['output']>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  ImportProductsInput: ImportProductsInput;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Invoice: ResolverTypeWrapper<Invoice>;
   InvoicesList: ResolverTypeWrapper<InvoicesList>;
@@ -498,6 +509,7 @@ export type ResolversParentTypes = {
   File: Scalars['File']['output'];
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
+  ImportProductsInput: ImportProductsInput;
   Int: Scalars['Int']['output'];
   Invoice: Invoice;
   InvoicesList: InvoicesList;
@@ -579,6 +591,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteProductArgs, 'id'>>;
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
   forgotPassword?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationForgotPasswordArgs, 'email'>>;
+  importProducts?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationImportProductsArgs, 'productsList'>>;
   login?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   randomize?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
