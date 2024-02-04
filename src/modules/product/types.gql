@@ -46,7 +46,7 @@ type Query {
 
 type Mutation {
   createProduct(productInfo: CreateProductInput!): Product!
-  importProducts(productsList: ImportProductsInput!): Boolean!
+  importProducts(productsList: ImportProductsInput!, userPoints: Float): Boolean!
   updateProduct(id: ID!, productInfo: UpdateProductInput!): Boolean!
   deleteProduct(id: ID!): Boolean!
 }

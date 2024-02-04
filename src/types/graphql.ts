@@ -182,6 +182,7 @@ export type MutationForgotPasswordArgs = {
 
 export type MutationImportProductsArgs = {
   productsList: ImportProductsInput;
+  userPoints?: InputMaybe<Scalars['Float']['input']>;
 };
 
 

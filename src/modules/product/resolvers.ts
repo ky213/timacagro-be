@@ -1,4 +1,4 @@
-import { ProductServiceProvider } from "~/services";
+import { ProductServiceProvider, UserServiceProvider } from "~/services";
 import { CreateProductInput, OrderProductsOutput, Resolvers } from "~/types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
@@ -19,10 +19,19 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       //@ts-ignore TODO:fix types
       return await productService.createProduct(productInfo);
     },
-    importProducts: async (_parent, { productsList }, { injector, pubSub }) => {
+    importProducts: async (_parent, { productsList, userPoints }, { injector, pubSub, currentUser }) => {
       const productService = injector.get(ProductServiceProvider);
+      const userService = injector.get(UserServiceProvider);
 
       await productService.importProducts({ products: productsList.products });
+
+      if (userPoints && currentUser) {
+        const user = await userService.getUserByEmail(currentUser.email);
+        if (user)
+          await userService.updateUser(user?.id, {
+            currentPoints: (currentUser?.currentPoints || 0) + userPoints,
+          });
+      }
 
       pubSub.publish("products:order", { products: productsList.products });
 
