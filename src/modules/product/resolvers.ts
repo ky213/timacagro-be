@@ -1,5 +1,5 @@
 import { ProductServiceProvider } from "~/services";
-import { Resolvers } from "~/types/graphql";
+import { CreateProductInput, OrderProductsOutput, Resolvers } from "~/types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
@@ -19,10 +19,14 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       //@ts-ignore TODO:fix types
       return await productService.createProduct(productInfo);
     },
-    importProducts: async (_parent, { productsList }, { injector }) => {
+    importProducts: async (_parent, { productsList }, { injector, pubSub }) => {
       const productService = injector.get(ProductServiceProvider);
 
-      return await productService.importProducts({ products: productsList.products });
+      await productService.importProducts({ products: productsList.products });
+
+      pubSub.publish("products:order", { products: productsList.products });
+
+      return true;
     },
     updateProduct: async (_parent, { id, productInfo }, { injector }) => {
       const productService = injector.get(ProductServiceProvider);
@@ -37,6 +41,12 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       await productService.deleteProduct(Number(id));
 
       return true;
+    },
+  },
+  Subscription: {
+    orderProducts: {
+      subscribe: (_root, _args, { pubSub }) => pubSub.subscribe("products:order"),
+      resolve: (payload: { products: OrderProductsOutput[] }) => payload.products,
     },
   },
 };

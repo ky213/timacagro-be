@@ -50,3 +50,12 @@ type Mutation {
   updateProduct(id: ID!, productInfo: UpdateProductInput!): Boolean!
   deleteProduct(id: ID!): Boolean!
 }
+
+type OrderProductsOutput {
+  label: String!
+  available: Float!
+}
+
+type Subscription {
+  orderProducts: [OrderProductsOutput!]!
+}

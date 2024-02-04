@@ -230,6 +230,12 @@ export type MutationUpdateUserArgs = {
   userInfo: UpdateUserInput;
 };
 
+export type OrderProductsOutput = {
+  __typename?: 'OrderProductsOutput';
+  available: Scalars['Float']['output'];
+  label: Scalars['String']['output'];
+};
+
 export type Pagination = {
   page: Scalars['Int']['output'];
   perPage: Scalars['Int']['output'];
@@ -323,6 +329,7 @@ export { Role };
 
 export type Subscription = {
   __typename?: 'Subscription';
+  orderProducts: Array<OrderProductsOutput>;
   randomNumber: Scalars['Float']['output'];
   testConnection: Scalars['Int']['output'];
 };
@@ -478,6 +485,7 @@ export type ResolversTypes = {
   Invoice: ResolverTypeWrapper<Invoice>;
   InvoicesList: ResolverTypeWrapper<InvoicesList>;
   Mutation: ResolverTypeWrapper<{}>;
+  OrderProductsOutput: ResolverTypeWrapper<OrderProductsOutput>;
   Pagination: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Pagination']>;
   Product: ResolverTypeWrapper<Product>;
   ProductType: ProductType;
@@ -514,6 +522,7 @@ export type ResolversParentTypes = {
   Invoice: Invoice;
   InvoicesList: InvoicesList;
   Mutation: {};
+  OrderProductsOutput: OrderProductsOutput;
   Pagination: ResolversInterfaceTypes<ResolversParentTypes>['Pagination'];
   Product: Product;
   ProductsList: ProductsList;
@@ -604,6 +613,12 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id' | 'userInfo'>>;
 };
 
+export type OrderProductsOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrderProductsOutput'] = ResolversParentTypes['OrderProductsOutput']> = {
+  available?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PaginationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Pagination'] = ResolversParentTypes['Pagination']> = {
   __resolveType: TypeResolveFn<'ClientsList' | 'InvoicesList' | 'ProductsList' | 'UsersList', ParentType, ContextType>;
   page?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -652,6 +667,7 @@ export type RegionResolvers = EnumResolverSignature<{ CENTER?: any, CENTER_EAST?
 export type RoleResolvers = EnumResolverSignature<{ ADMIN?: any, ATC?: any, COMMERCE?: any, SALES?: any }, ResolversTypes['Role']>;
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  orderProducts?: SubscriptionResolver<Array<ResolversTypes['OrderProductsOutput']>, "orderProducts", ParentType, ContextType>;
   randomNumber?: SubscriptionResolver<ResolversTypes['Float'], "randomNumber", ParentType, ContextType>;
   testConnection?: SubscriptionResolver<ResolversTypes['Int'], "testConnection", ParentType, ContextType>;
 };
@@ -690,6 +706,7 @@ export type Resolvers<ContextType = any> = {
   Invoice?: InvoiceResolvers<ContextType>;
   InvoicesList?: InvoicesListResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  OrderProductsOutput?: OrderProductsOutputResolvers<ContextType>;
   Pagination?: PaginationResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   ProductType?: ProductTypeResolvers;
