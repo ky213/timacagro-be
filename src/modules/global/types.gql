@@ -15,6 +15,7 @@ interface Pagination {
 
 enum Role {
   ADMIN
+  DR
   ATC
   SALES
   COMMERCE

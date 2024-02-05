@@ -24,6 +24,7 @@ interface HttpREquest extends Request {
 
 export enum Role {
   ADMIN = "ADMIN",
+  DR = "DR",
   ATC = "ATC",
   SALES = "SALES",
   COMMERCE = "COMMERCE",

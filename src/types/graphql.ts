@@ -665,7 +665,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type RegionResolvers = EnumResolverSignature<{ CENTER?: any, CENTER_EAST?: any, DEV_ZONE_SOUTH?: any, FAR_EAST?: any, FAR_WEST?: any, NORTH_EAST?: any, NORTH_WEST?: any, SOUTH_EAST?: any }, ResolversTypes['Region']>;
 
-export type RoleResolvers = EnumResolverSignature<{ ADMIN?: any, ATC?: any, COMMERCE?: any, SALES?: any }, ResolversTypes['Role']>;
+export type RoleResolvers = EnumResolverSignature<{ ADMIN?: any, ATC?: any, COMMERCE?: any, DR?: any, SALES?: any }, ResolversTypes['Role']>;
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   orderProducts?: SubscriptionResolver<Array<ResolversTypes['OrderProductsOutput']>, "orderProducts", ParentType, ContextType>;
