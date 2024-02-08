@@ -7,8 +7,6 @@ export const JWT_SIGNING_KEY: Secret = `${process.env.JWT_SIGNING_KEY}`;
 export const JWT_CONFIG: JwtPluginOptions = {
   issuer: `${process.env.SERVER_HOST}:${process.env.SERVER_PORT}`,
   signingKey: `${JWT_SIGNING_KEY}`,
-  //TODO:jwt is noting set in the request
-  // getToken: async ({ request }) => (await request.cookieStore?.get("authorization"))?.value,
 };
 
 export const COOKIE_CONFIG: CookieListItem = {

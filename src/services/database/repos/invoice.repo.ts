@@ -18,7 +18,7 @@ export class InvoiceEntity extends BaseEntity {
 
   @Column({ type: "varchar", unique: true, length: 25, nullable: false })
   number!: string;
-  //TODO:set client relation
+
   @Column({ type: "numeric", nullable: false })
   client!: number;
 
