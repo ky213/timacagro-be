@@ -33,9 +33,13 @@ export class UserServiceProvider {
   }
 
   async lisUsers(page: number, perPage: number): Promise<UsersList> {
-    const [users, total] = await this.userRepo.findAndCount({ skip: page, take: perPage, order:{
-      createdAt:"DESC"
-    } });
+    const [users, total] = await this.userRepo.findAndCount({
+      skip: page,
+      take: perPage,
+      order: {
+        createdAt: "DESC",
+      },
+    });
 
     return {
       users,
@@ -102,7 +106,9 @@ export class UserServiceProvider {
       user.email,
       `Welcome email`,
       `<h1>Welcome ${user.firstName}</h1>
-       <p>follow this <a href="https://${WEB_CLIENT_HOST}:${WEB_CLIENT_PORT}/confirm-email/?token=${token}">link</a> to confirm you email address.
+       <p>follow this <a href="http://${WEB_CLIENT_HOST}:${WEB_CLIENT_PORT}/auth/confirm-email/?token=${token}">link</a> to confirm you email address.</p>
+       <p>Your initial password is: 1qwerty</p>.
+       <p>Please reset it on your first login.</p>
     `
     );
   }

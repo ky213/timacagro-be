@@ -1,10 +1,8 @@
-import { TransportOptions } from "nodemailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
-export const emailServerOptions: TransportOptions = {
-  //@ts-expect-error
-  //TODO:fix type
+export const emailServerOptions: SMTPTransport.Options = {
   host: process.env.EMAIL_SERVER_HOST,
-  port: process.env.EMAIL_SERVER_PORT,
+  port: Number(process.env.EMAIL_SERVER_PORT),
   secure: process.env.NODE_ENV == "prod",
   auth: {
     user: process.env.EMAIL_SERVER_USER,
