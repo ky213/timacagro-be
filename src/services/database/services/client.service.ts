@@ -1,11 +1,13 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
+import fs from "fs";
 
 import { IClientRepository, ClientEntity, ClientRepositoryToken } from "../repos";
-import { CreateClientInput, Client, ClientsList, UpdateClientInput } from "~/types/graphql";
+import { CreateClientInput, Client, ClientsList } from "~/types/graphql";
 import { validateData } from "~/shared/utils/validator";
 import { HttpError } from "~/shared/utils/error-handler";
-import { ERRORS } from "~/config";
+import { ERRORS, FILES_DIR } from "~/config";
 import { ClientSchema } from "~/types/schemas/";
+import path from "path";
 
 @Injectable()
 export class ClientServiceProvider {
@@ -26,20 +28,33 @@ export class ClientServiceProvider {
     };
   }
 
-  async createClient(newClient: ClientEntity): Promise<Client> {
-    const errors = validateData<ClientEntity>(ClientSchema, newClient);
+  async createClient(newClient: CreateClientInput): Promise<Pick<Client, "id">> {
+    const errors = validateData<CreateClientInput>(ClientSchema, newClient);
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
 
     //check Client exists
     const clientExists = await this.clientRepo.findOneBy({ name: newClient.name });
 
-    if (clientExists) throw new HttpError(400, "Client with this number exists.", ERRORS.ENTIY_EXISTS_ERROR);
+    if (clientExists) throw new HttpError(400, "Client with this name exists.", ERRORS.ENTIY_EXISTS_ERROR);
+
+    //save files
+    try {
+      Object.values(newClient.files).forEach(async (file) => {
+        const fileArrayBuffer = await file.arrayBuffer();
+        await fs.promises.writeFile(
+          path.join(FILES_DIR, `/${newClient.name}/${file.name}`),
+          Buffer.from(fileArrayBuffer)
+        );
+      });
+    } catch {
+      throw new HttpError(500, "Coudn't save client's files.");
+    }
 
     //save Client
-    const client = this.clientRepo.create({ ...newClient });
+    const client = this.clientRepo.create({ name: newClient.name });
 
-    await client.save();
+    await this.clientRepo.save(client);
 
     return client;
   }

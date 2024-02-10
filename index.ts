@@ -30,13 +30,16 @@ async function startServer() {
 
     const app = express();
     const port = process.env.SERVER_PORT;
-    app.use(
-      cors({
-        origin: ["http://localhost:3000", "http://localhost:58927", "*"],
-        credentials: true,
-        methods: ["GET", "POST"],
-      })
-    );
+
+    if (process.env.NODE_ENV === "prod") {
+      app.use(
+        cors({
+          origin: ["http://localhost:3000", "http://localhost:58927", "*"],
+          credentials: true,
+          methods: ["GET", "POST"],
+        })
+      );
+    }
     app.use(yoga);
     app.listen(port, () => logger.info(`Server running on port ${port}`));
   } catch (error) {

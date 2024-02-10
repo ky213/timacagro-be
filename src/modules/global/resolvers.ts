@@ -16,8 +16,9 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       pubSub.publish("global:random_number", random);
       return random;
     },
-    readTextFile: async (_, { file }) => {
+    readTextFile: async (_, { file }: { file: File }) => {
       const fileContent = await file.text();
+
       return fileContent;
     },
     saveFile: async (_, { file }) => {
@@ -25,7 +26,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
         const fileArrayBuffer = await file.arrayBuffer();
         await fs.promises.writeFile(
           path.join(__dirname + "/../../../uploads/", file.name),
-          Buffer.from(fileArrayBuffer),
+          Buffer.from(fileArrayBuffer)
         );
       } catch (e) {
         return false;

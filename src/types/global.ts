@@ -46,3 +46,5 @@ export enum Region {
   FAR_EAST = "FAR_EAST",
   DEV_ZONE_SOUTH = "DEV_ZONE_SOUTH",
 }
+
+export type File = typeof File;

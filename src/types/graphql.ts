@@ -27,10 +27,23 @@ export type Client = {
   __typename?: 'Client';
   active: Scalars['Boolean']['output'];
   createdAt: Scalars['DateTime']['output'];
-  files: Array<Maybe<Scalars['String']['output']>>;
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type ClientFiles = {
+  BankStatement: Scalars['File']['input'];
+  BirthCetificate: Scalars['File']['input'];
+  C20Certificate: Scalars['File']['input'];
+  CertificateOfProperty: Scalars['File']['input'];
+  ClientForm: Scalars['File']['input'];
+  ID: Scalars['File']['input'];
+  MinesLicense?: InputMaybe<Scalars['File']['input']>;
+  ProofOfResidancy: Scalars['File']['input'];
+  PurchaseOrder: Scalars['File']['input'];
+  SignalFile: Scalars['File']['input'];
+  TaxesCard: Scalars['File']['input'];
 };
 
 export type ClientsList = Pagination & {
@@ -42,7 +55,7 @@ export type ClientsList = Pagination & {
 };
 
 export type CreateClientInput = {
-  files: Array<InputMaybe<Scalars['String']['input']>>;
+  files: ClientFiles;
   name: Scalars['String']['input'];
 };
 
@@ -107,7 +120,7 @@ export type InvoicesList = Pagination & {
 export type Mutation = {
   __typename?: 'Mutation';
   confirmEmail?: Maybe<Scalars['Boolean']['output']>;
-  createClient: Client;
+  createClient: Scalars['Int']['output'];
   createInvoice: Invoice;
   createProduct: Product;
   createUser: User;
@@ -136,7 +149,7 @@ export type MutationConfirmEmailArgs = {
 
 
 export type MutationCreateClientArgs = {
-  productInfo: CreateClientInput;
+  clientInfo: CreateClientInput;
 };
 
 
@@ -209,8 +222,8 @@ export type MutationSaveFileArgs = {
 
 
 export type MutationUpdateClientArgs = {
+  clientInfo: UpdateClientInput;
   id: Scalars['ID']['input'];
-  productInfo: UpdateClientInput;
 };
 
 
@@ -337,7 +350,7 @@ export type Subscription = {
 
 export type UpdateClientInput = {
   active?: InputMaybe<Scalars['Boolean']['input']>;
-  files?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  files?: InputMaybe<ClientFiles>;
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -471,6 +484,7 @@ export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Client: ResolverTypeWrapper<Client>;
+  ClientFiles: ClientFiles;
   ClientsList: ResolverTypeWrapper<ClientsList>;
   CreateClientInput: CreateClientInput;
   CreateInvoiceInput: CreateInvoiceInput;
@@ -508,6 +522,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Client: Client;
+  ClientFiles: ClientFiles;
   ClientsList: ClientsList;
   CreateClientInput: CreateClientInput;
   CreateInvoiceInput: CreateInvoiceInput;
@@ -541,7 +556,6 @@ export type ResolversParentTypes = {
 export type ClientResolvers<ContextType = any, ParentType extends ResolversParentTypes['Client'] = ResolversParentTypes['Client']> = {
   active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  files?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -592,7 +606,7 @@ export type InvoicesListResolvers<ContextType = any, ParentType extends Resolver
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   confirmEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationConfirmEmailArgs, 'token'>>;
-  createClient?: Resolver<ResolversTypes['Client'], ParentType, ContextType, RequireFields<MutationCreateClientArgs, 'productInfo'>>;
+  createClient?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<MutationCreateClientArgs, 'clientInfo'>>;
   createInvoice?: Resolver<ResolversTypes['Invoice'], ParentType, ContextType, RequireFields<MutationCreateInvoiceArgs, 'productInfo'>>;
   createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'productInfo'>>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'userInfo'>>;
@@ -608,7 +622,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   readTextFile?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationReadTextFileArgs, 'file'>>;
   resetPassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'newPassword' | 'token'>>;
   saveFile?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSaveFileArgs, 'file'>>;
-  updateClient?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateClientArgs, 'id' | 'productInfo'>>;
+  updateClient?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateClientArgs, 'clientInfo' | 'id'>>;
   updateInvoice?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateInvoiceArgs, 'id' | 'productInfo'>>;
   updateProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateProductArgs, 'id' | 'productInfo'>>;
   updateUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id' | 'userInfo'>>;
