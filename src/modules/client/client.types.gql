@@ -13,29 +13,14 @@ type ClientsList implements Pagination {
   total: Int!
 }
 
-input ClientFiles {
-  ID: File!
-  BirthCetificate: File!
-  ProofOfResidancy: File!
-  MinesLicense: File
-  SignalFile: File!
-  CertificateOfProperty: File!
-  TaxesCard: File!
-  C20Certificate: File!
-  BankStatement: File!
-  PurchaseOrder: File!
-  ClientForm: File!
-}
-
 input CreateClientInput {
-  name: String!
-  files: ClientFiles!
+  clientName: String!
+  files: [File!]!
 }
 
 input UpdateClientInput {
-  name: String
-  files: ClientFiles
-  active: Boolean
+  clientName: String
+  files: [File]
 }
 
 type Query {
@@ -44,7 +29,7 @@ type Query {
 }
 
 type Mutation {
-  createClient(clientInfo: CreateClientInput!): Int!
-  updateClient(id: ID!, clientInfo: UpdateClientInput!): Boolean!
+  createClient(clientInfo: CreateClientInput!): Client!
+  updateClient(id: Int!, clientInfo: UpdateClientInput!): Boolean!
   deleteClient(id: ID!): Boolean!
 }

@@ -22,4 +22,4 @@ export const WEB_CLIENT_HOST = process.env.WEB_CLIENT_HOST;
 export const WEB_CLIENT_PORT = process.env.WEB_CLIENT_PORT;
 
 // client files dir
-export const FILES_DIR = __dirname + "/../../uploads/files";
+export const FILES_DIR = __dirname + "/../../uploads/clients-files";

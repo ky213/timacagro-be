@@ -10,5 +10,5 @@ export const ClientlModule = createModule({
   dirname: __dirname,
   providers: [ClientRepositoryProvider, ClientServiceProvider],
   typeDefs: [...loadFilesSync(join(__dirname, "./*.gql"))],
-  resolvers: loadFilesSync(join(__dirname, "./resolvers.ts")),
+  resolvers: loadFilesSync(join(__dirname, "./*.resolvers.ts")),
 });

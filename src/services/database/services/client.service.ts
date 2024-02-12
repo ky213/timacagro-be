@@ -1,4 +1,5 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
+import path from "path";
 import fs from "fs";
 
 import { IClientRepository, ClientEntity, ClientRepositoryToken } from "../repos";
@@ -7,7 +8,6 @@ import { validateData } from "~/shared/utils/validator";
 import { HttpError } from "~/shared/utils/error-handler";
 import { ERRORS, FILES_DIR } from "~/config";
 import { ClientSchema } from "~/types/schemas/";
-import path from "path";
 
 @Injectable()
 export class ClientServiceProvider {
@@ -28,31 +28,36 @@ export class ClientServiceProvider {
     };
   }
 
-  async createClient(newClient: CreateClientInput): Promise<Pick<Client, "id">> {
-    const errors = validateData<CreateClientInput>(ClientSchema, newClient);
+  async createClient(newClient: CreateClientInput): Promise<Client> {
+    // const errors = validateData<CreateClientInput>(ClientSchema, newClient);
 
-    if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
+    // if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
 
     //check Client exists
-    const clientExists = await this.clientRepo.findOneBy({ name: newClient.name });
+    const clientExists = await this.clientRepo.findOneBy({ name: newClient.clientName });
 
     if (clientExists) throw new HttpError(400, "Client with this name exists.", ERRORS.ENTIY_EXISTS_ERROR);
 
     //save files
     try {
-      Object.values(newClient.files).forEach(async (file) => {
+      const clientFolder = `${FILES_DIR}/${newClient.clientName.replaceAll(" ", "-")}`;
+
+      newClient.files.forEach(async (file) => {
         const fileArrayBuffer = await file.arrayBuffer();
-        await fs.promises.writeFile(
-          path.join(FILES_DIR, `/${newClient.name}/${file.name}`),
-          Buffer.from(fileArrayBuffer)
-        );
+
+        if (!fs.existsSync(clientFolder))
+          fs.mkdir(clientFolder, (error) => {
+            if (error) throw new Error("coudn't open client folder.");
+          });
+
+        await fs.promises.writeFile(`${clientFolder}/${file.name.toLocaleLowerCase()}`, Buffer.from(fileArrayBuffer));
       });
     } catch {
       throw new HttpError(500, "Coudn't save client's files.");
     }
 
     //save Client
-    const client = this.clientRepo.create({ name: newClient.name });
+    const client = this.clientRepo.create({ name: newClient.clientName });
 
     await this.clientRepo.save(client);
 

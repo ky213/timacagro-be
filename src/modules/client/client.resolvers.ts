@@ -1,5 +1,5 @@
 import { ClientServiceProvider } from "~/services";
-import { Resolvers } from "~/types/graphql";
+import { CreateClientInput, Resolvers } from "~/types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
@@ -17,9 +17,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     createClient: async (_parent, { clientInfo }, { injector }) => {
       const clienttService = injector.get(ClientServiceProvider);
 
-      const { id } = await clienttService.createClient(clientInfo);
-
-      return id;
+      return await clienttService.createClient(clientInfo);
     },
     updateClient: async (_parent, { id, clientInfo }, { injector }) => {
       const clientService = injector.get(ClientServiceProvider);

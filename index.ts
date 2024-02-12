@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import dotenv from "dotenv";
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { createYoga } from "graphql-yoga";
 import { useGraphQLModules } from "@envelop/graphql-modules";
 import { useGenericAuth } from "@envelop/generic-auth";
@@ -22,7 +22,7 @@ async function startServer() {
     const cache = await initCache();
 
     const yoga = createYoga({
-      logging: process.env.NODE_ENV === "dev",
+      logging: "debug",
       maskedErrors: process.env.NODE_ENV === "prod",
       context: { pubSub, cache },
       plugins: [useCookies(), useJWT(JWT_CONFIG), useGenericAuth(authConfig), useGraphQLModules(application)],
@@ -40,6 +40,9 @@ async function startServer() {
         })
       );
     }
+    app.use((error: Error, _req: Request, _res: Response, _next: NextFunction): void => {
+      logger.error(error.message);
+    });
     app.use(yoga);
     app.listen(port, () => logger.info(`Server running on port ${port}`));
   } catch (error) {
@@ -47,4 +50,6 @@ async function startServer() {
   }
 }
 
-startServer();
+startServer().catch((error) => {
+  logger.error("Server error: ", error.message);
+});
