@@ -1,4 +1,6 @@
+import { ERRORS } from "~/config";
 import { ClientServiceProvider } from "~/services";
+import { HttpError } from "~/shared/utils/error-handler";
 import { CreateClientInput, Resolvers } from "~/types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
@@ -23,8 +25,11 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     },
     updateClient: async (_parent, { id, clientInfo }, { injector }) => {
       const clientService = injector.get(ClientServiceProvider);
-      //@ts-ignore TODO:fix types
-      await clientService.updateClient(Number(id), clientInfo);
+      const client = await clientService.getClientById(Number(id));
+
+      if (!client) throw new HttpError(404, "Client doesn't exist or deleted", ERRORS.USER_NOT_FOUND);
+
+      await clientService.updateClient(client, clientInfo);
 
       return true;
     },

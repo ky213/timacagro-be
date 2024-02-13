@@ -3,7 +3,7 @@ import path from "path";
 import fs from "fs";
 
 import { IClientRepository, ClientEntity, ClientRepositoryToken } from "../repos";
-import { CreateClientInput, Client, ClientsList } from "~/types/graphql";
+import { CreateClientInput, Client, ClientsList, UpdateClientInput } from "~/types/graphql";
 import { validateData } from "~/shared/utils/validator";
 import { HttpError } from "~/shared/utils/error-handler";
 import { ERRORS, FILES_DIR } from "~/config";
@@ -64,18 +64,37 @@ export class ClientServiceProvider {
     return client;
   }
 
-  async updateClient(id: number, clientData: ClientEntity): Promise<Boolean> {
-    const errors = validateData<ClientEntity>(ClientSchema, clientData);
+  async updateClient(client: Client, newClientData: UpdateClientInput): Promise<Boolean> {
+    const errors = validateData<UpdateClientInput>(ClientSchema, newClientData, { isUpdate: true });
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
 
-    await this.clientRepo.update({ id }, { ...clientData });
+    if (newClientData.files?.length) {
+      try {
+        const clientFolder = `${FILES_DIR}/${client.name.replaceAll(" ", "-")}`;
+
+        newClientData.files.forEach(async (file) => {
+          const fileArrayBuffer = await file.arrayBuffer();
+
+          if (!fs.existsSync(clientFolder))
+            fs.mkdir(clientFolder, (error) => {
+              if (error) throw new Error("coudn't open client folder.");
+            });
+
+          await fs.promises.writeFile(`${clientFolder}/${file.name.toLocaleLowerCase()}`, Buffer.from(fileArrayBuffer));
+        });
+      } catch {
+        throw new HttpError(500, "Coudn't save client's files.");
+      }
+    }
+
+    if (newClientData.name) await this.clientRepo.update({ id: client.id }, { name: newClientData.name });
 
     return true;
   }
 
   async deleteClient(id: number): Promise<Boolean> {
-    await this.clientRepo.update({ id }, { active: false });
+    await this.clientRepo.softDelete({ id });
 
     return true;
   }

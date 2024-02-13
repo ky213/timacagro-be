@@ -18,8 +18,8 @@ export class ClientSchema implements Omit<Client, "id" | "active" | "createdAt" 
   name!: string;
 
   @IsArray()
-  @ArrayMinSize(10)
-  @ArrayMaxSize(10)
+  @ArrayMinSize(1)
+  @ArrayMaxSize(1)
   @Type(() => ClientFile)
   @ValidateNested({ each: true })
   files!: ClientFile[];
