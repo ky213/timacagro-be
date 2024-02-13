@@ -15,9 +15,11 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   },
   Mutation: {
     createClient: async (_parent, { clientInfo }, { injector }) => {
-      const clienttService = injector.get(ClientServiceProvider);
+      const clientService = injector.get(ClientServiceProvider);
 
-      return await clienttService.createClient(clientInfo);
+      clientInfo.files.forEach((file) => (file!._size = file.size));
+
+      return await clientService.createClient(clientInfo);
     },
     updateClient: async (_parent, { id, clientInfo }, { injector }) => {
       const clientService = injector.get(ClientServiceProvider);

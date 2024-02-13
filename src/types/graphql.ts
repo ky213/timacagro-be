@@ -41,8 +41,8 @@ export type ClientsList = Pagination & {
 };
 
 export type CreateClientInput = {
-  clientName: Scalars['String']['input'];
   files: Array<Scalars['File']['input']>;
+  name: Scalars['String']['input'];
 };
 
 export type CreateInvoiceInput = {
@@ -335,8 +335,8 @@ export type Subscription = {
 };
 
 export type UpdateClientInput = {
-  clientName?: InputMaybe<Scalars['String']['input']>;
   files?: InputMaybe<Array<InputMaybe<Scalars['File']['input']>>>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateInvoiceInput = {

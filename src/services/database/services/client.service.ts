@@ -29,18 +29,18 @@ export class ClientServiceProvider {
   }
 
   async createClient(newClient: CreateClientInput): Promise<Client> {
-    // const errors = validateData<CreateClientInput>(ClientSchema, newClient);
+    const errors = validateData<CreateClientInput>(ClientSchema, newClient);
 
-    // if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
+    if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
 
     //check Client exists
-    const clientExists = await this.clientRepo.findOneBy({ name: newClient.clientName });
+    const clientExists = await this.clientRepo.findOneBy({ name: newClient.name });
 
     if (clientExists) throw new HttpError(400, "Client with this name exists.", ERRORS.ENTIY_EXISTS_ERROR);
 
     //save files
     try {
-      const clientFolder = `${FILES_DIR}/${newClient.clientName.replaceAll(" ", "-")}`;
+      const clientFolder = `${FILES_DIR}/${newClient.name.replaceAll(" ", "-")}`;
 
       newClient.files.forEach(async (file) => {
         const fileArrayBuffer = await file.arrayBuffer();
@@ -57,7 +57,7 @@ export class ClientServiceProvider {
     }
 
     //save Client
-    const client = this.clientRepo.create({ name: newClient.clientName });
+    const client = this.clientRepo.create({ name: newClient.name });
 
     await this.clientRepo.save(client);
 

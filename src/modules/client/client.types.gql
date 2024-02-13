@@ -14,12 +14,12 @@ type ClientsList implements Pagination {
 }
 
 input CreateClientInput {
-  clientName: String!
+  name: String!
   files: [File!]!
 }
 
 input UpdateClientInput {
-  clientName: String
+  name: String
   files: [File]
 }
 
