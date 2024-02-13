@@ -36,7 +36,14 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     deleteClient: async (_parent, { id }, { injector }) => {
       const clientService = injector.get(ClientServiceProvider);
 
-      await clientService.deleteClient(Number(id));
+      await clientService.deleteClient(id);
+
+      return true;
+    },
+    restoreClient: async (_parent, { id }, { injector }) => {
+      const clientService = injector.get(ClientServiceProvider);
+
+      await clientService.restoreClient(id);
 
       return true;
     },

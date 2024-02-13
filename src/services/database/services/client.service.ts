@@ -2,7 +2,7 @@ import { Injectable, Inject, forwardRef } from "graphql-modules";
 import path from "path";
 import fs from "fs";
 
-import { IClientRepository, ClientEntity, ClientRepositoryToken } from "../repos";
+import { IClientRepository, ClientRepositoryToken } from "../repos";
 import { CreateClientInput, Client, ClientsList, UpdateClientInput } from "~/types/graphql";
 import { validateData } from "~/shared/utils/validator";
 import { HttpError } from "~/shared/utils/error-handler";
@@ -97,6 +97,12 @@ export class ClientServiceProvider {
 
   async deleteClient(id: number): Promise<Boolean> {
     await this.clientRepo.softDelete({ id });
+
+    return true;
+  }
+
+  async restoreClient(id: number): Promise<Boolean> {
+    await this.clientRepo.restore({ id });
 
     return true;
   }

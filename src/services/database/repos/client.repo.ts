@@ -1,5 +1,13 @@
 import { InjectionToken, Provider } from "graphql-modules";
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Repository } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Repository,
+  DeleteDateColumn,
+} from "typeorm";
 
 import { database } from "~/config";
 import { Client } from "~/types/graphql";
@@ -20,6 +28,9 @@ export class ClientEntity implements Client {
 
   @UpdateDateColumn({ type: "timestamp" })
   updatedAt!: string;
+
+  @DeleteDateColumn({ type: "timestamp" })
+  deletedAt?: Date;
 }
 
 export type IClientRepository = Repository<ClientEntity>;

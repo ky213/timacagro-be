@@ -121,6 +121,7 @@ export type Mutation = {
   randomize: Scalars['Float']['output'];
   readTextFile: Scalars['String']['output'];
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
+  restoreClient: Scalars['Boolean']['output'];
   saveFile: Scalars['Boolean']['output'];
   updateClient: Scalars['Boolean']['output'];
   updateInvoice: Scalars['Boolean']['output'];
@@ -155,7 +156,7 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationDeleteClientArgs = {
-  id: Scalars['ID']['input'];
+  id: Scalars['Int']['input'];
 };
 
 
@@ -199,6 +200,11 @@ export type MutationReadTextFileArgs = {
 export type MutationResetPasswordArgs = {
   newPassword: Scalars['String']['input'];
   token: Scalars['String']['input'];
+};
+
+
+export type MutationRestoreClientArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -604,6 +610,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   randomize?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   readTextFile?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationReadTextFileArgs, 'file'>>;
   resetPassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'newPassword' | 'token'>>;
+  restoreClient?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRestoreClientArgs, 'id'>>;
   saveFile?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSaveFileArgs, 'file'>>;
   updateClient?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateClientArgs, 'clientInfo' | 'id'>>;
   updateInvoice?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateInvoiceArgs, 'id' | 'productInfo'>>;
