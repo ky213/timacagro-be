@@ -18,8 +18,7 @@ export class ClientSchema implements Omit<Client, "id" | "active" | "createdAt" 
   name!: string;
 
   @IsArray()
-  @ArrayMinSize(1)
-  @ArrayMaxSize(1)
+  @ArrayMaxSize(10)
   @Type(() => ClientFile)
   @ValidateNested({ each: true })
   files!: ClientFile[];
@@ -27,7 +26,7 @@ export class ClientSchema implements Omit<Client, "id" | "active" | "createdAt" 
 
 export class ClientFile implements Pick<File, "name" | "type" | "size"> {
   @Matches(
-    /^(ID|birth-certificate|proof-of-residency|mines-license|signal-file|certificate-of-property|taxes-card|C20-certificate|bank-statement|purchase-order|)\./
+    /^(ID|birth-certificate|proof-of-residency|mines-license|signal-file|certificate-of-property|taxes-card|C20-certificate|bank-statement|purchase-order)\./
   )
   name!: string;
 

@@ -29,6 +29,8 @@ export class ClientServiceProvider {
   }
 
   async createClient(newClient: CreateClientInput): Promise<Client> {
+    if (newClient.files?.length < 10) throw new HttpError(400, "10 files required", ERRORS.INVALID_INPUT_ERROR);
+
     const errors = validateData<CreateClientInput>(ClientSchema, newClient);
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
