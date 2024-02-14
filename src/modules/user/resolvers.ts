@@ -35,5 +35,12 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       return true;
     },
+    restoreUser: async (_parent, { id }, context) => {
+      const userRepo = context.injector.get(UserServiceProvider);
+
+      await userRepo.restoreUser(id);
+
+      return true;
+    },
   },
 };

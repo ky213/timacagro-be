@@ -51,6 +51,13 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       return true;
     },
+    restoreProduct: async (_parent, { id }, { injector }) => {
+      const productService = injector.get(ProductServiceProvider);
+
+      await productService.restoreProduct(id);
+
+      return true;
+    },
   },
   Subscription: {
     orderProducts: {

@@ -128,6 +128,9 @@ export type Mutation = {
   readTextFile: Scalars['String']['output'];
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
   restoreClient: Scalars['Boolean']['output'];
+  restoreInvoice: Scalars['Boolean']['output'];
+  restoreProduct: Scalars['Boolean']['output'];
+  restoreUser: Scalars['Boolean']['output'];
   saveFile: Scalars['Boolean']['output'];
   updateClient: Scalars['Boolean']['output'];
   updateInvoice: Scalars['Boolean']['output'];
@@ -210,6 +213,21 @@ export type MutationResetPasswordArgs = {
 
 
 export type MutationRestoreClientArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type MutationRestoreInvoiceArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type MutationRestoreProductArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type MutationRestoreUserArgs = {
   id: Scalars['Int']['input'];
 };
 
@@ -631,6 +649,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   readTextFile?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<MutationReadTextFileArgs, 'file'>>;
   resetPassword?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'newPassword' | 'token'>>;
   restoreClient?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRestoreClientArgs, 'id'>>;
+  restoreInvoice?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRestoreInvoiceArgs, 'id'>>;
+  restoreProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRestoreProductArgs, 'id'>>;
+  restoreUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationRestoreUserArgs, 'id'>>;
   saveFile?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationSaveFileArgs, 'file'>>;
   updateClient?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateClientArgs, 'clientInfo' | 'id'>>;
   updateInvoice?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateInvoiceArgs, 'id' | 'productInfo'>>;

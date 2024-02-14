@@ -38,4 +38,5 @@ type Mutation {
   createInvoice(productInfo: CreateInvoiceInput!): Invoice!
   updateInvoice(id: ID!, productInfo: UpdateInvoiceInput!): Boolean!
   deleteInvoice(id: ID!): Boolean!
+  restoreInvoice(id: Int!): Boolean!
 }

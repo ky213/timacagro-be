@@ -49,6 +49,7 @@ type Mutation {
   importProducts(productsList: ImportProductsInput!, userPoints: Float): Boolean!
   updateProduct(id: ID!, productInfo: UpdateProductInput!): Boolean!
   deleteProduct(id: ID!): Boolean!
+  restoreProduct(id: Int!): Boolean!
 }
 
 type OrderProductsOutput {

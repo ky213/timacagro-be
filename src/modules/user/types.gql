@@ -54,4 +54,5 @@ type Mutation {
   createUser(userInfo: CreateUserInput!): User!
   updateUser(id: ID!, userInfo: UpdateUserInput!): Boolean!
   deleteUser(id: ID!): Boolean!
+  restoreUser(id: Int!): Boolean!
 }
