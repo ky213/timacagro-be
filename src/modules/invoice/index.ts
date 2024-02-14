@@ -10,5 +10,5 @@ export const InvoicelModule = createModule({
   dirname: __dirname,
   providers: [InvoiceRepositoryProvider, InvoiceServiceProvider],
   typeDefs: [...loadFilesSync(join(__dirname, "./*.gql"))],
-  resolvers: loadFilesSync(join(__dirname, "./resolvers.ts")),
+  resolvers: loadFilesSync(join(__dirname, "./*resolvers.ts")),
 });

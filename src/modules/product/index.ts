@@ -10,5 +10,5 @@ export const ProductlModule = createModule({
   dirname: __dirname,
   providers: [ProductRepositoryProvider, UserRepositoryProvider, ProductServiceProvider, UserServiceProvider],
   typeDefs: [...loadFilesSync(join(__dirname, "./*.gql"))],
-  resolvers: loadFilesSync(join(__dirname, "./resolvers.ts")),
+  resolvers: loadFilesSync(join(__dirname, "./*resolvers.ts")),
 });
