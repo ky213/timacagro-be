@@ -91,7 +91,13 @@ export class UserServiceProvider {
   }
 
   async deleteUser(id: number): Promise<Boolean> {
-    await this.userRepo.update({ id }, { active: false });
+    await this.userRepo.softDelete({ id });
+
+    return true;
+  }
+
+  async restoreUser(id: number): Promise<Boolean> {
+    await this.userRepo.restore({ id });
 
     return true;
   }

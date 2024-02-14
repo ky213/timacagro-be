@@ -71,7 +71,13 @@ export class ProductServiceProvider {
   }
 
   async deleteProduct(id: number): Promise<Boolean> {
-    await this.productRepo.update({ id }, { active: false });
+    await this.productRepo.softDelete({ id });
+
+    return true;
+  }
+
+  async restoreProduct(id: number): Promise<Boolean> {
+    await this.productRepo.restore({ id });
 
     return true;
   }

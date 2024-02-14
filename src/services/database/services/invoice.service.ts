@@ -55,7 +55,13 @@ export class InvoiceServiceProvider {
   }
 
   async deleteInvoice(id: number): Promise<Boolean> {
-    await this.invoiceRepo.update({ id }, { active: false });
+    await this.invoiceRepo.softDelete({ id });
+
+    return true;
+  }
+
+  async restoreInvoice(id: number): Promise<Boolean> {
+    await this.invoiceRepo.restore({ id });
 
     return true;
   }
