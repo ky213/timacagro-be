@@ -26,8 +26,8 @@ export class InvoiceServiceProvider {
     };
   }
 
-  async createInvoice(newInvoice: InvoiceEntity): Promise<Invoice> {
-    const errors = validateData<InvoiceEntity>(InvoiceSchema, newInvoice);
+  async createInvoice(newInvoice: CreateInvoiceInput): Promise<Invoice> {
+    const errors = validateData<CreateInvoiceInput>(InvoiceSchema, newInvoice);
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
 
@@ -37,19 +37,19 @@ export class InvoiceServiceProvider {
     if (invoiceExists) throw new HttpError(400, "Invoice with this number exists.", ERRORS.ENTIY_EXISTS_ERROR);
 
     //save invoice
-    const invoice = this.invoiceRepo.create({ ...newInvoice });
+    const invoice = this.invoiceRepo.create(newInvoice);
 
-    await invoice.save();
+    await this.invoiceRepo.save(invoice);
 
     return invoice;
   }
 
-  async updateInvoice(id: number, invoiceData: InvoiceEntity): Promise<Boolean> {
-    const errors = validateData<InvoiceEntity>(InvoiceSchema, invoiceData);
+  async updateInvoice(id: number, invoiceData: UpdateInvoiceInput): Promise<Boolean> {
+    const errors = validateData<UpdateInvoiceInput>(InvoiceSchema, invoiceData);
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
 
-    await this.invoiceRepo.update({ id }, { ...invoiceData });
+    await this.invoiceRepo.update({ id }, invoiceData);
 
     return true;
   }

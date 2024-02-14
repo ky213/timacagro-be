@@ -46,7 +46,7 @@ export class ProductServiceProvider {
     //save product
     const product = this.productRepo.create({ ...newProduct });
 
-    await product.save();
+    await this.productRepo.save(product);
 
     return product;
   }

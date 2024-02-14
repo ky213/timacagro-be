@@ -5,15 +5,15 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  BaseEntity,
   Repository,
   DeleteDateColumn,
 } from "typeorm";
 
 import { database } from "~/config";
+import { Invoice } from "~/types/graphql";
 
 @Entity()
-export class InvoiceEntity extends BaseEntity {
+export class InvoiceEntity implements Invoice {
   @PrimaryGeneratedColumn()
   id!: number;
 

@@ -17,14 +17,14 @@ type InvoicesList implements Pagination {
 
 input CreateInvoiceInput {
   number: String!
-  client: String!
+  client: Int!
   total: Float!
   payed: Boolean!
 }
 
 input UpdateInvoiceInput {
   number: String!
-  client: String!
+  client: Int!
   total: Float!
   payed: Boolean!
 }
@@ -35,8 +35,8 @@ type Query {
 }
 
 type Mutation {
-  createInvoice(productInfo: CreateInvoiceInput!): Invoice!
-  updateInvoice(id: ID!, productInfo: UpdateInvoiceInput!): Boolean!
+  createInvoice(invoiceInfo: CreateInvoiceInput!): Invoice!
+  updateInvoice(id: ID!, invoiceInfo: UpdateInvoiceInput!): Boolean!
   deleteInvoice(id: ID!): Boolean!
   restoreInvoice(id: Int!): Boolean!
 }

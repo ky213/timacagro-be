@@ -14,15 +14,15 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     },
   },
   Mutation: {
-    createInvoice: async (_parent, { productInfo }, { injector }) => {
+    createInvoice: async (_parent, { invoiceInfo }, { injector }) => {
       const productService = injector.get(InvoiceServiceProvider);
-      //@ts-ignore TODO:fix types
-      return await productService.createInvoice(productInfo);
+
+      return await productService.createInvoice(invoiceInfo);
     },
-    updateInvoice: async (_parent, { id, productInfo }, { injector }) => {
-      const productService = injector.get(InvoiceServiceProvider);
-      //@ts-ignore TODO:fix types
-      await productService.updateInvoice(Number(id), productInfo);
+    updateInvoice: async (_parent, { id, invoiceInfo }, { injector }) => {
+      const invoiceService = injector.get(InvoiceServiceProvider);
+
+      await invoiceService.updateInvoice(Number(id), invoiceInfo);
 
       return true;
     },

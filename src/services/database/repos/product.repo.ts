@@ -5,16 +5,16 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  BaseEntity,
   Repository,
   DeleteDateColumn,
 } from "typeorm";
 
 import { database } from "~/config";
 import { ProductType } from "~/types/global";
+import { Product } from "~/types/graphql";
 
 @Entity()
-export class ProductEntity extends BaseEntity {
+export class ProductEntity implements Product {
   @PrimaryGeneratedColumn()
   id!: number;
 
