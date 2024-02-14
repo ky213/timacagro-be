@@ -19,7 +19,8 @@ type OrdersList implements Pagination {
 }
 
 input CreateOrderInput {
-  clientId: Int!
+  client: Client!
+  user: User!
   items: [OrderItem!]!
 }
 

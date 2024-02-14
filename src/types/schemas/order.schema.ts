@@ -1,10 +1,13 @@
 import { IsArray, ArrayMaxSize, ValidateNested, IsNumber } from "class-validator";
-import { Client, Order, OrderItem, Product, User } from "../graphql";
+import { Client, CreateOrderInput, Order, OrderItem, Product, User } from "../graphql";
 import { Type } from "class-transformer";
-import { ProductSchema } from ".";
+import { ClientSchema, ProductSchema, UserSchema } from ".";
 
-export class OrderSchema implements Omit<Order, "id" | "createdAt" | "updatedAt"> {
+export class OrderSchema implements CreateOrderInput {
+  @Type(() => ClientSchema)
   client!: Client;
+
+  @Type(() => UserSchema)
   user!: User;
 
   @IsArray()

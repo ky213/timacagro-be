@@ -32,8 +32,8 @@ export class OrderServiceProvider {
     };
   }
 
-  async createOrder(newOrder: OrderEntity): Promise<Order> {
-    const errors = validateData<OrderEntity>(OrderSchema, newOrder);
+  async createOrder(newOrder: CreateOrderInput): Promise<Order> {
+    const errors = validateData<CreateOrderInput>(OrderSchema, newOrder);
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
 
