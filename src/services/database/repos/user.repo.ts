@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
   BaseEntity,
   Repository,
+  DeleteDateColumn,
 } from "typeorm";
 
 import { database } from "~/config";
@@ -52,6 +53,9 @@ export class UserEntity extends BaseEntity {
 
   @UpdateDateColumn({ type: "timestamp" })
   updatedAt!: string;
+
+  @DeleteDateColumn({ type: "timestamp" })
+  deletedAt?: Date;
 }
 
 export type IUserRepository = Repository<UserEntity>;
