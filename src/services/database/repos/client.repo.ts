@@ -7,10 +7,12 @@ import {
   UpdateDateColumn,
   Repository,
   DeleteDateColumn,
+  ManyToOne,
 } from "typeorm";
 
 import { database } from "~/config";
-import { Client } from "~/types/graphql";
+import { Client, Order } from "~/types/graphql";
+import { OrderEntity } from "./order.repo";
 
 @Entity()
 export class ClientEntity implements Client {
@@ -31,6 +33,9 @@ export class ClientEntity implements Client {
 
   @DeleteDateColumn({ type: "timestamp" })
   deletedAt?: Date;
+
+  @ManyToOne(() => OrderEntity, (order) => order.client)
+  orders?: Order[];
 }
 
 export type IClientRepository = Repository<ClientEntity>;

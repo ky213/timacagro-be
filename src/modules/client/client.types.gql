@@ -2,6 +2,7 @@ type Client {
   id: Int!
   name: String!
   active: Boolean!
+  orders: [Order]
   createdAt: DateTime!
   updatedAt: DateTime!
 }

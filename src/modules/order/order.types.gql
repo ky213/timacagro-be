@@ -1,0 +1,37 @@
+type Order {
+  id: Int!
+  items: [OrderItem!]!
+  client: Client!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type OrderItem {
+  product: Product!
+  quantity: Float!
+}
+
+type OrdersList implements Pagination {
+  orders: [Order]!
+  page: Int!
+  perPage: Int!
+  total: Int!
+}
+
+input CreateOrderInput {
+  clientId: Int!
+  items: [OrderItem!]!
+}
+
+type Query {
+  listOrders(page: Int!, perPage: Int!): OrdersList!
+  getOrder(id: Int!): Order
+}
+
+type Mutation {
+  createOrder(orderInfo: CreateOrderInput!): Order!
+}
+
+# type Subscription {
+#   orderOrders: [OrderOrdersOutput!]!
+# }

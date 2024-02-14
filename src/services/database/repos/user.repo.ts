@@ -5,16 +5,17 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  BaseEntity,
   Repository,
   DeleteDateColumn,
+  OneToMany,
 } from "typeorm";
 
 import { database } from "~/config";
-import { Region, Role } from "~/types/graphql";
+import { Order, Region, Role, User } from "~/types/graphql";
+import { OrderEntity } from "./order.repo";
 
 @Entity()
-export class UserEntity extends BaseEntity {
+export class UserEntity implements User {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -56,6 +57,9 @@ export class UserEntity extends BaseEntity {
 
   @DeleteDateColumn({ type: "timestamp" })
   deletedAt?: Date;
+
+  @OneToMany(() => OrderEntity, (order) => order.id)
+  orders?: Order[];
 }
 
 export type IUserRepository = Repository<UserEntity>;

@@ -29,6 +29,7 @@ export type Client = {
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+  orders?: Maybe<Array<Maybe<Order>>>;
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -56,6 +57,11 @@ export type CreateInvoiceInput = {
   number: Scalars['String']['input'];
   payed: Scalars['Boolean']['input'];
   total: Scalars['Float']['input'];
+};
+
+export type CreateOrderInput = {
+  clientId: Scalars['Int']['input'];
+  items: Array<OrderItem>;
 };
 
 export type CreateProductInput = {
@@ -114,6 +120,7 @@ export type Mutation = {
   confirmEmail?: Maybe<Scalars['Boolean']['output']>;
   createClient: Client;
   createInvoice: Invoice;
+  createOrder: Order;
   createProduct: Product;
   createUser: User;
   deleteClient: Scalars['Boolean']['output'];
@@ -151,6 +158,11 @@ export type MutationCreateClientArgs = {
 
 export type MutationCreateInvoiceArgs = {
   invoiceInfo: CreateInvoiceInput;
+};
+
+
+export type MutationCreateOrderArgs = {
+  orderInfo: CreateOrderInput;
 };
 
 
@@ -260,10 +272,34 @@ export type MutationUpdateUserArgs = {
   userInfo: UpdateUserInput;
 };
 
+export type Order = {
+  __typename?: 'Order';
+  client: Client;
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['Int']['output'];
+  items: Array<OrderItem>;
+  updatedAt: Scalars['DateTime']['output'];
+  user: User;
+};
+
+export type OrderItem = {
+  __typename?: 'OrderItem';
+  product: Product;
+  quantity: Scalars['Float']['output'];
+};
+
 export type OrderProductsOutput = {
   __typename?: 'OrderProductsOutput';
   available: Scalars['Float']['output'];
   label: Scalars['String']['output'];
+};
+
+export type OrdersList = Pagination & {
+  __typename?: 'OrdersList';
+  orders: Array<Maybe<Order>>;
+  page: Scalars['Int']['output'];
+  perPage: Scalars['Int']['output'];
+  total: Scalars['Int']['output'];
 };
 
 export type Pagination = {
@@ -301,11 +337,13 @@ export type Query = {
   getClientFiles: Array<ClientFileRead>;
   getDateTime: Scalars['DateTime']['output'];
   getInvoice?: Maybe<Invoice>;
+  getOrder?: Maybe<Order>;
   getProduct?: Maybe<Product>;
   getSession?: Maybe<User>;
   getUser?: Maybe<User>;
   listClients: ClientsList;
   listInvoices: InvoicesList;
+  listOrders: OrdersList;
   listProducts: ProductsList;
   listUsers: UsersList;
 };
@@ -326,6 +364,11 @@ export type QueryGetInvoiceArgs = {
 };
 
 
+export type QueryGetOrderArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
 export type QueryGetProductArgs = {
   id: Scalars['ID']['input'];
 };
@@ -343,6 +386,12 @@ export type QueryListClientsArgs = {
 
 
 export type QueryListInvoicesArgs = {
+  page: Scalars['Int']['input'];
+  perPage: Scalars['Int']['input'];
+};
+
+
+export type QueryListOrdersArgs = {
   page: Scalars['Int']['input'];
   perPage: Scalars['Int']['input'];
 };
@@ -413,6 +462,7 @@ export type User = {
   firstName: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   lastName: Scalars['String']['output'];
+  orders?: Maybe<Array<Maybe<Order>>>;
   password?: Maybe<Scalars['String']['output']>;
   region?: Maybe<Region>;
   role: Role;
@@ -498,7 +548,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping of interface types */
 export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
-  Pagination: ( ClientsList ) | ( InvoicesList ) | ( ProductsList ) | ( UsersList );
+  Pagination: ( ClientsList ) | ( InvoicesList ) | ( OrdersList ) | ( ProductsList ) | ( UsersList );
 };
 
 /** Mapping between all available schema types and the resolvers types */
@@ -509,6 +559,7 @@ export type ResolversTypes = {
   ClientsList: ResolverTypeWrapper<ClientsList>;
   CreateClientInput: CreateClientInput;
   CreateInvoiceInput: CreateInvoiceInput;
+  CreateOrderInput: CreateOrderInput;
   CreateProductInput: CreateProductInput;
   CreateUserInput: CreateUserInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
@@ -521,7 +572,10 @@ export type ResolversTypes = {
   Invoice: ResolverTypeWrapper<Invoice>;
   InvoicesList: ResolverTypeWrapper<InvoicesList>;
   Mutation: ResolverTypeWrapper<{}>;
+  Order: ResolverTypeWrapper<Order>;
+  OrderItem: ResolverTypeWrapper<OrderItem>;
   OrderProductsOutput: ResolverTypeWrapper<OrderProductsOutput>;
+  OrdersList: ResolverTypeWrapper<OrdersList>;
   Pagination: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Pagination']>;
   Product: ResolverTypeWrapper<Product>;
   ProductType: ProductType;
@@ -547,6 +601,7 @@ export type ResolversParentTypes = {
   ClientsList: ClientsList;
   CreateClientInput: CreateClientInput;
   CreateInvoiceInput: CreateInvoiceInput;
+  CreateOrderInput: CreateOrderInput;
   CreateProductInput: CreateProductInput;
   CreateUserInput: CreateUserInput;
   DateTime: Scalars['DateTime']['output'];
@@ -559,7 +614,10 @@ export type ResolversParentTypes = {
   Invoice: Invoice;
   InvoicesList: InvoicesList;
   Mutation: {};
+  Order: Order;
+  OrderItem: OrderItem;
   OrderProductsOutput: OrderProductsOutput;
+  OrdersList: OrdersList;
   Pagination: ResolversInterfaceTypes<ResolversParentTypes>['Pagination'];
   Product: Product;
   ProductsList: ProductsList;
@@ -579,6 +637,7 @@ export type ClientResolvers<ContextType = any, ParentType extends ResolversParen
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  orders?: Resolver<Maybe<Array<Maybe<ResolversTypes['Order']>>>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -635,6 +694,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   confirmEmail?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationConfirmEmailArgs, 'token'>>;
   createClient?: Resolver<ResolversTypes['Client'], ParentType, ContextType, RequireFields<MutationCreateClientArgs, 'clientInfo'>>;
   createInvoice?: Resolver<ResolversTypes['Invoice'], ParentType, ContextType, RequireFields<MutationCreateInvoiceArgs, 'invoiceInfo'>>;
+  createOrder?: Resolver<ResolversTypes['Order'], ParentType, ContextType, RequireFields<MutationCreateOrderArgs, 'orderInfo'>>;
   createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'productInfo'>>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'userInfo'>>;
   deleteClient?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteClientArgs, 'id'>>;
@@ -659,14 +719,38 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'id' | 'userInfo'>>;
 };
 
+export type OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = {
+  client?: Resolver<ResolversTypes['Client'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['OrderItem']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type OrderItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrderItem'] = ResolversParentTypes['OrderItem']> = {
+  product?: Resolver<ResolversTypes['Product'], ParentType, ContextType>;
+  quantity?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type OrderProductsOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrderProductsOutput'] = ResolversParentTypes['OrderProductsOutput']> = {
   available?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type OrdersListResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrdersList'] = ResolversParentTypes['OrdersList']> = {
+  orders?: Resolver<Array<Maybe<ResolversTypes['Order']>>, ParentType, ContextType>;
+  page?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  perPage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  total?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PaginationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Pagination'] = ResolversParentTypes['Pagination']> = {
-  __resolveType: TypeResolveFn<'ClientsList' | 'InvoicesList' | 'ProductsList' | 'UsersList', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'ClientsList' | 'InvoicesList' | 'OrdersList' | 'ProductsList' | 'UsersList', ParentType, ContextType>;
   page?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   perPage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   total?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -700,11 +784,13 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getClientFiles?: Resolver<Array<ResolversTypes['ClientFileRead']>, ParentType, ContextType, RequireFields<QueryGetClientFilesArgs, 'id'>>;
   getDateTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   getInvoice?: Resolver<Maybe<ResolversTypes['Invoice']>, ParentType, ContextType, RequireFields<QueryGetInvoiceArgs, 'id'>>;
+  getOrder?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<QueryGetOrderArgs, 'id'>>;
   getProduct?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType, RequireFields<QueryGetProductArgs, 'id'>>;
   getSession?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   getUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<QueryGetUserArgs, 'id'>>;
   listClients?: Resolver<ResolversTypes['ClientsList'], ParentType, ContextType, RequireFields<QueryListClientsArgs, 'page' | 'perPage'>>;
   listInvoices?: Resolver<ResolversTypes['InvoicesList'], ParentType, ContextType, RequireFields<QueryListInvoicesArgs, 'page' | 'perPage'>>;
+  listOrders?: Resolver<ResolversTypes['OrdersList'], ParentType, ContextType, RequireFields<QueryListOrdersArgs, 'page' | 'perPage'>>;
   listProducts?: Resolver<ResolversTypes['ProductsList'], ParentType, ContextType, RequireFields<QueryListProductsArgs, 'page' | 'perPage'>>;
   listUsers?: Resolver<ResolversTypes['UsersList'], ParentType, ContextType, RequireFields<QueryListUsersArgs, 'page' | 'perPage'>>;
 };
@@ -728,6 +814,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  orders?: Resolver<Maybe<Array<Maybe<ResolversTypes['Order']>>>, ParentType, ContextType>;
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   region?: Resolver<Maybe<ResolversTypes['Region']>, ParentType, ContextType>;
   role?: Resolver<ResolversTypes['Role'], ParentType, ContextType>;
@@ -754,7 +841,10 @@ export type Resolvers<ContextType = any> = {
   Invoice?: InvoiceResolvers<ContextType>;
   InvoicesList?: InvoicesListResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Order?: OrderResolvers<ContextType>;
+  OrderItem?: OrderItemResolvers<ContextType>;
   OrderProductsOutput?: OrderProductsOutputResolvers<ContextType>;
+  OrdersList?: OrdersListResolvers<ContextType>;
   Pagination?: PaginationResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   ProductType?: ProductTypeResolvers;

@@ -1,15 +1,5 @@
 import { Type } from "class-transformer";
-import {
-  Length,
-  ValidateNested,
-  IsArray,
-  ArrayMinSize,
-  ArrayMaxSize,
-  IsIn,
-  Max,
-  IsString,
-  Matches,
-} from "class-validator";
+import { Length, ValidateNested, IsArray, ArrayMaxSize, IsIn, Max, IsString, Matches } from "class-validator";
 import { Client } from "../graphql";
 
 export class ClientSchema implements Omit<Client, "id" | "active" | "createdAt" | "updatedAt"> {

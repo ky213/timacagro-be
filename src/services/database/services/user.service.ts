@@ -64,7 +64,7 @@ export class UserServiceProvider {
 
     //save user
     const user = this.userRepo.create({ ...newUser });
-    await user.save();
+    await this.userRepo.save(user);
 
     //send confirmation email
     this.sendConfirmationEmail(user);
