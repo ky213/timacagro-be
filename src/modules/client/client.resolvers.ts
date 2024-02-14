@@ -10,6 +10,14 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       return await clientService.getClientById(Number(id));
     },
+    getClientFiles: async (_parent, { id }, { injector }) => {
+      const clientService = injector.get(ClientServiceProvider);
+      const client = await clientService.getClientById(id);
+
+      if (!client) throw new HttpError(404, "Client not found", ERRORS.USER_NOT_FOUND);
+
+      return await clientService.getClientFiles(client);
+    },
     listClients: async (_parent, { page = 0, perPage = 10 }, { injector }) => {
       const clientService = injector.get(ClientServiceProvider);
       return await clientService.listClients(page, perPage);

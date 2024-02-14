@@ -1,9 +1,8 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
-import path from "path";
 import fs from "fs";
 
 import { IClientRepository, ClientRepositoryToken } from "../repos";
-import { CreateClientInput, Client, ClientsList, UpdateClientInput } from "~/types/graphql";
+import { CreateClientInput, Client, ClientsList, UpdateClientInput, ClientFileRead } from "~/types/graphql";
 import { validateData } from "~/shared/utils/validator";
 import { HttpError } from "~/shared/utils/error-handler";
 import { ERRORS, FILES_DIR } from "~/config";
@@ -15,6 +14,15 @@ export class ClientServiceProvider {
 
   async getClientById(id: number): Promise<Client | null> {
     return await this.clientRepo.findOneBy({ id });
+  }
+
+  async getClientFiles(client: Client): Promise<ClientFileRead[]> {
+    const clientFolder = `${FILES_DIR}/${client.name.replaceAll(" ", "-")}`;
+
+    return fs.readdirSync(clientFolder).map((filePath) => ({
+      extension: `${filePath.split(".").pop()}`,
+      content: `${fs.readFileSync(clientFolder + "/" + filePath, { encoding: "base64" })}`,
+    }));
   }
 
   async listClients(page: number, perPage: number): Promise<ClientsList> {

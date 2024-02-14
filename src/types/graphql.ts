@@ -32,6 +32,12 @@ export type Client = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type ClientFileRead = {
+  __typename?: 'ClientFileRead';
+  content: Scalars['String']['output'];
+  extension: Scalars['String']['output'];
+};
+
 export type ClientsList = Pagination & {
   __typename?: 'ClientsList';
   clients: Array<Maybe<Client>>;
@@ -274,6 +280,7 @@ export type ProductsList = Pagination & {
 export type Query = {
   __typename?: 'Query';
   getClient?: Maybe<Client>;
+  getClientFiles: Array<ClientFileRead>;
   getDateTime: Scalars['DateTime']['output'];
   getInvoice?: Maybe<Invoice>;
   getProduct?: Maybe<Product>;
@@ -288,6 +295,11 @@ export type Query = {
 
 export type QueryGetClientArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetClientFilesArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -475,6 +487,7 @@ export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Client: ResolverTypeWrapper<Client>;
+  ClientFileRead: ResolverTypeWrapper<ClientFileRead>;
   ClientsList: ResolverTypeWrapper<ClientsList>;
   CreateClientInput: CreateClientInput;
   CreateInvoiceInput: CreateInvoiceInput;
@@ -512,6 +525,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
   Client: Client;
+  ClientFileRead: ClientFileRead;
   ClientsList: ClientsList;
   CreateClientInput: CreateClientInput;
   CreateInvoiceInput: CreateInvoiceInput;
@@ -548,6 +562,12 @@ export type ClientResolvers<ContextType = any, ParentType extends ResolversParen
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ClientFileReadResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClientFileRead'] = ResolversParentTypes['ClientFileRead']> = {
+  content?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  extension?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -656,6 +676,7 @@ export type ProductsListResolvers<ContextType = any, ParentType extends Resolver
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getClient?: Resolver<Maybe<ResolversTypes['Client']>, ParentType, ContextType, RequireFields<QueryGetClientArgs, 'id'>>;
+  getClientFiles?: Resolver<Array<ResolversTypes['ClientFileRead']>, ParentType, ContextType, RequireFields<QueryGetClientFilesArgs, 'id'>>;
   getDateTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   getInvoice?: Resolver<Maybe<ResolversTypes['Invoice']>, ParentType, ContextType, RequireFields<QueryGetInvoiceArgs, 'id'>>;
   getProduct?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType, RequireFields<QueryGetProductArgs, 'id'>>;
@@ -704,6 +725,7 @@ export type UsersListResolvers<ContextType = any, ParentType extends ResolversPa
 
 export type Resolvers<ContextType = any> = {
   Client?: ClientResolvers<ContextType>;
+  ClientFileRead?: ClientFileReadResolvers<ContextType>;
   ClientsList?: ClientsListResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Entity?: EntityResolvers<ContextType>;

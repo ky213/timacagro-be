@@ -13,6 +13,11 @@ type ClientsList implements Pagination {
   total: Int!
 }
 
+type ClientFileRead {
+  extension: String!
+  content: String!
+}
+
 input CreateClientInput {
   name: String!
   files: [File!]!
@@ -26,6 +31,7 @@ input UpdateClientInput {
 type Query {
   listClients(page: Int!, perPage: Int!): ClientsList!
   getClient(id: ID!): Client
+  getClientFiles(id: Int!): [ClientFileRead!]!
 }
 
 type Mutation {
