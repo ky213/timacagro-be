@@ -81,4 +81,12 @@ export class ProductServiceProvider {
 
     return true;
   }
+
+  async chechAvailability(productId: number, requestedQuantity: number): Promise<boolean> {
+    const product = await this.getProductById(productId);
+
+    if (product && product.available < requestedQuantity) return false;
+
+    return true;
+  }
 }

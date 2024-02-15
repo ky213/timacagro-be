@@ -1,25 +1,24 @@
-import { IsArray, ArrayMaxSize, ValidateNested, IsNumber } from "class-validator";
-import { Client, CreateOrderInput, Order, OrderItem, Product, User } from "../graphql";
+import { IsArray, ArrayMaxSize, ValidateNested, IsNumber, IsInt } from "class-validator";
+import { CreateOrderInput, OrderItemInput } from "../graphql";
 import { Type } from "class-transformer";
-import { ClientSchema, ProductSchema, UserSchema } from ".";
 
 export class OrderSchema implements CreateOrderInput {
-  @Type(() => ClientSchema)
-  client!: Client;
+  @IsInt()
+  clientId!: number;
 
-  @Type(() => UserSchema)
-  user!: User;
+  @IsInt()
+  userId!: number;
 
   @IsArray()
   @ArrayMaxSize(20)
   @Type(() => OrderItemSchema)
   @ValidateNested({ each: true })
-  items!: OrderItem[];
+  items!: OrderItemInput[];
 }
 
-export class OrderItemSchema implements OrderItem {
-  @Type(() => ProductSchema)
-  product!: Product;
+export class OrderItemSchema implements OrderItemInput {
+  @IsInt()
+  productId!: number;
 
   @IsNumber({ maxDecimalPlaces: 1 })
   quantity!: number;

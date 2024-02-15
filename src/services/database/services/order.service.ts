@@ -6,10 +6,14 @@ import { validateData } from "~/shared/utils/validator";
 import { HttpError } from "~/shared/utils/error-handler";
 import { ERRORS } from "~/config";
 import { OrderSchema } from "~/types/schemas/";
+import { ProductServiceProvider } from ".";
 
 @Injectable()
 export class OrderServiceProvider {
-  constructor(@Inject(forwardRef(() => OrderRepositoryToken)) private orderRepo: IOrderRepository) {}
+  constructor(
+    @Inject(forwardRef(() => OrderRepositoryToken)) private orderRepo: IOrderRepository,
+    @Inject(forwardRef(() => ProductServiceProvider)) private productService: ProductServiceProvider
+  ) {}
 
   async getOrderById(id: number): Promise<Order | null> {
     return await this.orderRepo.findOneBy({ id });
@@ -36,6 +40,18 @@ export class OrderServiceProvider {
     const errors = validateData<CreateOrderInput>(OrderSchema, newOrder);
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
+
+    //check available quantities
+    newOrder.items.forEach(async (item) => {
+      const available = this.productService.chechAvailability(item.productId, item.quantity);
+
+      if (!available)
+        throw new HttpError(
+          400,
+          `Product ${item.productId} quantity is not available in stock.`,
+          ERRORS.UNSUFFICENT_QUANTIY
+        );
+    });
 
     //save order
     const order = this.orderRepo.create({ ...newOrder });

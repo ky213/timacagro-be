@@ -18,10 +18,15 @@ type OrdersList implements Pagination {
   total: Int!
 }
 
+input OrderItemInput {
+  productId: Int!
+  quantity: Float!
+}
+
 input CreateOrderInput {
-  client: Client!
-  user: User!
-  items: [OrderItem!]!
+  clientId: Int!
+  userId: Int!
+  items: [OrderItemInput!]!
 }
 
 type Query {

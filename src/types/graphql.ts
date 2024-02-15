@@ -60,9 +60,9 @@ export type CreateInvoiceInput = {
 };
 
 export type CreateOrderInput = {
-  client: Client;
-  items: Array<OrderItem>;
-  user: User;
+  clientId: Scalars['Int']['input'];
+  items: Array<OrderItemInput>;
+  userId: Scalars['Int']['input'];
 };
 
 export type CreateProductInput = {
@@ -286,6 +286,11 @@ export type OrderItem = {
   __typename?: 'OrderItem';
   product: Product;
   quantity: Scalars['Float']['output'];
+};
+
+export type OrderItemInput = {
+  productId: Scalars['Int']['input'];
+  quantity: Scalars['Float']['input'];
 };
 
 export type OrderProductsOutput = {
@@ -574,6 +579,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   Order: ResolverTypeWrapper<Order>;
   OrderItem: ResolverTypeWrapper<OrderItem>;
+  OrderItemInput: OrderItemInput;
   OrderProductsOutput: ResolverTypeWrapper<OrderProductsOutput>;
   OrdersList: ResolverTypeWrapper<OrdersList>;
   Pagination: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Pagination']>;
@@ -616,6 +622,7 @@ export type ResolversParentTypes = {
   Mutation: {};
   Order: Order;
   OrderItem: OrderItem;
+  OrderItemInput: OrderItemInput;
   OrderProductsOutput: OrderProductsOutput;
   OrdersList: OrdersList;
   Pagination: ResolversInterfaceTypes<ResolversParentTypes>['Pagination'];
