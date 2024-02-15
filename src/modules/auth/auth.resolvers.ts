@@ -7,15 +7,15 @@ import { isSameHash } from "~/shared/utils/cyphers";
 import { ERRORS, COOKIE_CONFIG, JWT_SIGNING_KEY } from "~/config";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
-  Query:{
-    async getSession(_root, _args, {injector, currentUser}) {
-      if(currentUser){
+  Query: {
+    async getSession(_root, _args, { injector, currentUser }) {
+      if (currentUser) {
         const userService = injector.get(UserServiceProvider);
         const user = await userService.getUserByEmail(currentUser.email);
-        
+
         return user;
       }
-      return null
+      return null;
     },
   },
   Mutation: {
@@ -43,7 +43,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       const existingToken = (await request.cookieStore?.get("authorization"))?.value;
 
-      if(existingToken) throw new HttpError(400, "User already authenticated", ERRORS.USER_ALREADY_AUTHENTICATED);
+      if (existingToken) throw new HttpError(400, "User already authenticated", ERRORS.USER_ALREADY_AUTHENTICATED);
 
       if (!user) throw new HttpError(400, "invalid user credentials", ERRORS.INVALID_INPUT_ERROR);
 
@@ -55,7 +55,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       if (!user.active) throw new HttpError(401, "user not active", ERRORS.USER_NOT_ACTIVE);
 
-      const token = jwt.sign({ username: user.email }, JWT_SIGNING_KEY, { subject: `${user.id}` });
+      const token = jwt.sign({ user }, JWT_SIGNING_KEY, { subject: `${user.id}` });
 
       await request.cookieStore?.set({ ...COOKIE_CONFIG, value: token });
 

@@ -13,18 +13,16 @@ export const resolveUserFn: ResolveUserFn<User, GraphQLModules.Context> = async 
     return user;
   } catch (error: any | Error) {
     console.error("Auth controller failed to validate token.\n", error.message);
+    return null;
   }
-
-  return null;
 };
 
 export const validateUser: ValidateUserFn<User> = (params) => {
-  // if (["Login", "ForgotPassword", "ResetPassword", "ConfirmEmail"].includes(`${params.executionArgs.operationName}`)) {
-  //   return;
-  // }
-  // if (!params.user) {
-  //   throw new HttpError(401, `User Unauthenticated!`, ERRORS.USER_NOT_AUTHENTICATED);
-  // }
+  if (!["Login", "ForgotPassword", "ResetPassword", "ConfirmEmail"].includes(`${params.executionArgs.operationName}`)) {
+    if (!params.user) {
+      return new HttpError(401, `User Unauthenticated!`, ERRORS.USER_NOT_AUTHENTICATED);
+    }
+  }
 };
 
 export const authConfig: GenericAuthPluginOptions<User, GraphQLModules.Context> = {

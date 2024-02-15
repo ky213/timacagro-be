@@ -10,5 +10,5 @@ export const AuthModule = createModule({
   dirname: __dirname,
   providers: [UserRepositoryProvider, UserServiceProvider],
   typeDefs: [...loadFilesSync(join(__dirname, "./*.gql"))],
-  resolvers: loadFilesSync(join(__dirname, "./resolvers.ts")),
+  resolvers: loadFilesSync(join(__dirname, "./*resolvers.ts")),
 });

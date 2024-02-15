@@ -36,9 +36,9 @@ async function startServer() {
     if (process.env.NODE_ENV === "prod") {
       app.use(
         cors({
-          origin: ["http://localhost:3000", "http://localhost:58927", "*"],
           credentials: true,
           methods: ["GET", "POST"],
+          origin: ["http://localhost:3000", "http://localhost:58927", "*"],
         })
       );
     }
