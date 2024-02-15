@@ -4,14 +4,18 @@ import { RedisClientType } from "redis";
 
 import { ITopics } from "~/config";
 import { User } from "./graphql";
+import { JwtPayload } from "jsonwebtoken";
 
 declare global {
   namespace GraphQLModules {
+    interface Session extends JwtPayload {
+      user: User;
+    }
     interface GlobalContext {
       request: HttpREquest;
       pubSub: PubSub<ITopics>;
       cache: RedisClientType;
-      currentUser: User;
+      session: Session;
     }
   }
 

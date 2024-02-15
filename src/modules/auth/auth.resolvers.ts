@@ -8,10 +8,10 @@ import { ERRORS, COOKIE_CONFIG, JWT_SIGNING_KEY } from "~/config";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
-    async getSession(_root, _args, { injector, currentUser }) {
-      if (currentUser) {
+    async getSession(_root, _args, { injector, session }) {
+      if (session.user) {
         const userService = injector.get(UserServiceProvider);
-        const user = await userService.getUserByEmail(currentUser.email);
+        const user = await userService.getUserByEmail(session.user.email);
 
         return user;
       }
@@ -55,7 +55,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       if (!user.active) throw new HttpError(401, "user not active", ERRORS.USER_NOT_ACTIVE);
 
-      const token = jwt.sign({ user }, JWT_SIGNING_KEY, { subject: `${user.id}` });
+      const token = jwt.sign({ user }, JWT_SIGNING_KEY, { subject: user.email, expiresIn: "7 days" });
 
       await request.cookieStore?.set({ ...COOKIE_CONFIG, value: token });
 

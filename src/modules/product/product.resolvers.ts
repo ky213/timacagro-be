@@ -19,17 +19,17 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       //@ts-ignore TODO:fix types
       return await productService.createProduct(productInfo);
     },
-    importProducts: async (_parent, { productsList, userPoints }, { injector, pubSub, currentUser }) => {
+    importProducts: async (_parent, { productsList, userPoints }, { injector, pubSub, session }) => {
       const productService = injector.get(ProductServiceProvider);
       const userService = injector.get(UserServiceProvider);
 
       await productService.importProducts({ products: productsList.products });
 
-      if (userPoints && currentUser) {
-        const user = await userService.getUserByEmail(currentUser.email);
+      if (userPoints && session) {
+        const user = await userService.getUserByEmail(session.user.email);
         if (user)
           await userService.updateUser(user?.id, {
-            currentPoints: (currentUser?.currentPoints || 0) + userPoints,
+            currentPoints: (session.user?.currentPoints || 0) + userPoints,
           });
       }
 
