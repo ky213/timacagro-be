@@ -16,15 +16,15 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     },
   },
   Mutation: {
-    createOrder: async (_parent, { orderInfo }, { injector }) => {
+    createOrder: async (_parent, { orderInfo }, { injector, currentUser }) => {
       const clientService = injector.get(ClientServiceProvider);
       const orderService = injector.get(OrderServiceProvider);
 
-      const client = clientService.getClientById(orderInfo.clientId);
+      const client = await clientService.getClientById(orderInfo.clientId);
 
       if (!client) throw new HttpError(404, "client not found", ERRORS.USER_NOT_FOUND);
 
-      return await orderService.createOrder(orderInfo);
+      return await orderService.createOrder(orderInfo, client, currentUser);
     },
   },
 };

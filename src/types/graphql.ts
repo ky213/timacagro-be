@@ -280,6 +280,7 @@ export type Order = {
   id: Scalars['Int']['output'];
   items: Array<OrderItem>;
   updatedAt: Scalars['DateTime']['output'];
+  user: User;
 };
 
 export type OrderItem = {
@@ -732,6 +733,7 @@ export type OrderResolvers<ContextType = any, ParentType extends ResolversParent
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   items?: Resolver<Array<ResolversTypes['OrderItem']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

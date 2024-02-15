@@ -11,7 +11,7 @@ declare global {
       request: HttpREquest;
       pubSub: PubSub<ITopics>;
       cache: RedisClientType;
-      currentUser?: User;
+      currentUser: User;
     }
   }
 

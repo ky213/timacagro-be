@@ -85,7 +85,9 @@ export class ProductServiceProvider {
   async chechAvailability(productId: number, requestedQuantity: number): Promise<boolean> {
     const product = await this.getProductById(productId);
 
-    if (product && product.available < requestedQuantity) return false;
+    if (!product) throw new HttpError(404, "Product not found.", ERRORS.RESOURCE_NOT_FOUND);
+
+    if (product.available < requestedQuantity) return false;
 
     return true;
   }

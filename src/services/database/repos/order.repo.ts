@@ -18,10 +18,10 @@ export class OrderEntity implements Order {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => ClientEntity, (client) => client.orders)
+  @ManyToOne(() => ClientEntity, (client) => client.orders, { nullable: false })
   client!: Client;
 
-  @ManyToOne(() => UserEntity, (user) => user.orders)
+  @ManyToOne(() => UserEntity, (user) => user.orders, { nullable: false })
   user!: User;
 
   @Column({ type: "simple-json" })

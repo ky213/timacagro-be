@@ -1,7 +1,7 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
 
 import { IOrderRepository, OrderEntity, OrderRepositoryToken } from "../repos";
-import { CreateOrderInput, Order, OrdersList } from "~/types/graphql";
+import { Client, CreateOrderInput, Order, OrdersList, User } from "~/types/graphql";
 import { validateData } from "~/shared/utils/validator";
 import { HttpError } from "~/shared/utils/error-handler";
 import { ERRORS } from "~/config";
@@ -24,8 +24,9 @@ export class OrderServiceProvider {
       skip: page,
       take: perPage,
       order: {
-        createdAt: "DESC",
+        updatedAt: "DESC",
       },
+      loadRelationIds: true,
     });
 
     return {
@@ -36,7 +37,7 @@ export class OrderServiceProvider {
     };
   }
 
-  async createOrder(newOrder: CreateOrderInput): Promise<Order> {
+  async createOrder(newOrder: CreateOrderInput, client: Client, user: User): Promise<Order> {
     const errors = validateData<CreateOrderInput>(OrderSchema, newOrder);
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
@@ -55,6 +56,9 @@ export class OrderServiceProvider {
 
     //save order
     const order = this.orderRepo.create({ ...newOrder });
+
+    order.client = client;
+    order.user = user;
 
     await this.orderRepo.save(order);
 
