@@ -1,4 +1,5 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
+import { In } from "typeorm";
 
 import { IProductRepository, ProductEntity, ProductRepositoryToken } from "../repos";
 import { CreateProductInput, ImportProductsInput, Product, ProductsList, UpdateProductInput } from "~/types/graphql";
@@ -6,7 +7,6 @@ import { validateData } from "~/shared/utils/validator";
 import { HttpError } from "~/shared/utils/error-handler";
 import { ERRORS } from "~/config";
 import { ProductSchema } from "~/types/schemas/";
-import { ObjectLiteral } from "typeorm";
 
 @Injectable()
 export class ProductServiceProvider {
@@ -14,6 +14,10 @@ export class ProductServiceProvider {
 
   async getProductById(id: number): Promise<Product | null> {
     return await this.productRepo.findOneBy({ id });
+  }
+
+  async getMany(ids: number[]): Promise<Product[]> {
+    return await this.productRepo.findBy({ id: In(ids) });
   }
 
   async listProducts(page: number, perPage: number): Promise<ProductsList> {

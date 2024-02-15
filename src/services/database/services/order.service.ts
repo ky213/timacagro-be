@@ -26,7 +26,6 @@ export class OrderServiceProvider {
       order: {
         updatedAt: "DESC",
       },
-      loadRelationIds: true,
     });
 
     return {

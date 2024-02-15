@@ -1,7 +1,7 @@
 import { ERRORS } from "~/config";
-import { ClientServiceProvider, OrderServiceProvider, UserServiceProvider } from "~/services";
+import { ClientServiceProvider, OrderServiceProvider, ProductServiceProvider, UserServiceProvider } from "~/services";
 import { HttpError } from "~/shared/utils/error-handler";
-import { Client, CreateOrderInput, Resolvers, User } from "~/types/graphql";
+import { Client, CreateOrderInput, Product, Resolvers, User } from "~/types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
@@ -39,6 +39,17 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       const result = (await userSerivce.getUserById(user.id)) as User;
 
       return result;
+    },
+    items: async ({ items }, _, { injector }) => {
+      const productSerivce = injector.get(ProductServiceProvider);
+
+      // @ts-ignore
+      return items.map(async ({ productId, quantity }) => {
+        return {
+          quantity,
+          product: (await productSerivce.getProductById(productId)) as Product,
+        };
+      });
     },
   },
 };
