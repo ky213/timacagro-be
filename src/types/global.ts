@@ -8,9 +8,6 @@ import { JwtPayload } from "jsonwebtoken";
 
 declare global {
   namespace GraphQLModules {
-    interface Session extends JwtPayload {
-      user: User;
-    }
     interface GlobalContext {
       request: HttpREquest;
       pubSub: PubSub<ITopics>;
@@ -20,6 +17,10 @@ declare global {
   }
 
   type Nil<T> = T | null | undefined;
+}
+
+export interface Session extends JwtPayload {
+  user: User;
 }
 
 interface HttpREquest extends Request {

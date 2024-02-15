@@ -37,13 +37,11 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       return false;
     },
 
-    async login(_root, { email, password }, { injector, request }) {
+    async login(_root, { email, password }, { injector, request, session }) {
+      if (session) return session.user;
+
       const userSerivce = injector.get(UserServiceProvider);
       const user = await userSerivce.getUserWithPassword(email);
-
-      const existingToken = (await request.cookieStore?.get("authorization"))?.value;
-
-      if (existingToken) throw new HttpError(400, "User already authenticated", ERRORS.USER_ALREADY_AUTHENTICATED);
 
       if (!user) throw new HttpError(400, "invalid user credentials", ERRORS.INVALID_INPUT_ERROR);
 

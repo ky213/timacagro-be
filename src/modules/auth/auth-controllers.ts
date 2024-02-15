@@ -4,20 +4,20 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 
 import { HttpError } from "~/shared/utils/error-handler";
 import { ERRORS } from "~/config";
+import { Session } from "~/types/global";
 
-export const resolveUserFn: ResolveUserFn<User, GraphQLModules.Context> = async (context) => {
+export const resolveUserFn: ResolveUserFn<Session, GraphQLModules.Context> = async (context) => {
   try {
     const token = (await context.request.cookieStore?.get("authorization"))?.value;
-    const user = jwt.decode(`${token}`) as JwtPayload & User;
-
-    return user;
+    const session = jwt.decode(`${token}`) as Session;
+    return session;
   } catch (error: any | Error) {
     console.error("Auth controller failed to validate token.\n", error.message);
     return null;
   }
 };
 
-export const validateUser: ValidateUserFn<User> = (params) => {
+export const validateUser: ValidateUserFn<Session> = (params) => {
   if (!["Login", "ForgotPassword", "ResetPassword", "ConfirmEmail"].includes(`${params.executionArgs.operationName}`)) {
     if (!params.user) {
       return new HttpError(401, `User Unauthenticated!`, ERRORS.USER_NOT_AUTHENTICATED);
@@ -25,8 +25,9 @@ export const validateUser: ValidateUserFn<User> = (params) => {
   }
 };
 
-export const authConfig: GenericAuthPluginOptions<User, GraphQLModules.Context> = {
+export const authConfig: GenericAuthPluginOptions<Session, GraphQLModules.Context, "session"> = {
   resolveUserFn,
   validateUser,
   mode: "protect-all",
+  contextFieldName: "session",
 };
