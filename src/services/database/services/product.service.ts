@@ -2,7 +2,14 @@ import { Injectable, Inject, forwardRef } from "graphql-modules";
 import { In } from "typeorm";
 
 import { IProductRepository, ProductEntity, ProductRepositoryToken } from "../repos";
-import { CreateProductInput, ImportProductsInput, Product, ProductsList, UpdateProductInput } from "~/types/graphql";
+import {
+  CreateProductInput,
+  ImportProductsInput,
+  OrderItemInput,
+  Product,
+  ProductsList,
+  UpdateProductInput,
+} from "~/types/graphql";
 import { validateData } from "~/shared/utils/validator";
 import { HttpError } from "~/shared/utils/error-handler";
 import { ERRORS } from "~/config";
@@ -86,13 +93,15 @@ export class ProductServiceProvider {
     return true;
   }
 
-  async chechAvailability(productId: number, requestedQuantity: number): Promise<boolean> {
-    const product = await this.getProductById(productId);
+  async chechAvailability(products: OrderItemInput[]): Promise<string | null> {
+    for (const { productId, quantity } of products) {
+      const product = await this.getProductById(productId);
 
-    if (!product) throw new HttpError(404, "Product not found.", ERRORS.RESOURCE_NOT_FOUND);
+      if (!product) return `${productId}`;
 
-    if (product.available < requestedQuantity) return false;
+      if (product.available < quantity) return product.label;
+    }
 
-    return true;
+    return null;
   }
 }

@@ -1,7 +1,7 @@
 import { ERRORS } from "~/config";
 import { ClientServiceProvider, OrderServiceProvider, ProductServiceProvider, UserServiceProvider } from "~/services";
 import { HttpError } from "~/shared/utils/error-handler";
-import { Client, CreateOrderInput, OrderItem, OrderItemInput, Product, Resolvers, User } from "~/types/graphql";
+import { Client, OrderItem, OrderItemInput, Product, Resolvers, User } from "~/types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
@@ -19,10 +19,16 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     createOrder: async (_parent, { orderInfo }, { injector, session }) => {
       const clientService = injector.get(ClientServiceProvider);
       const orderService = injector.get(OrderServiceProvider);
-
+      const productService = injector.get(ProductServiceProvider);
       const client = await clientService.getClientById(orderInfo.clientId);
 
       if (!client) throw new HttpError(404, "client not found", ERRORS.USER_NOT_FOUND);
+
+      // check product availability
+      const unavailabeItem = await productService.chechAvailability(orderInfo.items);
+
+      if (unavailabeItem)
+        throw new HttpError(400, `Product ${unavailabeItem} or quantity is unavailable.`, ERRORS.UNAVAILABLE_PRODUCT);
 
       return await orderService.createOrder(orderInfo, client, session.user);
     },
