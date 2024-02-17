@@ -1,6 +1,8 @@
 import { JwtPluginOptions } from "@graphql-yoga/plugin-jwt";
 import { CookieListItem } from "@whatwg-node/cookie-store";
+import { ExecutionArgs } from "graphql";
 import { Secret } from "jsonwebtoken";
+import { Role } from "~/types/global";
 
 export const JWT_SIGNING_KEY: Secret = `${process.env.JWT_SIGNING_KEY}`;
 
@@ -16,4 +18,9 @@ export const COOKIE_CONFIG: CookieListItem = {
   domain: `${process.env.SERVER_HOST}`,
   expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7), // 7 days
   httpOnly: true,
+};
+
+// Access Control List
+export const ACL: { [key: string]: Role[] } = {
+  CreateProduct: [Role.ADMIN, Role.SALES, Role.COMMERCE],
 };

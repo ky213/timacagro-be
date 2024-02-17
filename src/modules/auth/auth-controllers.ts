@@ -1,9 +1,8 @@
 import { ResolveUserFn, ValidateUserFn, GenericAuthPluginOptions } from "@envelop/generic-auth";
-import { User } from "~/types/graphql";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 import { HttpError } from "~/shared/utils/error-handler";
-import { ERRORS } from "~/config";
+import { ERRORS, ACL } from "~/config";
 import { Session } from "~/types/global";
 
 export const resolveUserFn: ResolveUserFn<Session, GraphQLModules.Context> = async (context) => {
@@ -18,10 +17,13 @@ export const resolveUserFn: ResolveUserFn<Session, GraphQLModules.Context> = asy
 };
 
 export const validateUser: ValidateUserFn<Session> = (params) => {
-  if (!["Login", "ForgotPassword", "ResetPassword", "ConfirmEmail"].includes(`${params.executionArgs.operationName}`)) {
-    if (!params.user) {
-      return new HttpError(401, `User Unauthenticated!`, ERRORS.USER_NOT_AUTHENTICATED);
-    }
+  const requiredRoles = ACL[`${params.executionArgs.operationName}`];
+
+  if (requiredRoles) {
+    if (!params.user) return new HttpError(401, `User Unauthenticated!`, ERRORS.USER_NOT_AUTHENTICATED);
+
+    if (!requiredRoles.includes(params.user.Role))
+      return new HttpError(403, `Unauthorized!`, ERRORS.USER_NOT_AUTHORIZED);
   }
 };
 

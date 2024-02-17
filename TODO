@@ -2,16 +2,21 @@
 Todo:
 
     ☐ init app - done @project(Todo) @started(23-12-25 07:55)
-        ✔ code-gen @done(23-12-26 09:35)
-        ✔ api mappers @done(23-12-27 21:43)
-        ✔ database @done(23-12-27 21:43)
-        ☐ error handling
-        ☐ logging
-        ☐ rate limitin
-        ☐ inhance input validation 
-        ☐ apply rate limiter
-        ☐ install hustky
-        ☐ instal sonarqueb
+    ✔ code-gen @done(23-12-26 09:35)
+    ✔ api mappers @done(23-12-27 21:43)
+    ✔ database @done(23-12-27 21:43)
+    ☐ error handling
+    ☐ logging
+    ☐ rate limitin
+    ☐ inhance input validation 
+    ☐ apply rate limiter
+    ☐ install hustky
+    ☐ instal sonarqueb
+    
+    ☐ API
+        ☐ password autogen
+
+        
     ☐ docs
         ☐ tech stack
         ☐ architecture
