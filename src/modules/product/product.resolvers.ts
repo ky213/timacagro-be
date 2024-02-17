@@ -16,7 +16,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Mutation: {
     createProduct: async (_parent, { productInfo }, { injector }) => {
       const productService = injector.get(ProductServiceProvider);
-      //@ts-ignore TODO:fix types
+
       return await productService.createProduct(productInfo);
     },
     importProducts: async (_parent, { productsList, userPoints }, { injector, pubSub, session }) => {
@@ -39,8 +39,8 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     },
     updateProduct: async (_parent, { id, productInfo }, { injector }) => {
       const productService = injector.get(ProductServiceProvider);
-      //@ts-ignore TODO:fix types
-      await productService.updateProduct(Number(id), productInfo);
+
+      await productService.updateProduct(Number(id), productInfo as Partial<CreateProductInput>);
 
       return true;
     },

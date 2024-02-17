@@ -10,6 +10,7 @@ const config: CodegenConfig = {
         filename: "types/module-types.ts",
       },
       config: {
+        maybeValue: "T | null | undefined",
         enumValues: {
           Role: "./global#Role",
           Region: "./global#Region",

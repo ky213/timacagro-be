@@ -3,6 +3,7 @@ import { In } from "typeorm";
 
 import { IProductRepository, ProductEntity, ProductRepositoryToken } from "../repos";
 import {
+  CreateClientInput,
   CreateProductInput,
   ImportProductsInput,
   OrderItemInput,
@@ -44,8 +45,8 @@ export class ProductServiceProvider {
     };
   }
 
-  async createProduct(newProduct: ProductEntity): Promise<Product> {
-    const errors = validateData<ProductEntity>(ProductSchema, newProduct);
+  async createProduct(newProduct: CreateProductInput): Promise<Product> {
+    const errors = validateData<CreateProductInput>(ProductSchema, newProduct);
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
 
@@ -55,7 +56,7 @@ export class ProductServiceProvider {
     if (productExists) throw new HttpError(400, "Product with this label exists already.", ERRORS.ENTIY_EXISTS_ERROR);
 
     //save product
-    const product = this.productRepo.create({ ...newProduct });
+    const product = this.productRepo.create(newProduct);
 
     await this.productRepo.save(product);
 
@@ -75,8 +76,8 @@ export class ProductServiceProvider {
     return true;
   }
 
-  async updateProduct(id: number, productData: ProductEntity): Promise<Boolean> {
-    await this.productRepo.update({ id }, { ...productData });
+  async updateProduct(id: number, productData: Partial<CreateProductInput>): Promise<Boolean> {
+    await this.productRepo.update({ id }, productData);
 
     return true;
   }
