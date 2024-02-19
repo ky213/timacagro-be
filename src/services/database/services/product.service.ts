@@ -82,6 +82,12 @@ export class ProductServiceProvider {
     return true;
   }
 
+  async decrementAmount(id: number, amount: number): Promise<Boolean> {
+    await this.productRepo.decrement({ id }, "available", amount);
+
+    return true;
+  }
+
   async deleteProduct(id: number): Promise<Boolean> {
     await this.productRepo.softDelete({ id });
 

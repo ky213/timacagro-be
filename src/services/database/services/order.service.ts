@@ -37,7 +37,7 @@ export class OrderServiceProvider {
     };
   }
 
-  async createOrder(newOrder: CreateOrderInput, client: Client, user: User, ...rest: any): Promise<Order> {
+  async createOrder(newOrder: CreateOrderInput, client: Client, user: User): Promise<Order> {
     const errors = validateData<CreateOrderInput>(OrderSchema, newOrder);
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
@@ -48,7 +48,33 @@ export class OrderServiceProvider {
     order.client = client;
     order.user = user;
 
-    await this.orderRepo.save(order);
+    const queryRunner = this.db.createQueryRunner();
+
+    // establish real database connection using our new query runner
+    await queryRunner.connect();
+
+    // lets now open a new transaction:
+    await queryRunner.startTransaction();
+
+    try {
+      // execute some operations on this transaction:
+      await queryRunner.manager.save(order);
+
+      for (const { productId, quantity } of newOrder.items) {
+        await this.productService.decrementAmount(productId, quantity);
+      }
+
+      // commit transaction now:
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      // since we have errors let's rollback changes we made
+      await queryRunner.rollbackTransaction();
+
+      throw new HttpError(500, "Couldn't create order");
+    } finally {
+      // you need to release query runner which is manually created:
+      await queryRunner.release();
+    }
 
     return order;
   }
