@@ -16,7 +16,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     },
   },
   Mutation: {
-    createOrder: async (_parent, { orderInfo }, { injector, session }) => {
+    createOrder: async (_parent, { orderInfo }, { injector, session, db }) => {
       const clientService = injector.get(ClientServiceProvider);
       const orderService = injector.get(OrderServiceProvider);
       const productService = injector.get(ProductServiceProvider);

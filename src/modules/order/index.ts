@@ -10,6 +10,7 @@ import {
   ClientRepositoryProvider,
 } from "~/services/database/repos";
 import { OrderServiceProvider } from "~/services/database/services/order.service";
+import { DatabaseProvider } from "~/config";
 
 export const OrderModule = createModule({
   id: "order-module",
@@ -23,6 +24,7 @@ export const OrderModule = createModule({
     UserServiceProvider,
     OrderServiceProvider,
     ClientServiceProvider,
+    DatabaseProvider,
   ],
   typeDefs: [...loadFilesSync(join(__dirname, "./*.gql"))],
   resolvers: loadFilesSync(join(__dirname, "./*resolvers.ts")),

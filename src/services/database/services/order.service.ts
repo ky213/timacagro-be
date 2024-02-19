@@ -4,7 +4,7 @@ import { IOrderRepository, OrderEntity, OrderRepositoryToken } from "../repos";
 import { Client, CreateOrderInput, Order, OrdersList, User } from "~/types/graphql";
 import { validateData } from "~/shared/utils/validator";
 import { HttpError } from "~/shared/utils/error-handler";
-import { ERRORS } from "~/config";
+import { DatabaseProviderToken, ERRORS, IDatabaseProvider } from "~/config";
 import { OrderSchema } from "~/types/schemas/";
 import { ProductServiceProvider } from ".";
 
@@ -12,7 +12,8 @@ import { ProductServiceProvider } from ".";
 export class OrderServiceProvider {
   constructor(
     @Inject(forwardRef(() => OrderRepositoryToken)) private orderRepo: IOrderRepository,
-    @Inject(forwardRef(() => ProductServiceProvider)) private productService: ProductServiceProvider
+    @Inject(forwardRef(() => ProductServiceProvider)) private productService: ProductServiceProvider,
+    @Inject(forwardRef(() => DatabaseProviderToken)) private db: IDatabaseProvider
   ) {}
 
   async getOrderById(id: number): Promise<Order | null> {
@@ -36,7 +37,7 @@ export class OrderServiceProvider {
     };
   }
 
-  async createOrder(newOrder: CreateOrderInput, client: Client, user: User): Promise<Order> {
+  async createOrder(newOrder: CreateOrderInput, client: Client, user: User, ...rest: any): Promise<Order> {
     const errors = validateData<CreateOrderInput>(OrderSchema, newOrder);
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
