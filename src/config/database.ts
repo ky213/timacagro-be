@@ -1,5 +1,6 @@
 import { logger } from "~/shared/utils/logger";
 import { DataSource } from "typeorm";
+import { InjectionToken, Provider } from "graphql-modules";
 
 export const database = new DataSource({
   type: "postgres",
@@ -13,11 +14,22 @@ export const database = new DataSource({
   synchronize: process.env.NODE_ENV == "dev",
 });
 
+export const DatabaseProviderToken = new InjectionToken<DataSource>("DatabaseProvider");
+
+export const DatabaseProvider: Provider<DataSource> = {
+  provide: DatabaseProviderToken,
+  useValue: database,
+};
+
+export interface IDatabaseProvider extends DataSource {}
+
 export const initDatabse = async () => {
   try {
-    await database.initialize();
+    const db = await database.initialize();
 
     logger.info("Database Server connected");
+
+    return db;
   } catch (error) {
     logger.error(error);
   }

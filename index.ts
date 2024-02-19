@@ -22,14 +22,14 @@ async function startServer() {
 
     app.use(express.json({ limit: "21mb", type: "application/json" }));
 
-    await initDatabse();
+    const db = await initDatabse();
 
     const cache = await initCache();
 
     const yoga = createYoga({
       logging: "debug",
       maskedErrors: process.env.NODE_ENV === "prod",
-      context: { pubSub, cache },
+      context: { db, pubSub, cache },
       plugins: [useCookies(), useJWT(JWT_CONFIG), useGenericAuth(authConfig), useGraphQLModules(application)],
     });
 

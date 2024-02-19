@@ -5,10 +5,12 @@ import { RedisClientType } from "redis";
 import { ITopics } from "~/config";
 import { User } from "./graphql";
 import { JwtPayload } from "jsonwebtoken";
+import { DataSource } from "typeorm";
 
 declare global {
   namespace GraphQLModules {
     interface GlobalContext {
+      db: DataSource;
       request: HttpREquest;
       pubSub: PubSub<ITopics>;
       cache: RedisClientType;
