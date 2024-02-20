@@ -39,6 +39,6 @@ type Mutation {
   createOrder(orderInfo: CreateOrderInput!): Order!
 }
 
-# type Subscription {
-#   orderOrders: [OrderOrdersOutput!]!
-# }
+type Subscription {
+  orderCreated: Order!
+}

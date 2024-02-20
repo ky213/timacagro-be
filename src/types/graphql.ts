@@ -420,6 +420,7 @@ export { Role };
 
 export type Subscription = {
   __typename?: 'Subscription';
+  orderCreated: Order;
   orderProducts: Array<OrderProductsOutput>;
   randomNumber: Scalars['Float']['output'];
   testConnection: Scalars['Int']['output'];
@@ -808,6 +809,7 @@ export type RegionResolvers = EnumResolverSignature<{ CENTER?: any, CENTER_EAST?
 export type RoleResolvers = EnumResolverSignature<{ ADMIN?: any, ATC?: any, COMMERCE?: any, DR?: any, SALES?: any }, ResolversTypes['Role']>;
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
+  orderCreated?: SubscriptionResolver<ResolversTypes['Order'], "orderCreated", ParentType, ContextType>;
   orderProducts?: SubscriptionResolver<Array<ResolversTypes['OrderProductsOutput']>, "orderProducts", ParentType, ContextType>;
   randomNumber?: SubscriptionResolver<ResolversTypes['Float'], "randomNumber", ParentType, ContextType>;
   testConnection?: SubscriptionResolver<ResolversTypes['Int'], "testConnection", ParentType, ContextType>;

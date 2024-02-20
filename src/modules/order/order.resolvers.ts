@@ -1,7 +1,7 @@
 import { ERRORS } from "~/config";
 import { ClientServiceProvider, OrderServiceProvider, ProductServiceProvider, UserServiceProvider } from "~/services";
 import { HttpError } from "~/shared/utils/error-handler";
-import { Client, OrderItem, OrderItemInput, Product, Resolvers, User } from "~/types/graphql";
+import { Client, Order, OrderItem, OrderItemInput, Product, Resolvers, User } from "~/types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
@@ -16,7 +16,7 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     },
   },
   Mutation: {
-    createOrder: async (_parent, { orderInfo }, { injector, session, db }) => {
+    createOrder: async (_parent, { orderInfo }, { injector, session, pubSub }) => {
       const clientService = injector.get(ClientServiceProvider);
       const orderService = injector.get(OrderServiceProvider);
       const productService = injector.get(ProductServiceProvider);
@@ -30,7 +30,11 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
       if (unavailabeItem)
         throw new HttpError(400, `Product ${unavailabeItem} or quantity is unavailable.`, ERRORS.UNAVAILABLE_PRODUCT);
 
-      return await orderService.createOrder(orderInfo, client, session.user);
+      const order = await orderService.createOrder(orderInfo, client, session.user);
+
+      pubSub.publish("order:created", { order });
+
+      return order;
     },
   },
   Order: {
@@ -56,6 +60,12 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
           product: (await productSerivce.getProductById(productId)) as Product,
         };
       });
+    },
+  },
+  Subscription: {
+    orderCreated: {
+      subscribe: (_root, _args, { pubSub }) => pubSub.subscribe("order:created"),
+      resolve: (payload: { order: Order }) => payload.order,
     },
   },
 };
