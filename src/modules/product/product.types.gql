@@ -5,7 +5,6 @@ type Product {
   quantity: Float!
   available: Float!
   points: Int!
-  active: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -23,11 +22,6 @@ input CreateProductInput {
   quantity: Float!
   available: Float!
   points: Int!
-  active: Boolean!
-}
-
-input ImportProductsInput {
-  products: [CreateProductInput!]!
 }
 
 input UpdateProductInput {
@@ -36,7 +30,6 @@ input UpdateProductInput {
   quantity: Float
   available: Float
   points: Int
-  active: Boolean
 }
 
 type Query {
@@ -46,17 +39,12 @@ type Query {
 
 type Mutation {
   createProduct(productInfo: CreateProductInput!): Product!
-  importProducts(productsList: ImportProductsInput!, userPoints: Float): Boolean!
+  importProducts(productsList: [CreateProductInput!]!): [Product!]!
   updateProduct(id: ID!, productInfo: UpdateProductInput!): Boolean!
   deleteProduct(id: ID!): Boolean!
   restoreProduct(id: Int!): Boolean!
 }
 
-type OrderProductsOutput {
-  label: String!
-  available: Float!
-}
-
 type Subscription {
-  orderProducts: [OrderProductsOutput!]!
+  productsImported: [Product!]!
 }

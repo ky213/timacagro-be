@@ -1,11 +1,11 @@
 import { createPubSub } from "graphql-yoga";
-import { Order, OrderProductsOutput } from "~/types/graphql";
+import { Order, Product } from "~/types/graphql";
 
 export type ITopics = {
   // Global events
   "global:test_connection": [];
   "global:random_number": [random: number];
-  "products:order": [payload: { products: OrderProductsOutput[] }];
+  "products:imported": [payload: { products: Product[] }];
   "order:created": [payload: { order: Order }];
   "event:payload:obj": [payload: { foo: number }];
 };

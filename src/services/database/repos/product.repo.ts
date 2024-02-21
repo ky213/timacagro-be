@@ -33,9 +33,6 @@ export class ProductEntity implements Product {
   @Column({ type: "numeric", nullable: false })
   points!: number;
 
-  @Column({ type: "boolean", default: true })
-  active!: boolean;
-
   @CreateDateColumn({ type: "timestamp" })
   createdAt!: string;
 

@@ -1,11 +1,10 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
-import { In } from "typeorm";
+import { In, InsertResult } from "typeorm";
 
 import { IProductRepository, ProductEntity, ProductRepositoryToken } from "../repos";
 import {
   CreateClientInput,
   CreateProductInput,
-  ImportProductsInput,
   OrderItemInput,
   Product,
   ProductsList,
@@ -63,17 +62,17 @@ export class ProductServiceProvider {
     return product;
   }
 
-  async importProducts({ products }: ImportProductsInput): Promise<boolean> {
+  async importProducts(products: CreateProductInput[]): Promise<Product[]> {
     const errors = products.flatMap((product) => validateData<CreateProductInput>(ProductSchema, product));
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
 
-    //save product
-    await this.productRepo.upsert(products, {
+    //save products
+    const importedProducts: InsertResult = await this.productRepo.upsert(products, {
       conflictPaths: ["label"],
     });
 
-    return true;
+    return importedProducts.raw as Product[];
   }
 
   async updateProduct(id: number, productData: Partial<CreateProductInput>): Promise<Boolean> {

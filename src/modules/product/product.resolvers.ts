@@ -1,5 +1,5 @@
 import { ProductServiceProvider, UserServiceProvider } from "~/services";
-import { CreateProductInput, OrderProductsOutput, Resolvers } from "~/types/graphql";
+import { CreateProductInput, Product, Resolvers } from "~/types/graphql";
 
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
@@ -19,23 +19,14 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       return await productService.createProduct(productInfo);
     },
-    importProducts: async (_parent, { productsList, userPoints }, { injector, pubSub, session }) => {
+    importProducts: async (_parent, { productsList }, { injector, pubSub }) => {
       const productService = injector.get(ProductServiceProvider);
-      const userService = injector.get(UserServiceProvider);
 
-      await productService.importProducts({ products: productsList.products });
+      const importedProducts = await productService.importProducts(productsList);
 
-      if (userPoints && session) {
-        const user = await userService.getUserByEmail(session.user.email);
-        if (user)
-          await userService.updateUser(user?.id, {
-            currentPoints: (session.user?.currentPoints || 0) + userPoints,
-          });
-      }
+      pubSub.publish("products:imported", { products: importedProducts });
 
-      pubSub.publish("products:order", { products: productsList.products });
-
-      return true;
+      return importedProducts;
     },
     updateProduct: async (_parent, { id, productInfo }, { injector }) => {
       const productService = injector.get(ProductServiceProvider);
@@ -60,9 +51,9 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
     },
   },
   Subscription: {
-    orderProducts: {
-      subscribe: (_root, _args, { pubSub }) => pubSub.subscribe("products:order"),
-      resolve: (payload: { products: OrderProductsOutput[] }) => payload.products,
+    productsImported: {
+      subscribe: (_root, _args, { pubSub }) => pubSub.subscribe("products:imported"),
+      resolve: (payload: { products: Product[] }) => payload.products,
     },
   },
 };

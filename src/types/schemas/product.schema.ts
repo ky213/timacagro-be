@@ -16,7 +16,4 @@ export class ProductSchema {
 
   @IsInt({ message: "Points should be integers" })
   points!: number;
-
-  @IsBoolean({ message: "Active should be a boolean" })
-  active!: boolean;
 }

@@ -66,7 +66,6 @@ export type CreateOrderInput = {
 };
 
 export type CreateProductInput = {
-  active: Scalars['Boolean']['input'];
   available: Scalars['Float']['input'];
   label: Scalars['String']['input'];
   points: Scalars['Int']['input'];
@@ -91,10 +90,6 @@ export type Entity = {
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
-};
-
-export type ImportProductsInput = {
-  products: Array<CreateProductInput>;
 };
 
 export type Invoice = {
@@ -129,7 +124,7 @@ export type Mutation = {
   deleteProduct: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
   forgotPassword?: Maybe<Scalars['String']['output']>;
-  importProducts: Scalars['Boolean']['output'];
+  importProducts: Array<Product>;
   login?: Maybe<User>;
   logout?: Maybe<Scalars['Boolean']['output']>;
   randomize: Scalars['Float']['output'];
@@ -203,8 +198,7 @@ export type MutationForgotPasswordArgs = {
 
 
 export type MutationImportProductsArgs = {
-  productsList: ImportProductsInput;
-  userPoints?: InputMaybe<Scalars['Float']['input']>;
+  productsList: Array<CreateProductInput>;
 };
 
 
@@ -294,12 +288,6 @@ export type OrderItemInput = {
   quantity: Scalars['Float']['input'];
 };
 
-export type OrderProductsOutput = {
-  __typename?: 'OrderProductsOutput';
-  available: Scalars['Float']['output'];
-  label: Scalars['String']['output'];
-};
-
 export type OrdersList = Pagination & {
   __typename?: 'OrdersList';
   orders: Array<Maybe<Order>>;
@@ -316,7 +304,6 @@ export type Pagination = {
 
 export type Product = {
   __typename?: 'Product';
-  active: Scalars['Boolean']['output'];
   available: Scalars['Float']['output'];
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['Int']['output'];
@@ -421,7 +408,7 @@ export { Role };
 export type Subscription = {
   __typename?: 'Subscription';
   orderCreated: Order;
-  orderProducts: Array<OrderProductsOutput>;
+  productsImported: Array<Product>;
   randomNumber: Scalars['Float']['output'];
   testConnection: Scalars['Int']['output'];
 };
@@ -439,7 +426,6 @@ export type UpdateInvoiceInput = {
 };
 
 export type UpdateProductInput = {
-  active?: InputMaybe<Scalars['Boolean']['input']>;
   available?: InputMaybe<Scalars['Float']['input']>;
   label?: InputMaybe<Scalars['String']['input']>;
   points?: InputMaybe<Scalars['Int']['input']>;
@@ -574,7 +560,6 @@ export type ResolversTypes = {
   File: ResolverTypeWrapper<Scalars['File']['output']>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
-  ImportProductsInput: ImportProductsInput;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Invoice: ResolverTypeWrapper<Invoice>;
   InvoicesList: ResolverTypeWrapper<InvoicesList>;
@@ -582,7 +567,6 @@ export type ResolversTypes = {
   Order: ResolverTypeWrapper<Order>;
   OrderItem: ResolverTypeWrapper<OrderItem>;
   OrderItemInput: OrderItemInput;
-  OrderProductsOutput: ResolverTypeWrapper<OrderProductsOutput>;
   OrdersList: ResolverTypeWrapper<OrdersList>;
   Pagination: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Pagination']>;
   Product: ResolverTypeWrapper<Product>;
@@ -617,7 +601,6 @@ export type ResolversParentTypes = {
   File: Scalars['File']['output'];
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
-  ImportProductsInput: ImportProductsInput;
   Int: Scalars['Int']['output'];
   Invoice: Invoice;
   InvoicesList: InvoicesList;
@@ -625,7 +608,6 @@ export type ResolversParentTypes = {
   Order: Order;
   OrderItem: OrderItem;
   OrderItemInput: OrderItemInput;
-  OrderProductsOutput: OrderProductsOutput;
   OrdersList: OrdersList;
   Pagination: ResolversInterfaceTypes<ResolversParentTypes>['Pagination'];
   Product: Product;
@@ -711,7 +693,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteProduct?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteProductArgs, 'id'>>;
   deleteUser?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'id'>>;
   forgotPassword?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationForgotPasswordArgs, 'email'>>;
-  importProducts?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationImportProductsArgs, 'productsList'>>;
+  importProducts?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType, RequireFields<MutationImportProductsArgs, 'productsList'>>;
   login?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   randomize?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
@@ -744,12 +726,6 @@ export type OrderItemResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type OrderProductsOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrderProductsOutput'] = ResolversParentTypes['OrderProductsOutput']> = {
-  available?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type OrdersListResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrdersList'] = ResolversParentTypes['OrdersList']> = {
   orders?: Resolver<Array<Maybe<ResolversTypes['Order']>>, ParentType, ContextType>;
   page?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -766,7 +742,6 @@ export type PaginationResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
-  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   available?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -810,7 +785,7 @@ export type RoleResolvers = EnumResolverSignature<{ ADMIN?: any, ATC?: any, COMM
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   orderCreated?: SubscriptionResolver<ResolversTypes['Order'], "orderCreated", ParentType, ContextType>;
-  orderProducts?: SubscriptionResolver<Array<ResolversTypes['OrderProductsOutput']>, "orderProducts", ParentType, ContextType>;
+  productsImported?: SubscriptionResolver<Array<ResolversTypes['Product']>, "productsImported", ParentType, ContextType>;
   randomNumber?: SubscriptionResolver<ResolversTypes['Float'], "randomNumber", ParentType, ContextType>;
   testConnection?: SubscriptionResolver<ResolversTypes['Int'], "testConnection", ParentType, ContextType>;
 };
@@ -853,7 +828,6 @@ export type Resolvers<ContextType = any> = {
   Mutation?: MutationResolvers<ContextType>;
   Order?: OrderResolvers<ContextType>;
   OrderItem?: OrderItemResolvers<ContextType>;
-  OrderProductsOutput?: OrderProductsOutputResolvers<ContextType>;
   OrdersList?: OrdersListResolvers<ContextType>;
   Pagination?: PaginationResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
