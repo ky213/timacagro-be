@@ -1,13 +1,13 @@
 import { Injectable, Inject, forwardRef } from "graphql-modules";
 
 import { UserRepositoryToken, IUserRepository, UserEntity } from "../repos";
-import { UsersList, User, CreateUserInput, UpdateUserInput } from "~/types/graphql";
+import { UsersList, User, CreateUserInput, UpdateUserInput, Role } from "~/types/graphql";
 import { validateData } from "~/shared/utils/validator";
 import { HttpError } from "~/shared/utils/error-handler";
 import { DELAYS, ERRORS, WEB_CLIENT_HOST, WEB_CLIENT_PORT } from "~/config";
-import { PasswordSchema, UserSchema } from "~/types/schemas/";
+import { PasswordSchema, CreateUserSchema } from "~/types/schemas/";
 import { EmailServiceToken, CacheServiceProvider, IEmailService } from "~/services";
-import { generateHash, generateToken } from "~/shared/utils/cyphers";
+import { generateHash, generatePassword, generateToken } from "~/shared/utils/cyphers";
 
 @Injectable()
 export class UserServiceProvider {
@@ -50,7 +50,7 @@ export class UserServiceProvider {
   }
 
   async createUser(newUser: CreateUserInput): Promise<User> {
-    const errors = validateData<CreateUserInput>(UserSchema, newUser);
+    const errors = validateData<CreateUserInput>(CreateUserSchema, newUser);
 
     if (errors.length) throw new HttpError(400, "Data not valid", ERRORS.INVALID_INPUT_ERROR);
 
@@ -59,15 +59,19 @@ export class UserServiceProvider {
 
     if (userExists) throw new HttpError(400, "User with this email exists.", ERRORS.USER_EXISTS_ERROR);
 
-    //hash password
-    newUser.password = await generateHash(newUser.password);
+    //generate random password
+    const password = generatePassword();
+    const passwordHash = await generateHash(password);
+
+    //set points
+    const currentPoints = [Role.DR, Role.ATC].includes(newUser.role) ? 0 : null;
 
     //save user
-    const user = this.userRepo.create({ ...newUser });
+    const user = this.userRepo.create({ password: passwordHash, active: true, currentPoints, ...newUser });
     await this.userRepo.save(user);
 
     //send confirmation email
-    this.sendConfirmationEmail(user);
+    this.sendConfirmationEmail(user, password);
 
     return user;
   }
@@ -108,7 +112,7 @@ export class UserServiceProvider {
     return true;
   }
 
-  async sendConfirmationEmail(user: User) {
+  async sendConfirmationEmail(user: User, password: string) {
     const token = generateToken();
 
     await this.cacheService.set(token, `${user.id}`, DELAYS.EMAIL_CONFIRMATION_EXPIRATION_TIME);
@@ -119,8 +123,9 @@ export class UserServiceProvider {
       `Welcome email`,
       `<h1>Welcome ${user.firstName}</h1>
        <p>follow this <a href="http://${WEB_CLIENT_HOST}:${WEB_CLIENT_PORT}/auth/confirm-email/?token=${token}">link</a> to confirm you email address.</p>
-       <p>Your initial password is: 1qwerty</p>.
-       <p>Please reset it on your first login.</p>
+       <p>Your login  is:${user.email}</p>.
+       <p>Your initial password is:${password}</p>.
+       <p>Please reset your password on your first login.</p>
     `
     );
   }

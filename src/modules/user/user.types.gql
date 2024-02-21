@@ -19,12 +19,9 @@ input CreateUserInput {
   firstName: String!
   lastName: String!
   email: String!
-  password: String!
   role: Role!
-  currentPoints: Int
   targetPoints: Int
   region: Region
-  active: Boolean!
 }
 
 input UpdateUserInput {

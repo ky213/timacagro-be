@@ -73,12 +73,9 @@ export type CreateProductInput = {
 };
 
 export type CreateUserInput = {
-  active: Scalars['Boolean']['input'];
-  currentPoints?: InputMaybe<Scalars['Int']['input']>;
   email: Scalars['String']['input'];
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
-  password: Scalars['String']['input'];
   region?: InputMaybe<Region>;
   role: Role;
   targetPoints?: InputMaybe<Scalars['Int']['input']>;

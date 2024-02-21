@@ -10,6 +10,10 @@ export async function generateHash(value: string) {
   return await bcrypt.hash(value, salt);
 }
 
+export function generatePassword(): string {
+  return Math.random().toString(36).slice(-8);
+}
+
 export async function isSameHash(text: string, hash: string) {
   return await bcrypt.compare(text, hash);
 }

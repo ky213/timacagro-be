@@ -1,6 +1,7 @@
-import { Length, IsEmail, IsBoolean, IsStrongPassword, MaxLength, IsEnum, IsAlpha } from "class-validator";
+import { Length, IsEmail, IsBoolean, IsStrongPassword, MaxLength, IsEnum, IsAlpha, IsNumber } from "class-validator";
 
-import { Role } from "~/types/global";
+import { Region, Role } from "~/types/global";
+import { CreateUserInput } from "../graphql";
 
 export class PasswordSchema {
   @MaxLength(50)
@@ -13,7 +14,7 @@ export class LoginSchema extends PasswordSchema {
   email!: string;
 }
 
-export class UserSchema extends LoginSchema {
+export class CreateUserSchema implements CreateUserInput {
   @IsAlpha()
   @Length(2, 25)
   firstName!: string;
@@ -22,9 +23,15 @@ export class UserSchema extends LoginSchema {
   @Length(2, 25)
   lastName!: string;
 
+  @IsEmail()
+  email!: string;
+
   @IsEnum(Role)
   role!: Role;
 
-  @IsBoolean()
-  active!: boolean;
+  @IsEnum(Region)
+  region!: Region;
+
+  @IsNumber()
+  targetPoints?: number;
 }
