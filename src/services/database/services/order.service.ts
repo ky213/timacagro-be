@@ -6,13 +6,14 @@ import { validateData } from "~/shared/utils/validator";
 import { HttpError } from "~/shared/utils/error-handler";
 import { DatabaseProviderToken, ERRORS, IDatabaseProvider } from "~/config";
 import { OrderSchema } from "~/types/schemas/";
-import { ProductServiceProvider } from ".";
+import { ProductServiceProvider, UserServiceProvider } from ".";
 
 @Injectable()
 export class OrderServiceProvider {
   constructor(
     @Inject(forwardRef(() => OrderRepositoryToken)) private orderRepo: IOrderRepository,
     @Inject(forwardRef(() => ProductServiceProvider)) private productService: ProductServiceProvider,
+    @Inject(forwardRef(() => UserServiceProvider)) private userService: UserServiceProvider,
     @Inject(forwardRef(() => DatabaseProviderToken)) private db: IDatabaseProvider
   ) {}
 
@@ -60,9 +61,15 @@ export class OrderServiceProvider {
       // execute some operations on this transaction:
       await queryRunner.manager.save(order);
 
+      //Update available amounts
       for (const { productId, quantity } of newOrder.items) {
         await this.productService.decrementAmount(productId, quantity);
       }
+
+      // Updated user points
+      const totalPoint = await this.productService.calculateTotalPoints(newOrder.items);
+
+      await this.userService.incUserPoints(user.id, totalPoint);
 
       // commit transaction now:
       await queryRunner.commitTransaction();

@@ -32,8 +32,6 @@ export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
 
       const order = await orderService.createOrder(orderInfo, client, session.user);
 
-      // TODO: Updated user points
-
       pubSub.publish("order:created", { order });
 
       return order;

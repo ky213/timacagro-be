@@ -78,6 +78,12 @@ export class UserServiceProvider {
     return true;
   }
 
+  async incUserPoints(id: number, points: number): Promise<Boolean> {
+    await this.userRepo.increment({ id }, "currentPoints", points);
+
+    return true;
+  }
+
   async updateUserPassword(id: number, newPassword: string): Promise<Boolean> {
     const errors = validateData<{ password: string }>(PasswordSchema, { password: newPassword });
 

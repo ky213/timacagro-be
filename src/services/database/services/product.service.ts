@@ -4,6 +4,7 @@ import { In, InsertResult } from "typeorm";
 import { IProductRepository, ProductEntity, ProductRepositoryToken } from "../repos";
 import {
   CreateClientInput,
+  CreateOrderInput,
   CreateProductInput,
   OrderItemInput,
   Product,
@@ -109,5 +110,20 @@ export class ProductServiceProvider {
     }
 
     return null;
+  }
+
+  async calculateTotalPoints(orderItems: OrderItemInput[]): Promise<number> {
+    const productIds = orderItems.map(({ productId }) => productId);
+    const products = await this.getMany(productIds);
+
+    return products.reduce((total, { id, points }) => {
+      const orderItem = orderItems.find(({ productId }) => productId === id);
+
+      if (orderItem) {
+        total += orderItem.quantity * points;
+      }
+
+      return total;
+    }, 0);
   }
 }
