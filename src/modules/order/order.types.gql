@@ -26,7 +26,6 @@ input OrderItemInput {
 
 input CreateOrderInput {
   clientId: Int!
-  userId: Int!
   items: [OrderItemInput!]!
 }
 

@@ -6,9 +6,6 @@ export class OrderSchema implements CreateOrderInput {
   @IsInt()
   clientId!: number;
 
-  @IsInt()
-  userId!: number;
-
   @IsArray()
   @ArrayMaxSize(20)
   @Type(() => OrderItemSchema)

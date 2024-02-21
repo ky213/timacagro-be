@@ -62,7 +62,6 @@ export type CreateInvoiceInput = {
 export type CreateOrderInput = {
   clientId: Scalars['Int']['input'];
   items: Array<OrderItemInput>;
-  userId: Scalars['Int']['input'];
 };
 
 export type CreateProductInput = {
