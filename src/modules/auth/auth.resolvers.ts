@@ -9,11 +9,10 @@ import { ERRORS, COOKIE_CONFIG, JWT_SIGNING_KEY } from "~/config";
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
     async getSession(_root, _args, { injector, session }) {
-      if (session.user) {
+      if (session) {
         const userService = injector.get(UserServiceProvider);
-        const user = await userService.getUserByEmail(session.user.email);
 
-        return user;
+        return await userService.getUserByEmail(session.user.email);
       }
       return null;
     },
