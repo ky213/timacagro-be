@@ -5,14 +5,19 @@ import { Resolvers } from "~/types/graphql";
 export const resolvers: Resolvers<GraphQLModules.ModuleContext> = {
   Query: {
     getUser: async (_parent, { id }, context) => {
-      const userRepo = context.injector.get(UserServiceProvider);
+      const userService = context.injector.get(UserServiceProvider);
 
-      return await userRepo.getUserById(Number(id));
+      return await userService.getUserById(Number(id));
     },
     listUsers: async (_parent, { page = 0, perPage = 10 }, context) => {
-      const userRepo = context.injector.get(UserServiceProvider);
+      const userService = context.injector.get(UserServiceProvider);
 
-      return await userRepo.lisUsers(page, perPage);
+      return await userService.lisUsers(page, perPage);
+    },
+    searchUser: async (_parent, { searchQuery }, context) => {
+      const userService = context.injector.get(UserServiceProvider);
+
+      return await userService.searchUser(searchQuery);
     },
   },
   Mutation: {

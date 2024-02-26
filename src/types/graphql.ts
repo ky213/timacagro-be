@@ -335,6 +335,7 @@ export type Query = {
   listOrders: OrdersList;
   listProducts: ProductsList;
   listUsers: UsersList;
+  searchUser: Array<Maybe<User>>;
 };
 
 
@@ -395,6 +396,11 @@ export type QueryListProductsArgs = {
 export type QueryListUsersArgs = {
   page: Scalars['Int']['input'];
   perPage: Scalars['Int']['input'];
+};
+
+
+export type QuerySearchUserArgs = {
+  searchQuery: Scalars['String']['input'];
 };
 
 export { Region };
@@ -773,6 +779,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   listOrders?: Resolver<ResolversTypes['OrdersList'], ParentType, ContextType, RequireFields<QueryListOrdersArgs, 'page' | 'perPage'>>;
   listProducts?: Resolver<ResolversTypes['ProductsList'], ParentType, ContextType, RequireFields<QueryListProductsArgs, 'page' | 'perPage'>>;
   listUsers?: Resolver<ResolversTypes['UsersList'], ParentType, ContextType, RequireFields<QueryListUsersArgs, 'page' | 'perPage'>>;
+  searchUser?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType, RequireFields<QuerySearchUserArgs, 'searchQuery'>>;
 };
 
 export type RegionResolvers = EnumResolverSignature<{ CENTER?: any, CENTER_EAST?: any, DEV_ZONE_SOUTH?: any, FAR_EAST?: any, FAR_WEST?: any, NORTH_EAST?: any, NORTH_WEST?: any, SOUTH_EAST?: any }, ResolversTypes['Region']>;

@@ -44,8 +44,9 @@ type UsersList implements Pagination {
 }
 
 type Query {
-  listUsers(page: Int!, perPage: Int!): UsersList!
   getUser(id: Int!): User
+  listUsers(page: Int!, perPage: Int!): UsersList!
+  searchUser(searchQuery: String!): [User]!
 }
 
 type Mutation {

@@ -143,4 +143,14 @@ export class UserServiceProvider {
     `
     );
   }
+
+  async searchUser(searchQuery: string): Promise<User[]> {
+    return await this.userRepo
+      .createQueryBuilder("user")
+      .select()
+      .where("user.firstName ILIKE :searchQuery", { searchQuery: `%${searchQuery}%` })
+      .orWhere("user.lastName ILIKE :searchQuery", { searchQuery: `%${searchQuery}%` })
+      .orWhere("user.email ILIKE :searchQuery", { searchQuery: `%${searchQuery}%` })
+      .getMany();
+  }
 }
