@@ -45,12 +45,12 @@ type UsersList implements Pagination {
 
 type Query {
   listUsers(page: Int!, perPage: Int!): UsersList!
-  getUser(id: ID!): User
+  getUser(id: Int!): User
 }
 
 type Mutation {
   createUser(userInfo: CreateUserInput!): User!
-  updateUser(id: ID!, userInfo: UpdateUserInput!): Boolean!
-  deleteUser(id: ID!): Boolean!
+  updateUser(id: Int!, userInfo: UpdateUserInput!): Boolean!
+  deleteUser(id: Int!): Boolean!
   restoreUser(id: Int!): Boolean!
 }

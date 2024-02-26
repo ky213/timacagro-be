@@ -184,7 +184,7 @@ export type MutationDeleteProductArgs = {
 
 
 export type MutationDeleteUserArgs = {
-  id: Scalars['ID']['input'];
+  id: Scalars['Int']['input'];
 };
 
 
@@ -259,7 +259,7 @@ export type MutationUpdateProductArgs = {
 
 
 export type MutationUpdateUserArgs = {
-  id: Scalars['ID']['input'];
+  id: Scalars['Int']['input'];
   userInfo: UpdateUserInput;
 };
 
@@ -364,7 +364,7 @@ export type QueryGetProductArgs = {
 
 
 export type QueryGetUserArgs = {
-  id: Scalars['ID']['input'];
+  id: Scalars['Int']['input'];
 };
 
 
